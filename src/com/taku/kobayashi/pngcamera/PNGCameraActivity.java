@@ -1,7 +1,5 @@
 package com.taku.kobayashi.pngcamera;
 
-import com.example.degitalcamera.R;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Activity;
@@ -117,9 +115,9 @@ public class PNGCameraActivity extends Activity {
 
 	private Camera.AutoFocusCallback CameraAutoFocusCallback = new Camera.AutoFocusCallback() {
 		public void onAutoFocus(boolean success, Camera camera) {
-			m_CameraPreview.takePicture(CameraShutterCallback, null, POST,null);
-			//m_CameraPreview.takePicture(CameraShutterCallback, RAW,null);
-			m_CameraPreview.stopPreview();
+			//m_CameraPreview.takePicture(CameraShutterCallback, null, POST,null);
+			m_CameraPreview.takePicture(CameraShutterCallback, RAW,null);
+			//m_CameraPreview.stopPreview();
 		}
 	};
 

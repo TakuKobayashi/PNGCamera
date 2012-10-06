@@ -110,13 +110,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		//RgbImageAndroid.toRgbImage(PreviewImage);
 		m_PreViewSize = cp.getPreviewSize();
 		m_ImageSize = cp.getPictureSize();
-		Log.d(TAG, "PreView width:"+m_PreViewSize.width+" height:"+m_PreViewSize.height);
-		Log.d(TAG, "Image width:"+m_ImageSize.width+" height:"+m_ImageSize.height);
+		//Log.d(TAG, "PreView width:"+m_PreViewSize.width+" height:"+m_PreViewSize.height);
+		//Log.d(TAG, "Image width:"+m_ImageSize.width+" height:"+m_ImageSize.height);
 		m_CameraDisplayOrientation = getCameraDisplayOrientation((Activity) m_Context, nCameraID);
 		m_Camera.setDisplayOrientation(m_CameraDisplayOrientation);
 		m_Camera.setParameters(cp);
 		//m_Camera.setPreviewCallback(m_PreViewCallback);
-		m_Camera.setOneShotPreviewCallback(m_PreViewCallback);
+		//m_Camera.setOneShotPreviewCallback(m_PreViewCallback);
 		m_Camera.startPreview();
 	}
 
@@ -171,9 +171,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void takePicture(ShutterCallback shutter, PictureCallback raw, PictureCallback jpeg){
-		Log.d(TAG,"normal:"+shutter+" "+raw+" "+" "+jpeg);
+		m_Camera.setOneShotPreviewCallback(null);
+		m_Camera.stopPreview();
+		m_Camera.setOneShotPreviewCallback(m_PreViewCallback);
+		//Log.d(TAG,"normal:"+shutter+" "+raw+" "+" "+jpeg);
 		//m_Camera.takePicture(shutter,raw,jpeg);
-		m_Camera.takePicture(shutter,raw,null);
+		//m_Camera.takePicture(shutter,raw,null);
+		m_Camera.startPreview();
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
