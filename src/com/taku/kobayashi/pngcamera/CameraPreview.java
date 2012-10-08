@@ -158,10 +158,18 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			//PreviewImage = BitmapFactory.decodeByteArray(data, 0, data.length);
 			decodeBitmapData(data,m_PreViewSize.width,m_PreViewSize.height);
 			Log.d(TAG,"width:"+PreviewImage.getWidth()+" height:"+PreviewImage.getHeight());
+			savePicture(PreviewImage);
 			m_OverrayImage.setImageBitmap(PreviewImage);
 			//PreviewImage = Tools.getBitmap(m_Context, data, orientation);
 		}
 	};
+
+	private void savePicture(Bitmap picture){
+		StringBuffer name = new StringBuffer();
+		// 画像のおいてある場所と保存する画像のファイル名の情報をとって来る
+		String savedImagePathstr = Tools.getFilePath(Config.SAVE_IMG_EXTENSION_PNG);
+		Tools.SaveImage(m_Context.getContentResolver(), picture, savedImagePathstr, name.toString(), (Activity) m_Context);
+	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 	public void autoFocus(AutoFocusCallback cameraAutoFocusCallback){

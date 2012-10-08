@@ -66,9 +66,9 @@ public class Tools {
 
 	//define
 	private static final String TAG = "Lisa_Tools";
-	//private static final float BASE_DISPLAY_WIDTH = jp.co.tpnconpany.lisa.no.kagami.Config.BASE_DISPLAY_WIDTH;
-	//private static final float BASE_DISPLAY_HEIGHT = jp.co.tpnconpany.lisa.no.kagami.Config.BASE_DISPLAY_HEIGHT;
-	//private static final float BASE_ASPECT_RATIO = BASE_DISPLAY_WIDTH / BASE_DISPLAY_HEIGHT;
+	private static final float BASE_DISPLAY_WIDTH = com.taku.kobayashi.pngcamera.Config.BASE_DISPLAY_WIDTH;
+	private static final float BASE_DISPLAY_HEIGHT = com.taku.kobayashi.pngcamera.Config.BASE_DISPLAY_HEIGHT;
+	private static final float BASE_ASPECT_RATIO = BASE_DISPLAY_WIDTH / BASE_DISPLAY_HEIGHT;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 /*
@@ -481,24 +481,6 @@ public class Tools {
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	/*
-	public static boolean deleteDirectory(File path) {
-		if( path.exists() ) {
-			File[] files = path.listFiles();
-			for(int i=0; i<files.length; i++) {
-				if(files[i].isDirectory()) {
-					deleteDirectory(files[i]);
-				} else {
-					files[i].delete();
-				}
-			}
-		}
-		return(path.delete());
-	}
-	*/
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 	//画像をSDカードに保存する
 	public static boolean SaveImage(ContentResolver contentResolver, Bitmap bitmap, String strFilePath, String strFileName, Activity act) {
 		Uri imageUri = null;
@@ -520,7 +502,7 @@ public class Tools {
 			// imageUriにあるファイルを開く(openOutputStream)
 			OutputStream outputStream = contentResolver.openOutputStream(imageUri);
 			// bitmap画像を圧縮する(圧縮後の拡張子,圧縮率,画像)
-			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
 			outputStream.close();
 			if (act != null) {
 				File file = new File(strFilePath);
@@ -542,22 +524,18 @@ public class Tools {
 		String strTempName = new String();
 		int i = 0;
 		while (true) {
-			String strExtDir = Environment.getExternalStorageDirectory().toString()+"/Lisa_no_Kagami/";
+			String strExtDir = Environment.getExternalStorageDirectory().toString()+"/"+com.taku.kobayashi.pngcamera.Config.DIRECTORY_NAME_TO_SAVE;
 			File files = new File(strExtDir);
-			//String strPrefix = jp.co.tpnconpany.lisa.no.kagami.Config.ALBUM_IMG_NAME;
 			// 今の時間をミリ秒で返す(PHPのstrtotimeと同じ)
 			long dateTaken = System.currentTimeMillis();
 			if (i == 0) {
 				// 年-月-日_時.分.秒 + 拡張子 または 年-月-日_時.分.秒 +_番号 + 拡張子
-				//strTempName = strPrefix + DateFormat.format("yyyy-MM-dd_kk.mm.ss", dateTaken).toString() + file_extention;
 				strTempName = DateFormat.format("yyyy-MM-dd_kk.mm.ss", dateTaken).toString() + file_extention;
 			} else {
-				//strTempName = strPrefix + DateFormat.format("yyyy-MM-dd_kk.mm.ss", dateTaken).toString() + "_" + i + file_extention;
 				strTempName = DateFormat.format("yyyy-MM-dd_kk.mm.ss", dateTaken).toString() + "_" + i + file_extention;
 			}
 			strFilePath = strExtDir + strTempName;
 			File file = new File(strFilePath);
-			//Log.d(TAG, "strFilePath:" + strFilePath);
 			// 同じファイル名がないか調べる
 			if (file.exists() == false){
 				break;
