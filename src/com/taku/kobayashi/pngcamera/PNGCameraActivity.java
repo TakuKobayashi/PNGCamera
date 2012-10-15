@@ -1,22 +1,15 @@
 package com.taku.kobayashi.pngcamera;
 
-import android.os.Build;
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Camera;
-import android.util.Log;
+import android.os.Build;
+import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.support.v4.app.NavUtils;
 
 public class PNGCameraActivity extends Activity {
 
@@ -105,18 +98,19 @@ public class PNGCameraActivity extends Activity {
 	};
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
+/*
 	private void Init() {
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
 		m_CameraPreview.setOverrayImageView((ImageView) findViewById(R.id.OverrayImage));
 	}
-
+*/
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private Camera.AutoFocusCallback CameraAutoFocusCallback = new Camera.AutoFocusCallback() {
 		public void onAutoFocus(boolean success, Camera camera) {
+			m_CameraPreview.takuPreviewPicture();
 			//m_CameraPreview.takePicture(CameraShutterCallback, null, POST,null);
-			m_CameraPreview.takePicture(CameraShutterCallback, RAW,null);
+			//m_CameraPreview.takePicture(CameraShutterCallback, RAW,null);
 			//m_CameraPreview.stopPreview();
 		}
 	};
@@ -132,6 +126,7 @@ public class PNGCameraActivity extends Activity {
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	/*
 	private Camera.PictureCallback RAW = new Camera.PictureCallback() {
 		public void onPictureTaken(byte[] data, Camera camera) {
 			Log.d(TAG,"RAW:"+data);
@@ -159,13 +154,15 @@ public class PNGCameraActivity extends Activity {
 			}
 		}
 	};
+	*/
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@Override
 	protected void onResume(){
 		super.onResume();
-		Init();
+		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
+		//m_CameraPreview.setOverrayImageView((ImageView) findViewById(R.id.OverrayImage));
 		m_CameraPreview.setCamera(m_nCameraID);
 	};
 

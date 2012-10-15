@@ -9,9 +9,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.PictureCallback;
@@ -24,7 +21,6 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.ImageView;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback{
 
@@ -34,9 +30,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	private SurfaceHolder m_Holder;
 	private int m_CameraDisplayOrientation = 0;
 	private Camera m_Camera = null;
-	private ImageView m_OverrayImage;
 	private Size m_ImageSize;
 	private Size m_PreViewSize;
+	private List<Size> m_PreviewList;
+	private List<Size> m_ImageList;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -47,9 +44,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		m_Holder.addCallback(this);
 	}
 
+	/*
 	public void setOverrayImageView(ImageView iv){
 		m_OverrayImage = iv;
 	}
+	*/
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -96,6 +95,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		//Log.d(TAG,"Scene:"+cp.getSupportedSceneModes());
 		//Log.d(TAG,"Focus:"+cp.getSupportedFocusModes());
 
+		m_PreviewList = cp.getSupportedPreviewSizes();
+		m_ImageList = cp.getSupportedPictureSizes();
 		/*
 		List<Size> Picture = cp.getSupportedPictureSizes();
 		for(int i = 0;i < Picture.size();i++){
@@ -110,13 +111,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		//RgbImageAndroid.toRgbImage(PreviewImage);
 		m_PreViewSize = cp.getPreviewSize();
 		m_ImageSize = cp.getPictureSize();
-		//Log.d(TAG, "PreView width:"+m_PreViewSize.width+" height:"+m_PreViewSize.height);
-		//Log.d(TAG, "Image width:"+m_ImageSize.width+" height:"+m_ImageSize.height);
+		Log.d(TAG,"Format:"+cp.getPreviewFormat());
+		cp.setPictureSize(m_PreviewList.get(0).width, m_PreviewList.get(0).height);
 		m_CameraDisplayOrientation = getCameraDisplayOrientation((Activity) m_Context, nCameraID);
 		m_Camera.setDisplayOrientation(m_CameraDisplayOrientation);
 		m_Camera.setParameters(cp);
-		//m_Camera.setPreviewCallback(m_PreViewCallback);
-		//m_Camera.setOneShotPreviewCallback(m_PreViewCallback);
 		m_Camera.startPreview();
 	}
 
@@ -151,16 +150,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private PreviewCallback m_PreViewCallback = new PreviewCallback(){
-
 		@Override
 		public void onPreviewFrame(byte[] data, Camera camera) {
-			Log.d(TAG,"data_length:"+data.length);
-			//PreviewImage = BitmapFactory.decodeByteArray(data, 0, data.length);
-			decodeBitmapData(data,m_PreViewSize.width,m_PreViewSize.height);
-			Log.d(TAG,"width:"+PreviewImage.getWidth()+" height:"+PreviewImage.getHeight());
+			Log.d(TAG,"byte length:"+data.length);
+			//TODO 変更
+			decodeBitmapData(data,m_PreviewList.get(0).width,m_PreviewList.get(0).height);
 			savePicture(PreviewImage);
-			m_OverrayImage.setImageBitmap(PreviewImage);
-			//PreviewImage = Tools.getBitmap(m_Context, data, orientation);
 		}
 	};
 
@@ -178,14 +173,24 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void takePicture(ShutterCallback shutter, PictureCallback raw, PictureCallback jpeg){
+	public void takuPreviewPicture() {
+
+		//TODO サイズ調整
+		Camera.Parameters cp = m_Camera.getParameters();
+		cp.setPreviewSize(m_PreviewList.get(0).width, m_PreviewList.get(0).height);
+		m_Camera.setParameters(cp);
 		m_Camera.setOneShotPreviewCallback(null);
 		m_Camera.stopPreview();
 		m_Camera.setOneShotPreviewCallback(m_PreViewCallback);
-		//Log.d(TAG,"normal:"+shutter+" "+raw+" "+" "+jpeg);
+		Camera.Parameters acp = m_Camera.getParameters();
+		cp.setPreviewSize(m_PreViewSize.width, m_PreViewSize.height);
+		m_Camera.setParameters(acp);
+		m_Camera.startPreview();
+	}
+
+	public void takePicture(ShutterCallback shutter, PictureCallback raw, PictureCallback jpeg){
 		//m_Camera.takePicture(shutter,raw,jpeg);
 		//m_Camera.takePicture(shutter,raw,null);
-		m_Camera.startPreview();
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -256,7 +261,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		}
 		int[] rgb = new int[(width * height)];
 		decodeYUV420SP(rgb, data, width, height);
+		Log.d(TAG,"RGB" +rgb);
 		PreviewImage = Bitmap.createBitmap(rgb, width, height, Bitmap.Config.ARGB_8888);
+		Log.d(TAG,"P:"+PreviewImage);
 		rgb = null;
 
 		if (m_CameraDisplayOrientation != 0) {
