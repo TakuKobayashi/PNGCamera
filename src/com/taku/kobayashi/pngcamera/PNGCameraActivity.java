@@ -26,13 +26,6 @@ public class PNGCameraActivity extends Activity {
 		setContentView(R.layout.cameraview);
 
 		m_nCameraID = getIntent().getIntExtra(getResources().getString(R.string.IntentCameraIDKey), 0);
-		/*
-		if(Build.VERSION.SDK_INT >= 9){
-			if (Camera.getNumberOfCameras() <= 1) {
-				m_nCameraID = 0;
-			}
-		}
-		*/
 
 		ImageButton shatterButton = (ImageButton) findViewById(R.id.ShutterButton);
 		shatterButton.setImageResource(R.drawable.device_access_camera);
@@ -49,8 +42,6 @@ public class PNGCameraActivity extends Activity {
 		}else{
 			InOutButton.setVisibility(View.INVISIBLE);
 		}
-
-
 
 	}
 
@@ -98,20 +89,10 @@ public class PNGCameraActivity extends Activity {
 	};
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-/*
-	private void Init() {
-		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
-		m_CameraPreview.setOverrayImageView((ImageView) findViewById(R.id.OverrayImage));
-	}
-*/
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private Camera.AutoFocusCallback CameraAutoFocusCallback = new Camera.AutoFocusCallback() {
 		public void onAutoFocus(boolean success, Camera camera) {
 			m_CameraPreview.takuPreviewPicture();
-			//m_CameraPreview.takePicture(CameraShutterCallback, null, POST,null);
-			//m_CameraPreview.takePicture(CameraShutterCallback, RAW,null);
-			//m_CameraPreview.stopPreview();
 		}
 	};
 
@@ -126,43 +107,10 @@ public class PNGCameraActivity extends Activity {
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	/*
-	private Camera.PictureCallback RAW = new Camera.PictureCallback() {
-		public void onPictureTaken(byte[] data, Camera camera) {
-			Log.d(TAG,"RAW:"+data);
-			if (data != null) {
-				Log.d(TAG,"RAWlength:"+data.length);
-			}
-		}
-	};
-
-	private Camera.PictureCallback POST = new Camera.PictureCallback() {
-		public void onPictureTaken(byte[] data, Camera camera) {
-			Log.d(TAG,"POST:"+data);
-			if (data != null) {
-				Log.d(TAG,"POSTlength:"+data.length);
-			}
-		}
-	};
-
-	private Camera.PictureCallback JPEG = new Camera.PictureCallback() {
-		public void onPictureTaken(byte[] data, Camera camera) {
-			if (data != null) {
-				Log.d(TAG,"JPEGlength:"+data.length);
-				Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-				Log.d(TAG,"JPEG width:"+bitmap.getWidth()+"height:"+bitmap.getHeight());
-			}
-		}
-	};
-	*/
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 	@Override
 	protected void onResume(){
 		super.onResume();
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
-		//m_CameraPreview.setOverrayImageView((ImageView) findViewById(R.id.OverrayImage));
 		m_CameraPreview.setCamera(m_nCameraID);
 	};
 

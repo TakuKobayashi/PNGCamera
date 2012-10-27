@@ -44,12 +44,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		m_Holder.addCallback(this);
 	}
 
-	/*
-	public void setOverrayImageView(ImageView iv){
-		m_OverrayImage = iv;
-	}
-	*/
-
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void surfaceCreated(SurfaceHolder holder) {
@@ -75,7 +69,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void setCamera(int nCameraID){
-		//m_LisaCamera = new AnotherWorldCamera(nCameraID);
 		if(Build.VERSION.SDK_INT < 9){
 			m_Camera = Camera.open();
 		}else{

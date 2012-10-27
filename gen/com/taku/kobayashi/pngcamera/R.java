@@ -8,6 +8,10 @@
 package com.taku.kobayashi.pngcamera;
 
 public final class R {
+    public static final class array {
+        public static final int FinishMenuNames=0x7f040001;
+        public static final int effect-values=0x7f040000;
+    }
     public static final class attr {
     }
     public static final class drawable {
@@ -29,13 +33,25 @@ public final class R {
         public static final int cameraview=0x7f030000;
     }
     public static final class string {
-        public static final int IntentCameraIDKey=0x7f040004;
-        public static final int app_name=0x7f040000;
-        public static final int hello_world=0x7f040001;
-        public static final int menu_settings=0x7f040002;
-        public static final int title_activity_main=0x7f040003;
-    }
-    public static final class style {
-        public static final int AppTheme=0x7f050000;
+        public static final int Autofocus=0x7f050005;
+        public static final int CameraColorEffect=0x7f050007;
+        public static final int IntentCameraIDKey=0x7f050004;
+        public static final int app_name=0x7f050000;
+        public static final int effect-values=0x7f050006;
+        public static final int effect_aqua=0x7f050010;
+        public static final int effect_blackboard=0x7f05000f;
+        public static final int effect_emboss=0x7f050011;
+        public static final int effect_mono=0x7f050009;
+        public static final int effect_negative=0x7f05000a;
+        public static final int effect_neon=0x7f050013;
+        public static final int effect_none=0x7f050008;
+        public static final int effect_posterize=0x7f05000d;
+        public static final int effect_sepia=0x7f05000c;
+        public static final int effect_sketch=0x7f050012;
+        public static final int effect_solarize=0x7f05000b;
+        public static final int effect_whiteboard=0x7f05000e;
+        public static final int hello_world=0x7f050001;
+        public static final int menu_settings=0x7f050002;
+        public static final int title_activity_main=0x7f050003;
     }
 }

@@ -1,10 +1,47 @@
 <resources>
 
-		<string name="app_name">DegitalCamera</string>
-		<string name="hello_world">Hello world!</string>
-		<string name="menu_settings">Settings</string>
-		<string name="title_activity_main">MainActivity</string>
-		<string name="IntentCameraIDKey">CameraID</string>
+	<string name="app_name">PNGCamera</string>
+	<string name="hello_world">Hello world!</string>
+	<string name="menu_settings">Settings</string>
+	<string name="title_activity_main">MainActivity</string>
+	<string name="IntentCameraIDKey">CameraID</string>
+
+
+	<string name="Autofocus">CameraID</string>
+
+	<string name="PrefixSupportOption">SupportOption</string>
+
+
+
+
+
+
+
+
+
+
+	<string name="CameraFlashModeKey">FlashMode</string>
+	<string name="FlashMode">フラッシュモード</string>
+	<string name="FlashModeoff">フラッシュなし</string>
+	<string name="FlashModeauto">オート</string>
+	<string name="FlashModeon">フラッシュオン</string>
+	<string name="FlashModetorch">トーチ</string>
+
+	<!-- key + サポートしている名前で命名 -->
+	<string name="CameraColorEffectKey">Effect</string>
+	<string name="Effect">エフェクト</string>
+	<string name="Effectnone">効果なし</string>
+	<string name="Effectmono">モノラル</string>
+	<string name="Effectnegative">ネガ</string>
+	<string name="Effectsolarize">ソラリゼーション</string>
+	<string name="Effectsepia">セピア</string>
+	<string name="Effectposterize">ポスタライズ</string>
+	<string name="Effectwhiteboard">ホワイトボード</string>
+	<string name="Effectblackboard">黒板</string>
+	<string name="Effectaqua">アクア</string>
+	<string name="Effectemboss">エンボス</string>
+	<string name="Effectsketch">スケッチ</string>
+	<string name="Effectneon">ネオン</string>
 
 
 </resources>
