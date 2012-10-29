@@ -34,22 +34,31 @@ public final class R {
     }
     public static final class string {
         public static final int Autofocus=0x7f050005;
-        public static final int CameraColorEffect=0x7f050007;
+        /**  key + サポートしている名前で命名 
+         */
+        public static final int CameraColorEffectKey=0x7f05000d;
+        public static final int CameraFlashModeKey=0x7f050007;
+        public static final int Effect=0x7f05000e;
+        public static final int Effectaqua=0x7f050017;
+        public static final int Effectblackboard=0x7f050016;
+        public static final int Effectemboss=0x7f050018;
+        public static final int Effectmono=0x7f050010;
+        public static final int Effectnegative=0x7f050011;
+        public static final int Effectneon=0x7f05001a;
+        public static final int Effectnone=0x7f05000f;
+        public static final int Effectposterize=0x7f050014;
+        public static final int Effectsepia=0x7f050013;
+        public static final int Effectsketch=0x7f050019;
+        public static final int Effectsolarize=0x7f050012;
+        public static final int Effectwhiteboard=0x7f050015;
+        public static final int FlashMode=0x7f050008;
+        public static final int FlashModeauto=0x7f05000a;
+        public static final int FlashModeoff=0x7f050009;
+        public static final int FlashModeon=0x7f05000b;
+        public static final int FlashModetorch=0x7f05000c;
         public static final int IntentCameraIDKey=0x7f050004;
+        public static final int PrefixSupportOption=0x7f050006;
         public static final int app_name=0x7f050000;
-        public static final int effect-values=0x7f050006;
-        public static final int effect_aqua=0x7f050010;
-        public static final int effect_blackboard=0x7f05000f;
-        public static final int effect_emboss=0x7f050011;
-        public static final int effect_mono=0x7f050009;
-        public static final int effect_negative=0x7f05000a;
-        public static final int effect_neon=0x7f050013;
-        public static final int effect_none=0x7f050008;
-        public static final int effect_posterize=0x7f05000d;
-        public static final int effect_sepia=0x7f05000c;
-        public static final int effect_sketch=0x7f050012;
-        public static final int effect_solarize=0x7f05000b;
-        public static final int effect_whiteboard=0x7f05000e;
         public static final int hello_world=0x7f050001;
         public static final int menu_settings=0x7f050002;
         public static final int title_activity_main=0x7f050003;

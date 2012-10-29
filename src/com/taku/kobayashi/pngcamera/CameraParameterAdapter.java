@@ -1,6 +1,7 @@
 package com.taku.kobayashi.pngcamera;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -9,7 +10,6 @@ import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -19,6 +19,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 	private static final String TAG = "PNGCamera_Parameter";
 	private Context m_Context;
 	private ArrayList<String> m_CameraOptionList;
+	private HashMap<String,ParameterValueAdapter> m_CameraParamsValues;
 	private Bundle m_CameraOptionValues;
 	private Bundle m_ShowingSize;
 
@@ -27,21 +28,16 @@ public class CameraParameterAdapter extends BaseAdapter{
 	private List<String> m_SupportedFlashModesList;
 	private List<String> m_SupportedFocusModesList;
 
-
 	public CameraParameterAdapter(Context con){
 		m_Context = con;
 		m_CameraOptionList = new ArrayList();
+		m_CameraParamsValues = new HashMap<String, ParameterValueAdapter>();
+
 		m_CameraOptionValues = new Bundle();
 		m_ShowingSize = new Bundle();
 	}
 
 	public void setParameters(Camera.Parameters cp){
-		String supportParam = cp.flatten();
-		Log.d(TAG,supportParam);
-		String[] params = supportParam.split(",");
-		for(int i = 0;i < params.length;i++){
-			Log.d(TAG,params[i]);
-		}
 		cp.getSupportedAntibanding();
 
 
