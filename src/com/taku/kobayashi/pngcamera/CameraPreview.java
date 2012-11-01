@@ -30,10 +30,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	private SurfaceHolder m_Holder;
 	private int m_CameraDisplayOrientation = 0;
 	private Camera m_Camera = null;
-	private Size m_ImageSize;
 	private Size m_PreViewSize;
 	private List<Size> m_PreviewList;
-	private List<Size> m_ImageList;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -63,7 +61,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-		Log.d(TAG,"surfacechange");
+
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -89,7 +87,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		//Log.d(TAG,"Focus:"+cp.getSupportedFocusModes());
 
 		m_PreviewList = cp.getSupportedPreviewSizes();
-		m_ImageList = cp.getSupportedPictureSizes();
 		/*
 		List<Size> Picture = cp.getSupportedPictureSizes();
 		for(int i = 0;i < Picture.size();i++){
@@ -101,16 +98,20 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		}
 		*/
 
-		//RgbImageAndroid.toRgbImage(PreviewImage);
 		m_PreViewSize = cp.getPreviewSize();
-		m_ImageSize = cp.getPictureSize();
-		Log.d(TAG,"Format:"+cp.getPreviewFormat());
-		cp.setPictureSize(m_PreviewList.get(0).width, m_PreviewList.get(0).height);
 		m_CameraDisplayOrientation = getCameraDisplayOrientation((Activity) m_Context, nCameraID);
 		m_Camera.setDisplayOrientation(m_CameraDisplayOrientation);
 		m_Camera.setParameters(cp);
 		m_Camera.startPreview();
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public void setCameraParams(CameraParameterAdapter cpa){
+		cpa.setParameters(m_Camera.getParameters());
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//YUV420 to BMP
 	public static final void decodeYUV420SP(int[] rgb, byte[] yuv420sp, int width, int height) {
@@ -145,12 +146,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	private PreviewCallback m_PreViewCallback = new PreviewCallback(){
 		@Override
 		public void onPreviewFrame(byte[] data, Camera camera) {
-			Log.d(TAG,"byte length:"+data.length);
-			//TODO 変更
 			decodeBitmapData(data,m_PreviewList.get(0).width,m_PreviewList.get(0).height);
 			savePicture(PreviewImage);
 		}
 	};
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void savePicture(Bitmap picture){
 		StringBuffer name = new StringBuffer();
@@ -181,23 +182,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		m_Camera.startPreview();
 	}
 
-	public void takePicture(ShutterCallback shutter, PictureCallback raw, PictureCallback jpeg){
-		//m_Camera.takePicture(shutter,raw,jpeg);
-		//m_Camera.takePicture(shutter,raw,null);
-	}
-
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	public void takePicture(ShutterCallback shutter, PictureCallback raw, PictureCallback post ,PictureCallback jpeg){
-		Log.d(TAG,"post:"+shutter+" "+raw+" "+post+" "+jpeg);
-		m_Camera.takePicture(shutter,raw,post,jpeg);
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	public void stopPreview() {
-		m_Camera.stopPreview();
-	}
 
 	public int getCameraDisplayOrientation(Activity act,int nCameraID){
 		if(Build.VERSION.SDK_INT >= 9){
@@ -254,9 +239,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		}
 		int[] rgb = new int[(width * height)];
 		decodeYUV420SP(rgb, data, width, height);
-		Log.d(TAG,"RGB" +rgb);
 		PreviewImage = Bitmap.createBitmap(rgb, width, height, Bitmap.Config.ARGB_8888);
-		Log.d(TAG,"P:"+PreviewImage);
 		rgb = null;
 
 		if (m_CameraDisplayOrientation != 0) {

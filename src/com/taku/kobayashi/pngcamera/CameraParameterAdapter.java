@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
@@ -17,8 +18,8 @@ import android.widget.BaseAdapter;
 public class CameraParameterAdapter extends BaseAdapter{
 
 	private static final String TAG = "PNGCamera_Parameter";
-	private Context m_Context;
-	private ArrayList<String> m_CameraOptionList;
+	private Activity m_Activity;
+	private ArrayList<String> m_CameraParamsList;
 	private HashMap<String,ParameterValueAdapter> m_CameraParamsValues;
 	private Bundle m_CameraOptionValues;
 	private Bundle m_ShowingSize;
@@ -28,18 +29,18 @@ public class CameraParameterAdapter extends BaseAdapter{
 	private List<String> m_SupportedFlashModesList;
 	private List<String> m_SupportedFocusModesList;
 
-	public CameraParameterAdapter(Context con){
-		m_Context = con;
-		m_CameraOptionList = new ArrayList();
+	public CameraParameterAdapter(Activity act){
+		m_Activity = act;
+		m_CameraParamsList = new ArrayList();
 		m_CameraParamsValues = new HashMap<String, ParameterValueAdapter>();
 
 		m_CameraOptionValues = new Bundle();
 		m_ShowingSize = new Bundle();
+		m_CameraOptionValues.
 	}
 
 	public void setParameters(Camera.Parameters cp){
 		cp.getSupportedAntibanding();
-
 
 		//カメラのカラーエフェクト
 		setOptionValue(R.string.CameraColorEffectKey,cp.getSupportedColorEffects());
@@ -53,17 +54,27 @@ public class CameraParameterAdapter extends BaseAdapter{
 		cp.getSupportedJpegThumbnailSizes();
 	}
 
-	private void setOptionValue(int keyRes, List valueList){
-		String key = m_Context.getString(keyRes);
+	private void setOptionValue(int keyRes, List<String> valueList){
+		String key = m_Activity.getString(keyRes);
 		if(valueList.isEmpty() == false){
-			int res = m_Context.getResources().getIdentifier(key, "string", m_Context.getPackageName());
+			for(int i = 0;i < valueList.size();i++){
+
+			}
+			ParameterValueAdapter pva = new ParameterValueAdapter(valueList);
+			m_CameraParamsValues.put(key, pva);
+			int res = m_Activity.getResources().getIdentifier(key, "string", m_Activity.getPackageName());
 			//CameraParamsListのポジション番号を記録
-			String optionsPosition = m_Context.getString(R.string.PrefixSupportOption) + String.valueOf(m_CameraOptionList.size());
+
+			String optionsPosition = m_Activity.getString(R.string.PrefixSupportOption) + String.valueOf(m_CameraParamsList.size());
 			m_CameraOptionValues.putString(optionsPosition, key);
-			m_CameraOptionList.add(m_Context.getString(res));
+			m_CameraParamsList.add(m_Activity.getString(res));
 			//要素を記録
 			m_CameraOptionValues.putStringArrayList(key, (ArrayList<String>) valueList);
 		}
+	}
+	
+	private void setKeyValues(int position){
+		
 	}
 
 	public void showSupportOptions(int position){
@@ -87,26 +98,26 @@ public class CameraParameterAdapter extends BaseAdapter{
 	}
 
 	private void recordParams(String key,String value){
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Context);
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Activity);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putString(key, value);
 		editor.commit();
 	}
 
 	private void recordSupportedParams(String key,Set<String> params){
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Context);
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Activity);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putStringSet(key, params);
 		editor.commit();
 	}
 
 	private Set<String> getRecordSupportedParams(String key){
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Context);
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Activity);
 		return settings.getStringSet(key, null);
 	}
 
 	private String getRecordValue(String key){
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Context);
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Activity);
 		return settings.getString(key, null);
 	}
 

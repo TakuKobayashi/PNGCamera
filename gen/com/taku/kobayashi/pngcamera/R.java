@@ -9,8 +9,8 @@ package com.taku.kobayashi.pngcamera;
 
 public final class R {
     public static final class array {
-        public static final int FinishMenuNames=0x7f040001;
-        public static final int effect-values=0x7f040000;
+        public static final int FinishMenuNames=0x7f050001;
+        public static final int effect-values=0x7f050000;
     }
     public static final class attr {
     }
@@ -21,46 +21,56 @@ public final class R {
         public static final int device_access_switch_camera=0x7f020003;
         public static final int ic_action_search=0x7f020004;
         public static final int ic_launcher=0x7f020005;
-        public static final int switchcamera_buttonshape=0x7f020006;
+        public static final int setting_icon=0x7f020006;
+        public static final int switchcamera_buttonshape=0x7f020007;
     }
     public static final class id {
-        public static final int CameraFooterLayout=0x7f060000;
-        public static final int CameraPreview=0x7f060001;
-        public static final int InOutButton=0x7f060003;
-        public static final int ShutterButton=0x7f060002;
+        public static final int CameraFooterLayout=0x7f080000;
+        public static final int CameraOptionButton=0x7f080005;
+        public static final int CameraParamsButton=0x7f080003;
+        public static final int CameraParamsList=0x7f080004;
+        public static final int CameraPreview=0x7f080001;
+        public static final int InOutButton=0x7f080006;
+        public static final int ShutterButton=0x7f080002;
     }
     public static final class layout {
         public static final int cameraview=0x7f030000;
     }
+    public static final class raw {
+        public static final int camera_shutter=0x7f040000;
+    }
     public static final class string {
-        public static final int Autofocus=0x7f050005;
+        public static final int Autofocus=0x7f060005;
         /**  key + サポートしている名前で命名 
          */
-        public static final int CameraColorEffectKey=0x7f05000d;
-        public static final int CameraFlashModeKey=0x7f050007;
-        public static final int Effect=0x7f05000e;
-        public static final int Effectaqua=0x7f050017;
-        public static final int Effectblackboard=0x7f050016;
-        public static final int Effectemboss=0x7f050018;
-        public static final int Effectmono=0x7f050010;
-        public static final int Effectnegative=0x7f050011;
-        public static final int Effectneon=0x7f05001a;
-        public static final int Effectnone=0x7f05000f;
-        public static final int Effectposterize=0x7f050014;
-        public static final int Effectsepia=0x7f050013;
-        public static final int Effectsketch=0x7f050019;
-        public static final int Effectsolarize=0x7f050012;
-        public static final int Effectwhiteboard=0x7f050015;
-        public static final int FlashMode=0x7f050008;
-        public static final int FlashModeauto=0x7f05000a;
-        public static final int FlashModeoff=0x7f050009;
-        public static final int FlashModeon=0x7f05000b;
-        public static final int FlashModetorch=0x7f05000c;
-        public static final int IntentCameraIDKey=0x7f050004;
-        public static final int PrefixSupportOption=0x7f050006;
-        public static final int app_name=0x7f050000;
-        public static final int hello_world=0x7f050001;
-        public static final int menu_settings=0x7f050002;
-        public static final int title_activity_main=0x7f050003;
+        public static final int CameraColorEffectKey=0x7f06000d;
+        public static final int CameraFlashModeKey=0x7f060007;
+        public static final int Effect=0x7f06000e;
+        public static final int Effectaqua=0x7f060017;
+        public static final int Effectblackboard=0x7f060016;
+        public static final int Effectemboss=0x7f060018;
+        public static final int Effectmono=0x7f060010;
+        public static final int Effectnegative=0x7f060011;
+        public static final int Effectneon=0x7f06001a;
+        public static final int Effectnone=0x7f06000f;
+        public static final int Effectposterize=0x7f060014;
+        public static final int Effectsepia=0x7f060013;
+        public static final int Effectsketch=0x7f060019;
+        public static final int Effectsolarize=0x7f060012;
+        public static final int Effectwhiteboard=0x7f060015;
+        public static final int FlashMode=0x7f060008;
+        public static final int FlashModeauto=0x7f06000a;
+        public static final int FlashModeoff=0x7f060009;
+        public static final int FlashModeon=0x7f06000b;
+        public static final int FlashModetorch=0x7f06000c;
+        public static final int IntentCameraIDKey=0x7f060004;
+        public static final int PrefixSupportOption=0x7f060006;
+        public static final int app_name=0x7f060000;
+        public static final int hello_world=0x7f060001;
+        public static final int menu_settings=0x7f060002;
+        public static final int title_activity_main=0x7f060003;
+    }
+    public static final class style {
+        public static final int AppTheme=0x7f070000;
     }
 }

@@ -9,13 +9,18 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
+import android.widget.ListView;
 
 public class PNGCameraActivity extends Activity {
 
 	private static final String TAG = "AnotherWorld_AnotherWorldActivity";
 	private CameraPreview m_CameraPreview = null;
 	private int m_nCameraID = 0;
+	private ListView m_CameraParamsList;
+	private CameraParameterAdapter m_CameraParameterAdapter;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -42,6 +47,12 @@ public class PNGCameraActivity extends Activity {
 		}else{
 			InOutButton.setVisibility(View.INVISIBLE);
 		}
+
+		ImageButton CameraOptionButton = (ImageButton) findViewById(R.id.CameraParamsButton);
+		CameraOptionButton.setImageResource(R.drawable.setting_icon);
+		CameraOptionButton.setOnClickListener(m_CameraOptionListener);
+
+		m_CameraParameterAdapter = new CameraParameterAdapter(this);
 
 	}
 
@@ -90,6 +101,31 @@ public class PNGCameraActivity extends Activity {
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	private OnClickListener m_CameraOptionListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			if(m_CameraParamsList.getVisibility() == View.GONE){
+				m_CameraParamsList.setVisibility(View.VISIBLE);
+			}else{
+				m_CameraParamsList.setVisibility(View.GONE);
+			}
+		}
+	};
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	private OnItemClickListener m_CameraParameterListener = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> adapterview, View view, int position,long id) {
+			m_CameraParameterAdapter.setCameraOption(position);
+		}
+
+	};
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	private Camera.AutoFocusCallback CameraAutoFocusCallback = new Camera.AutoFocusCallback() {
 		public void onAutoFocus(boolean success, Camera camera) {
 			m_CameraPreview.takuPreviewPicture();
@@ -112,6 +148,12 @@ public class PNGCameraActivity extends Activity {
 		super.onResume();
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
 		m_CameraPreview.setCamera(m_nCameraID);
+		m_CameraPreview.setCameraParams(m_CameraParameterAdapter);
+
+		m_CameraParamsList = (ListView) findViewById(R.id.CameraParamsList);
+		m_CameraParamsList.setAdapter(m_CameraParameterAdapter);
+		m_CameraParamsList.setOnItemClickListener(m_CameraParameterListener);
+		m_CameraParamsList.setVisibility(View.GONE);
 	};
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -120,6 +162,7 @@ public class PNGCameraActivity extends Activity {
 	protected void onPause(){
 		super.onPause();
 		m_CameraPreview.releaseCamera();
+		m_CameraParamsList = null;
 	};
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -129,6 +172,7 @@ public class PNGCameraActivity extends Activity {
 		super.onDestroy();
 		Tools.releaseImageView((ImageButton) findViewById(R.id.ShutterButton));
 		Tools.releaseImageView((ImageButton) findViewById(R.id.InOutButton));
+		Tools.releaseImageView((ImageButton) findViewById(R.id.CameraParamsButton));
 	}
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------

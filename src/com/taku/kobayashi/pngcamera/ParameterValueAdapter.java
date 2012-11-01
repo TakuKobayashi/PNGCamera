@@ -1,6 +1,7 @@
 package com.taku.kobayashi.pngcamera;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,32 +9,34 @@ import android.widget.BaseAdapter;
 
 public class ParameterValueAdapter extends BaseAdapter{
 
-	ArrayList<String> m_Values;
+	List<String> m_Values;
 
-	public ParameterValueAdapter(String ValuesKey){
-
+	public ParameterValueAdapter(List<String> Values){
+		m_Values = Values;
 	}
 
 	@Override
 	public int getCount() {
-		return 0;
+		return m_Values.size();
 	}
 
 	@Override
-	public Object getItem(int arg0) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+	public Object getItem(int position) {
+		return position;
 	}
 
 	@Override
 	public long getItemId(int position) {
-		// TODO 自動生成されたメソッド・スタブ
-		return 0;
+		return position;
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		if(convertView == null){
+			convertView = (TextView);
+		}else{
+
+		}
+		return convertView;
 	}
 }

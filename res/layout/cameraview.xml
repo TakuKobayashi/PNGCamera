@@ -54,6 +54,23 @@ Copyright (c) 2012年 __CompanyName__. All rights reserved.
 	</FrameLayout>
 
 	<ImageButton
+		android:id="@+id/CameraParamsButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:layout_centerHorizontal="true"
+		android:background="#00000000"
+		android:scaleType="fitXY" />
+
+	<ListView
+		android:id="@+id/CameraParamsList"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/CameraOptionButton"
+		android:layout_centerHorizontal="true"
+	/>
+
+	<ImageButton
 		android:id="@+id/InOutButton"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
