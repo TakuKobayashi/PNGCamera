@@ -1,6 +1,7 @@
 package com.taku.kobayashi.pngcamera;
 
 import java.util.ArrayList;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -8,38 +9,42 @@ import java.util.Set;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 public class CameraParameterAdapter extends BaseAdapter{
 
 	private static final String TAG = "PNGCamera_Parameter";
+	private Camera.Parameters m_Parameter;
 	private Activity m_Activity;
 	private ArrayList<String> m_CameraParamsList;
 	private HashMap<String,ParameterValueAdapter> m_CameraParamsValues;
-	private Bundle m_CameraOptionValues;
-	private Bundle m_ShowingSize;
+	private HashMap<String,Boolean> m_bSelected;
+	private ParamsSelectListener SelectListener = null;
 
-	private List<String> m_SupportedAntibandingList;
-	private List<String> m_SupportedColorEffectsList;
-	private List<String> m_SupportedFlashModesList;
-	private List<String> m_SupportedFocusModesList;
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public CameraParameterAdapter(Activity act){
 		m_Activity = act;
-		m_CameraParamsList = new ArrayList();
+		m_CameraParamsList = new ArrayList<String>();
 		m_CameraParamsValues = new HashMap<String, ParameterValueAdapter>();
-
-		m_CameraOptionValues = new Bundle();
-		m_ShowingSize = new Bundle();
-		m_CameraOptionValues.
+		m_bSelected = new HashMap<String, Boolean>();
 	}
 
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	public void setParameters(Camera.Parameters cp){
+		m_Parameter = cp;
 		cp.getSupportedAntibanding();
 
 		//カメラのカラーエフェクト
@@ -54,48 +59,29 @@ public class CameraParameterAdapter extends BaseAdapter{
 		cp.getSupportedJpegThumbnailSizes();
 	}
 
-	private void setOptionValue(int keyRes, List<String> valueList){
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	private void setOptionValue(int keyRes, List<String> paramsList){
 		String key = m_Activity.getString(keyRes);
-		if(valueList.isEmpty() == false){
-			for(int i = 0;i < valueList.size();i++){
-
+		if(paramsList.isEmpty() == false){
+			m_CameraParamsList.add(key);
+			//keyに該当する日本語のリスト
+			ArrayList<String> valueList = new ArrayList<String>();
+			for(int i = 0;i < paramsList.size();i++){
+				int value_res = m_Activity.getResources().getIdentifier(key + paramsList.get(i), "string", m_Activity.getPackageName());
+				if(value_res != 0){
+					valueList.add(m_Activity.getString(value_res));
+				}else{
+					valueList.add(paramsList.get(i));
+				}
 			}
-			ParameterValueAdapter pva = new ParameterValueAdapter(valueList);
+			ParameterValueAdapter pva = new ParameterValueAdapter(m_Activity,valueList);
 			m_CameraParamsValues.put(key, pva);
-			int res = m_Activity.getResources().getIdentifier(key, "string", m_Activity.getPackageName());
-			//CameraParamsListのポジション番号を記録
-
-			String optionsPosition = m_Activity.getString(R.string.PrefixSupportOption) + String.valueOf(m_CameraParamsList.size());
-			m_CameraOptionValues.putString(optionsPosition, key);
-			m_CameraParamsList.add(m_Activity.getString(res));
-			//要素を記録
-			m_CameraOptionValues.putStringArrayList(key, (ArrayList<String>) valueList);
+			m_bSelected.put(key, false);
 		}
 	}
-	
-	private void setKeyValues(int position){
-		
-	}
 
-	public void showSupportOptions(int position){
-
-		int currentPosition = position;
-		Set<String> keys = m_ShowingSize.keySet();
-		for(String key : keys){
-			currentPosition = currentPosition - m_ShowingSize.getInt(key);
-		}
-		ArrayList supportList = m_CameraOptionValues.getStringArrayList(key);
-
-	}
-
-	public void setCameraOption(int position){
-
-	}
-
-	//選択された場所を正確に取り出すために計算する
-	private void controllPostion(int position){
-
-	}
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void recordParams(String key,String value){
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Activity);
@@ -104,43 +90,124 @@ public class CameraParameterAdapter extends BaseAdapter{
 		editor.commit();
 	}
 
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	private void recordSupportedParams(String key,Set<String> params){
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Activity);
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putStringSet(key, params);
 		editor.commit();
 	}
 
-	private Set<String> getRecordSupportedParams(String key){
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Activity);
-		return settings.getStringSet(key, null);
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public void switchSelected(int position){
+		String key = m_CameraParamsList.get(position);
+		if(m_bSelected.get(key) == false){
+			m_bSelected.put(key, true);
+		}else{
+			m_bSelected.put(key, false);
+		}
+		this.notifyDataSetChanged();
 	}
 
-	private String getRecordValue(String key){
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Activity);
-		return settings.getString(key, null);
-	}
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@Override
 	public int getCount() {
-		return 0;
+		return m_CameraParamsList.size();
 	}
 
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	@Override
-	public Object getItem(int arg0) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+	public Object getItem(int position) {
+		return position;
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@Override
 	public long getItemId(int position) {
-		// TODO 自動生成されたメソッド・スタブ
-		return 0;
+		return position;
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		if(convertView == null){
+			convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamsadapterview, null);
+		}
+		String key = m_CameraParamsList.get(position);
+		int res = m_Activity.getResources().getIdentifier(key, "string", m_Activity.getPackageName());
+		//valueはxml内で定義された該当する日本語
+		String value = null;
+		if(res != 0){
+			value = m_Activity.getString(res);
+		}else{
+			value = key;
+		}
+		TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
+		paramtext.setText(value);
+		ListView valueListView = (ListView) convertView.findViewById(R.id.ParamsValueList);
+		valueListView.setAdapter(m_CameraParamsValues.get(key));
+		valueListView.setOnItemClickListener(m_ListValuesListener);
+
+		if(m_bSelected.get(key) == false){
+			valueListView.setVisibility(View.GONE);
+		}else{
+			valueListView.setVisibility(View.VISIBLE);
+		}
+
+		return convertView;
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	//TODO クリックするとCameraにParameterが入る
+	private OnItemClickListener m_ListValuesListener = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
+			/*
+			if(SelectListener != null){
+				SelectListener.selected(m_Parameter);
+			}
+			*/
+		}
+
+	};
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * リスナーを追加する
+	 */
+	public void setOnParamsSelectListener(ParamsSelectListener listener){
+		this.SelectListener = listener;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * リスナーを削除する
+	 */
+	public void removeListener(){
+		this.SelectListener = null;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+	//検出処理が終わったことを通知する独自のリスナーを作成
+	public interface ParamsSelectListener extends EventListener {
+
+		//検出処理が終了したことを通知する
+		public void selected(Camera.Parameters params);
+
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
 }

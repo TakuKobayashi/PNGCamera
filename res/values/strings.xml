@@ -1,15 +1,13 @@
 <resources>
 
 	<string name="app_name">PNGCamera</string>
-	<string name="hello_world">Hello world!</string>
-	<string name="menu_settings">Settings</string>
 	<string name="title_activity_main">MainActivity</string>
 	<string name="IntentCameraIDKey">CameraID</string>
-
 
 	<string name="Autofocus">CameraID</string>
 
 	<string name="PrefixSupportOption">SupportOption</string>
+	<string name="SettingButtonText">設定</string>
 
 
 

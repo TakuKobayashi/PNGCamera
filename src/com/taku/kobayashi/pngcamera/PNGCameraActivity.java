@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class PNGCameraActivity extends Activity {
 
@@ -48,8 +49,9 @@ public class PNGCameraActivity extends Activity {
 			InOutButton.setVisibility(View.INVISIBLE);
 		}
 
-		ImageButton CameraOptionButton = (ImageButton) findViewById(R.id.CameraParamsButton);
-		CameraOptionButton.setImageResource(R.drawable.setting_icon);
+		TextView CameraOptionButton = (TextView) findViewById(R.id.CameraParamsButton);
+		//ImageButton CameraOptionButton = (ImageButton) findViewById(R.id.CameraParamsButton);
+		//CameraOptionButton.setImageResource(R.drawable.setting_icon);
 		CameraOptionButton.setOnClickListener(m_CameraOptionListener);
 
 		m_CameraParameterAdapter = new CameraParameterAdapter(this);
@@ -111,6 +113,7 @@ public class PNGCameraActivity extends Activity {
 				m_CameraParamsList.setVisibility(View.GONE);
 			}
 		}
+
 	};
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -119,7 +122,7 @@ public class PNGCameraActivity extends Activity {
 
 		@Override
 		public void onItemClick(AdapterView<?> adapterview, View view, int position,long id) {
-			m_CameraParameterAdapter.setCameraOption(position);
+			m_CameraParameterAdapter.switchSelected(position);
 		}
 
 	};
@@ -172,7 +175,7 @@ public class PNGCameraActivity extends Activity {
 		super.onDestroy();
 		Tools.releaseImageView((ImageButton) findViewById(R.id.ShutterButton));
 		Tools.releaseImageView((ImageButton) findViewById(R.id.InOutButton));
-		Tools.releaseImageView((ImageButton) findViewById(R.id.CameraParamsButton));
+		//Tools.releaseImageView((ImageButton) findViewById(R.id.CameraParamsButton));
 	}
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------
