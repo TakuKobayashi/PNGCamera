@@ -6,11 +6,14 @@ package com.taku.kobayashi.pngcamera;
 import java.io.IOException;
 import java.util.List;
 
+import com.taku.kobayashi.pngcamera.CameraParameterAdapter.ParamsSelectListener;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
+import android.hardware.Camera.Parameters;
 import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.ShutterCallback;
@@ -25,7 +28,7 @@ import android.view.SurfaceView;
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback{
 
 	public Bitmap PreviewImage;
-	private static final String TAG = "AnotherWorld_CameraPreView";
+	private static final String TAG = "PNGCamera_CameraPreView";
 	private Context m_Context;
 	private SurfaceHolder m_Holder;
 	private int m_CameraDisplayOrientation = 0;
@@ -109,6 +112,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	public void setCameraParams(CameraParameterAdapter cpa){
 		cpa.setParameters(m_Camera.getParameters());
+		cpa.setOnParamsSelectListener(new ParamsSelectListener() {
+
+			@Override
+			public void selected(Parameters params) {
+				Log.d(TAG,"ParamselectListener:"+params);
+			}
+		});
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

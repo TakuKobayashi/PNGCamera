@@ -8,15 +8,18 @@
 
 	<string name="PrefixSupportOption">SupportOption</string>
 	<string name="SettingButtonText">設定</string>
+	<!-- int型でとれるカメラのサポートしているサイズをつなぐ文字列 -->
+	<string name="ConnectSizeAndSize">×</string>
 
+	<string name="SaveFormatKey">SaveFormat</string>
+	<string name="SaveFormat">保存画像のフォーマット</string>
+	<string name="SaveFormatPNG">PNG</string>
+	<string name="SaveFormatJPEG">JPEG</string>
 
-
-
-
-
-
-
-
+	<string name="SutterSoundKey">SutterSound</string>
+	<string name="SutterSound">シャッター音</string>
+	<string name="SutterSoundON">有り</string>
+	<string name="SutterSoundOFF">なし</string>
 
 	<string name="CameraFlashModeKey">FlashMode</string>
 	<string name="FlashMode">フラッシュモード</string>

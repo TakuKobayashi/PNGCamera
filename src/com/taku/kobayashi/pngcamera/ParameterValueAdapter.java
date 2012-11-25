@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -11,12 +12,14 @@ import android.widget.TextView;
 
 public class ParameterValueAdapter extends BaseAdapter{
 
-	Activity m_Activity;
-	ArrayList<String> m_Values;
+	private static final String TAG = "PNGCamera_ParameterValueAdapter";
+	private Activity m_Activity;
+	private ArrayList<String> m_Values;
 
 	public ParameterValueAdapter(Activity act,ArrayList<String> Values){
 		m_Activity = act;
 		m_Values = Values;
+		Log.d(TAG,"values:"+Values+" size:"+m_Values.size());
 	}
 
 	@Override
@@ -41,7 +44,7 @@ public class ParameterValueAdapter extends BaseAdapter{
 		}
 		TextView parameterValueText= (TextView) convertView.findViewById(R.id.ParameterValueText);
 		parameterValueText.setText(m_Values.get(position));
-
+		Log.d(TAG,"position:"+position+" value:"+m_Values.get(position));
 		return convertView;
 	}
 

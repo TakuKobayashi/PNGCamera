@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string-array name="effect-values">
-		<item>none</item>
-		<item>Album</item>
-		<item>キャンセル</item>
+	<string-array name="SaveFormatValues">
+		<item>PNG</item>
+		<item>JPEG</item>
 	</string-array>
 
-	<string-array name="FinishMenuNames">
-		<item>トップに戻る</item>
-		<item>Facebookに投稿</item>
-		<item>twitterに投稿</item>
-		<item>メールで送信</item>
-		<item>キャンセル</item>
+	<string-array name="SutterSoundValues">
+		<item>ON</item>
+		<item>OFF</item>
 	</string-array>
 
 </resources>

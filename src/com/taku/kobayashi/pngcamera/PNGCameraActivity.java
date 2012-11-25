@@ -1,5 +1,7 @@
 package com.taku.kobayashi.pngcamera;
 
+import java.util.HashMap;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
@@ -17,7 +19,7 @@ import android.widget.TextView;
 
 public class PNGCameraActivity extends Activity {
 
-	private static final String TAG = "AnotherWorld_AnotherWorldActivity";
+	private static final String TAG = "PNGCamera_AnotherWorldActivity";
 	private CameraPreview m_CameraPreview = null;
 	private int m_nCameraID = 0;
 	private ListView m_CameraParamsList;

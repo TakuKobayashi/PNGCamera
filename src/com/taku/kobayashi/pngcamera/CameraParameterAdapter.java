@@ -1,6 +1,7 @@
 package com.taku.kobayashi.pngcamera;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
@@ -9,10 +10,13 @@ import java.util.Set;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.hardware.Camera;
+import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -43,27 +47,46 @@ public class CameraParameterAdapter extends BaseAdapter{
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	//TODO PNG.JPEG シャッター音 オートフォーカス サイズ
 	public void setParameters(Camera.Parameters cp){
 		m_Parameter = cp;
-		cp.getSupportedAntibanding();
 
+
+		//PNG,JPEG
+		setOptionValue(R.string.SaveFormatKey,getArraysFromXml(R.array.SaveFormatValues));
+		//シャッター音
+		setOptionValue(R.string.SutterSoundKey,getArraysFromXml(R.array.SutterSoundValues));
+		//保存画像のサイズ
+		setOptionValue(R.string.SutterSoundKey,getArraysFromXml(R.array.SutterSoundValues));
 		//カメラのカラーエフェクト
 		setOptionValue(R.string.CameraColorEffectKey,cp.getSupportedColorEffects());
 		//カメラのフラッシュ
 		setOptionValue(R.string.CameraFlashModeKey,cp.getSupportedFlashModes());
 		//カメラのフォーカス
 		setOptionValue(R.string.CameraFlashModeKey,cp.getSupportedFlashModes());
-		cp.getSupportedFocusModes();
-
-		cp.getSupportedFocusModes();
-		cp.getSupportedJpegThumbnailSizes();
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	private List<String> getArraysFromXml(int res){
+		String[] strArray = m_Activity.getResources().getStringArray(res);
+		return Arrays.asList(strArray);
+	}
+
+	private List<String> conversionSizeToString(List<Size> sizeList){
+		ArrayList<String> converted = new ArrayList<String>();
+		for(int i = 0;i < sizeList.size();i++){
+			//TODO 縦横によってサイズを絞り込む
+			String width = String.valueOf(sizeList.get(i).width);
+			//converted.add(object);
+		}
+		return null;
+	}
+
 	private void setOptionValue(int keyRes, List<String> paramsList){
 		String key = m_Activity.getString(keyRes);
 		if(paramsList.isEmpty() == false){
+			Log.d(TAG, "params:"+paramsList);
 			m_CameraParamsList.add(key);
 			//keyに該当する日本語のリスト
 			ArrayList<String> valueList = new ArrayList<String>();
@@ -75,6 +98,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 					valueList.add(paramsList.get(i));
 				}
 			}
+			Log.d(TAG, "cameraParams:"+valueList);
 			ParameterValueAdapter pva = new ParameterValueAdapter(m_Activity,valueList);
 			m_CameraParamsValues.put(key, pva);
 			m_bSelected.put(key, false);
@@ -169,11 +193,10 @@ public class CameraParameterAdapter extends BaseAdapter{
 
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
-			/*
+			Log.d(TAG,"click"+SelectListener);
 			if(SelectListener != null){
 				SelectListener.selected(m_Parameter);
 			}
-			*/
 		}
 
 	};
