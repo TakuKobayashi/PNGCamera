@@ -2,6 +2,8 @@ package com.taku.kobayashi.pngcamera;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.EventListener;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +34,8 @@ public class CameraParameterAdapter extends BaseAdapter{
 	private Camera.Parameters m_Parameter;
 	private Activity m_Activity;
 	private ArrayList<String> m_CameraParamsList;
-	private HashMap<String,ParameterValueAdapter> m_CameraParamsValues;
+	private Bundle m_CameraParamsValues;
+	//private HashMap<String,List<String>> m_CameraParamsValues;
 	private HashMap<String,Boolean> m_bSelected;
 	private ParamsSelectListener SelectListener = null;
 
@@ -41,7 +44,8 @@ public class CameraParameterAdapter extends BaseAdapter{
 	public CameraParameterAdapter(Activity act){
 		m_Activity = act;
 		m_CameraParamsList = new ArrayList<String>();
-		m_CameraParamsValues = new HashMap<String, ParameterValueAdapter>();
+		//m_CameraParamsValues = new HashMap<String, List<String>>();
+		m_CameraParamsValues = new Bundle();
 		m_bSelected = new HashMap<String, Boolean>();
 	}
 
@@ -50,7 +54,6 @@ public class CameraParameterAdapter extends BaseAdapter{
 	//TODO PNG.JPEG シャッター音 オートフォーカス サイズ
 	public void setParameters(Camera.Parameters cp){
 		m_Parameter = cp;
-
 
 		//PNG,JPEG
 		setOptionValue(R.string.SaveFormatKey,getArraysFromXml(R.array.SaveFormatValues));
@@ -83,11 +86,17 @@ public class CameraParameterAdapter extends BaseAdapter{
 		return null;
 	}
 
+
 	private void setOptionValue(int keyRes, List<String> paramsList){
 		String key = m_Activity.getString(keyRes);
 		if(paramsList.isEmpty() == false){
 			Log.d(TAG, "params:"+paramsList);
-			m_CameraParamsList.add(key);
+			ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.CameraParameterKeyListKey));
+			keyList.add(key);
+			m_CameraParamsValues.putStringArrayList(key, keyList);
+
+			//m_CameraParamsList.add(key);
+			m_CameraParamsValues.putInt(m_Activity.getResources().getString(R.string.AdapterCurrentListSizeKey), m_CameraParamsList.size());
 			//keyに該当する日本語のリスト
 			ArrayList<String> valueList = new ArrayList<String>();
 			for(int i = 0;i < paramsList.size();i++){
@@ -99,8 +108,9 @@ public class CameraParameterAdapter extends BaseAdapter{
 				}
 			}
 			Log.d(TAG, "cameraParams:"+valueList);
-			ParameterValueAdapter pva = new ParameterValueAdapter(m_Activity,valueList);
-			m_CameraParamsValues.put(key, pva);
+			m_CameraParamsValues.putStringArrayList(key, valueList);
+			//m_CameraParamsValues.put(key, valueList);
+			//TODO Bundleにする
 			m_bSelected.put(key, false);
 		}
 	}
@@ -126,6 +136,14 @@ public class CameraParameterAdapter extends BaseAdapter{
 
 	public void switchSelected(int position){
 		String key = m_CameraParamsList.get(position);
+		ArrayList<String> setList = m_CameraParamsValues.getStringArrayList(key);
+		ArrayList<String> currentList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.AdapterCurrentSelectListKey));
+		if(setList.equals(currentList) == true){
+
+		}else{
+
+		}
+		m_CameraParamsValues.putStringArrayList(key, value);
 		if(m_bSelected.get(key) == false){
 			m_bSelected.put(key, true);
 		}else{
@@ -138,7 +156,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 
 	@Override
 	public int getCount() {
-		return m_CameraParamsList.size();
+		return m_CameraParamsValues.getInt(m_Activity.getResources().getString(R.string.AdapterCurrentListSizeKey));
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -176,6 +194,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 		ListView valueListView = (ListView) convertView.findViewById(R.id.ParamsValueList);
 		valueListView.setAdapter(m_CameraParamsValues.get(key));
 		valueListView.setOnItemClickListener(m_ListValuesListener);
+		valueListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 		if(m_bSelected.get(key) == false){
 			valueListView.setVisibility(View.GONE);
@@ -190,7 +209,6 @@ public class CameraParameterAdapter extends BaseAdapter{
 
 	//TODO クリックするとCameraにParameterが入る
 	private OnItemClickListener m_ListValuesListener = new OnItemClickListener() {
-
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
 			Log.d(TAG,"click"+SelectListener);

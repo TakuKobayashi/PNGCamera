@@ -4,10 +4,15 @@
 	<string name="title_activity_main">MainActivity</string>
 	<string name="IntentCameraIDKey">CameraID</string>
 
+	<string name="AdapterCurrentListSizeKey">CurrentSize</string>
+	<string name="AdapterCurrentSelectListKey">CurrentSelect</string>
+	<string name="CameraParameterKeyListKey">CameraParameterKeyList</string>
+
+
 	<string name="Autofocus">CameraID</string>
 
 	<string name="PrefixSupportOption">SupportOption</string>
-	<string name="SettingButtonText">設定</string>
+	<string name="SettingButtonText">オプション</string>
 	<!-- int型でとれるカメラのサポートしているサイズをつなぐ文字列 -->
 	<string name="ConnectSizeAndSize">×</string>
 

@@ -113,7 +113,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	public void setCameraParams(CameraParameterAdapter cpa){
 		cpa.setParameters(m_Camera.getParameters());
 		cpa.setOnParamsSelectListener(new ParamsSelectListener() {
-
 			@Override
 			public void selected(Parameters params) {
 				Log.d(TAG,"ParamselectListener:"+params);
