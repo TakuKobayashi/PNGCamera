@@ -4,9 +4,13 @@
 	<string name="title_activity_main">MainActivity</string>
 	<string name="IntentCameraIDKey">CameraID</string>
 
-	<string name="AdapterCurrentListSizeKey">CurrentSize</string>
-	<string name="AdapterCurrentSelectListKey">CurrentSelect</string>
-	<string name="CameraParameterKeyListKey">CameraParameterKeyList</string>
+	<string name="CurrentAdapterSizeKey">CurrentAdapterSize</string>
+	<string name="CurrentSelectShowListKey">CurrentSelectShowList</string>
+	<string name="CurrentSelectPositionKey">CurrentSelectPosition</string>
+	<string name="KeyListAccessKey">KeyListAccess</string>
+	<string name="DefaultAdapterSizeKey">DefaultAdapterSize</string>
+	<string name="ShowListPrefixKey">ShowListPrefix</string>
+	<string name="ValueListPrefixKey">ValueListPrefix</string>
 
 
 	<string name="Autofocus">CameraID</string>

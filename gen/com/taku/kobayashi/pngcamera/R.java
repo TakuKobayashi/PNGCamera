@@ -45,43 +45,50 @@ public final class R {
         public static final int camera_shutter=0x7f040000;
     }
     public static final class string {
-        public static final int Autofocus=0x7f060003;
+        public static final int Autofocus=0x7f06000a;
         /**  key + サポートしている名前で命名 
          */
-        public static final int CameraColorEffectKey=0x7f060015;
-        public static final int CameraFlashModeKey=0x7f06000f;
+        public static final int CameraColorEffectKey=0x7f06001c;
+        public static final int CameraFlashModeKey=0x7f060016;
         /**  int型でとれるカメラのサポートしているサイズをつなぐ文字列 
          */
-        public static final int ConnectSizeAndSize=0x7f060006;
-        public static final int Effect=0x7f060016;
-        public static final int Effectaqua=0x7f06001f;
-        public static final int Effectblackboard=0x7f06001e;
-        public static final int Effectemboss=0x7f060020;
-        public static final int Effectmono=0x7f060018;
-        public static final int Effectnegative=0x7f060019;
-        public static final int Effectneon=0x7f060022;
-        public static final int Effectnone=0x7f060017;
-        public static final int Effectposterize=0x7f06001c;
-        public static final int Effectsepia=0x7f06001b;
-        public static final int Effectsketch=0x7f060021;
-        public static final int Effectsolarize=0x7f06001a;
-        public static final int Effectwhiteboard=0x7f06001d;
-        public static final int FlashMode=0x7f060010;
-        public static final int FlashModeauto=0x7f060012;
-        public static final int FlashModeoff=0x7f060011;
-        public static final int FlashModeon=0x7f060013;
-        public static final int FlashModetorch=0x7f060014;
+        public static final int ConnectSizeAndSize=0x7f06000d;
+        public static final int CurrentAdapterSizeKey=0x7f060003;
+        public static final int CurrentSelectPositionKey=0x7f060005;
+        public static final int CurrentSelectShowListKey=0x7f060004;
+        public static final int DefaultAdapterSizeKey=0x7f060007;
+        public static final int Effect=0x7f06001d;
+        public static final int Effectaqua=0x7f060026;
+        public static final int Effectblackboard=0x7f060025;
+        public static final int Effectemboss=0x7f060027;
+        public static final int Effectmono=0x7f06001f;
+        public static final int Effectnegative=0x7f060020;
+        public static final int Effectneon=0x7f060029;
+        public static final int Effectnone=0x7f06001e;
+        public static final int Effectposterize=0x7f060023;
+        public static final int Effectsepia=0x7f060022;
+        public static final int Effectsketch=0x7f060028;
+        public static final int Effectsolarize=0x7f060021;
+        public static final int Effectwhiteboard=0x7f060024;
+        public static final int FlashMode=0x7f060017;
+        public static final int FlashModeauto=0x7f060019;
+        public static final int FlashModeoff=0x7f060018;
+        public static final int FlashModeon=0x7f06001a;
+        public static final int FlashModetorch=0x7f06001b;
         public static final int IntentCameraIDKey=0x7f060002;
-        public static final int PrefixSupportOption=0x7f060004;
-        public static final int SaveFormat=0x7f060008;
-        public static final int SaveFormatJPEG=0x7f06000a;
-        public static final int SaveFormatKey=0x7f060007;
-        public static final int SaveFormatPNG=0x7f060009;
-        public static final int SettingButtonText=0x7f060005;
-        public static final int SutterSound=0x7f06000c;
-        public static final int SutterSoundKey=0x7f06000b;
-        public static final int SutterSoundOFF=0x7f06000e;
-        public static final int SutterSoundON=0x7f06000d;
+        public static final int KeyListAccessKey=0x7f060006;
+        public static final int PrefixSupportOption=0x7f06000b;
+        public static final int SaveFormat=0x7f06000f;
+        public static final int SaveFormatJPEG=0x7f060011;
+        public static final int SaveFormatKey=0x7f06000e;
+        public static final int SaveFormatPNG=0x7f060010;
+        public static final int SettingButtonText=0x7f06000c;
+        public static final int ShowListPrefixKey=0x7f060008;
+        public static final int SutterSound=0x7f060013;
+        public static final int SutterSoundKey=0x7f060012;
+        public static final int SutterSoundOFF=0x7f060015;
+        public static final int SutterSoundON=0x7f060014;
+        public static final int ValueListPrefixKey=0x7f060009;
         public static final int app_name=0x7f060000;
         public static final int title_activity_main=0x7f060001;
     }
