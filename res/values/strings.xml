@@ -5,11 +5,12 @@
 	<string name="IntentCameraIDKey">CameraID</string>
 
 	<string name="CurrentAdapterSizeKey">CurrentAdapterSize</string>
-	<string name="CurrentSelectShowListKey">CurrentSelectShowList</string>
+	<string name="CurrentSelectSupportListKey">CurrentSelectShowList</string>
 	<string name="CurrentSelectPositionKey">CurrentSelectPosition</string>
 	<string name="KeyListAccessKey">KeyListAccess</string>
+	<string name="ShowKeyListAccessKey">ShowKeyListAccess</string>
 	<string name="DefaultAdapterSizeKey">DefaultAdapterSize</string>
-	<string name="ShowListPrefixKey">ShowListPrefix</string>
+	<string name="SupportListPrefixKey">ShowListPrefix</string>
 	<string name="ValueListPrefixKey">ValueListPrefix</string>
 
 

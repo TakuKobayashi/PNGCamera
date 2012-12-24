@@ -18,13 +18,4 @@ Copyright (c) 2012年 __CompanyName__. All rights reserved.
 			android:minHeight="48dp"
 		/>
 
-		<ListView
-			android:id="@+id/ParamsValueList"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerHorizontal="true"
-			android:layout_below="@+id/CameraParamsText"
-			android:minHeight="144dp"
-		/>
-
 </RelativeLayout>
