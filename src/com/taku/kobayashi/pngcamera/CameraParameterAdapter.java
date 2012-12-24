@@ -57,7 +57,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 		//シャッター音
 		setParams(R.string.SutterSoundKey,getArraysFromXml(R.array.SutterSoundValues));
 		//保存画像のサイズ
-		setParams(R.string.SutterSoundKey,getArraysFromXml(R.array.SutterSoundValues));
+		setParams(R.string.SavePreviewSizeKey, conversionSizeToString(cp.getSupportedPreviewSizes()));
 		//カメラのカラーエフェクト
 		setParams(R.string.CameraColorEffectKey,cp.getSupportedColorEffects());
 		//カメラのフラッシュ
@@ -78,9 +78,11 @@ public class CameraParameterAdapter extends BaseAdapter{
 		for(int i = 0;i < sizeList.size();i++){
 			//TODO 縦横によってサイズを絞り込む
 			String width = String.valueOf(sizeList.get(i).width);
-			//converted.add(object);
+			String cross = m_Activity.getString(R.string.ConnectSizeAndSize);
+			String height = String.valueOf(sizeList.get(i).height);
+			converted.add(width + cross + height);
 		}
-		return null;
+		return converted;
 	}
 
 	private void setParams(int keyRes, List<String> paramsList){

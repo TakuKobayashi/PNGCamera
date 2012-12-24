@@ -21,6 +21,8 @@
 	<!-- int型でとれるカメラのサポートしているサイズをつなぐ文字列 -->
 	<string name="ConnectSizeAndSize">×</string>
 
+	<string name="SavePreviewSizeKey">SavePreviewSize</string>
+
 	<string name="SaveFormatKey">SaveFormat</string>
 	<string name="SaveFormat">保存画像のフォーマット</string>
 	<string name="SaveFormatPNG">PNG</string>
