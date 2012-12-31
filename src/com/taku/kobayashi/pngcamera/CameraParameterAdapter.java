@@ -7,6 +7,8 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
@@ -57,7 +59,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 		//シャッター音
 		setParams(R.string.SutterSoundKey,getArraysFromXml(R.array.SutterSoundValues));
 		//保存画像のサイズ
-		setParams(R.string.SavePreviewSizeKey, conversionSizeToString(cp.getSupportedPreviewSizes()));
+		//setParams(R.string.SavePreviewSizeKey, conversionSizeToString(cp.getSupportedPreviewSizes()));
 		//カメラのカラーエフェクト
 		setParams(R.string.CameraColorEffectKey,cp.getSupportedColorEffects());
 		//カメラのフラッシュ
@@ -211,15 +213,19 @@ public class CameraParameterAdapter extends BaseAdapter{
 		int currentPosition = m_CameraParamsCurrentValues.getInt(m_Activity.getResources().getString(R.string.CurrentSelectPositionKey), UNSELECTING);
 		ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ShowKeyListAccessKey));
 		if(currentPosition == UNSELECTING){
+			convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
 			paramtext.setText(keyList.get(position));
 		}else{
 			ArrayList<String> ShowList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + keyList.get(currentPosition));
 			ArrayList<String> currentList = m_CameraParamsCurrentValues.getStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey));
 			if(currentPosition < position && position < currentPosition + currentList.size()){
+				convertView.setBackgroundColor(Color.argb(218, 64, 65, 65));
 				paramtext.setText(currentList.get(position - currentPosition - 1));
 			}else if(currentPosition + currentList.size() <= position){
+				convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
 				paramtext.setText(keyList.get(position - currentList.size()));
 			}else{
+				convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
 				paramtext.setText(keyList.get(position));
 			}
 		}
