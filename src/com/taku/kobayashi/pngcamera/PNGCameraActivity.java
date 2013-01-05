@@ -1,16 +1,17 @@
 package com.taku.kobayashi.pngcamera;
 
-import java.util.HashMap;
-
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageButton;
@@ -154,8 +155,12 @@ public class PNGCameraActivity extends Activity {
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
 		m_CameraPreview.setCamera(m_nCameraID);
 		m_CameraPreview.setCameraParams(m_CameraParameterAdapter);
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
 
 		m_CameraParamsList = (ListView) findViewById(R.id.CameraParamsList);
+		m_CameraParamsList.getLayoutParams().width = displayMetrics.widthPixels / 2;
+		m_CameraParamsList.getLayoutParams().height = displayMetrics.heightPixels / 2;
 		m_CameraParamsList.setAdapter(m_CameraParameterAdapter);
 		m_CameraParamsList.setOnItemClickListener(m_CameraParameterListener);
 		m_CameraParamsList.setVisibility(View.GONE);

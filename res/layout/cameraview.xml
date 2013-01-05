@@ -73,15 +73,6 @@ Copyright (c) 2012年 __CompanyName__. All rights reserved.
 		android:background="@drawable/switchcamera_buttonshape"
 		android:text="@string/SettingButtonText" />
 
-
-	<ListView
-		android:id="@+id/CameraParamsList"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/CameraOptionButton"
-		android:layout_centerHorizontal="true"
-	/>
-
 	<ImageButton
 		android:id="@+id/InOutButton"
 		android:layout_width="wrap_content"
@@ -90,5 +81,14 @@ Copyright (c) 2012年 __CompanyName__. All rights reserved.
 		android:layout_alignParentRight="true"
 		android:background="@drawable/switchcamera_buttonshape"
 		android:scaleType="fitXY" />
+
+	<ListView
+		android:id="@+id/CameraParamsList"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/InOutButton"
+		android:layout_centerHorizontal="true"
+		android:background="@drawable/listview_shape"
+	/>
 
 </RelativeLayout>
