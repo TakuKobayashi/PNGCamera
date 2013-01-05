@@ -3,23 +3,23 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:shape="rectangle">
 
-    <gradient
-        android:startColor="#00000000"
+	<gradient
+		android:startColor="#00000000"
 		android:endColor="#00000000"
 		android:angle="270"
-        />
-    <corners
-    	android:bottomRightRadius="15dp"
-    	android:bottomLeftRadius="15dp"
-    	android:topLeftRadius="15dp"
-    	android:topRightRadius="15dp"
-       />
-    <stroke
+	/>
+	<corners
+		android:bottomRightRadius="15dp"
+		android:bottomLeftRadius="15dp"
+		android:topLeftRadius="15dp"
+		android:topRightRadius="15dp"
+	/>
+	<stroke
 		android:width="3dip"
-		android:color="#000000" />
-
-    <padding
+		android:color="#000000"
+	/>
+	<padding
 		android:left="24dp"
 		android:right="24dp"
-       />
+	/>
 </shape>
