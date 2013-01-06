@@ -158,14 +158,15 @@ public class PNGCameraActivity extends Activity {
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
 		m_CameraPreview.setCamera(m_nCameraID);
 		m_CameraPreview.setCameraParams(m_CameraParameterAdapter);
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
-		Log.d(TAG,"width:"+ displayMetrics.widthPixels + " height:"+displayMetrics.heightPixels+" dpi:"+displayMetrics.density);
+		CGSize displaySize = ExtraLayout.getDisplaySize(this);
 
 		m_CameraParamsList = (ListView) findViewById(R.id.CameraParamsList);
-		m_CameraParamsList.getLayoutParams().width = displayMetrics.widthPixels * 2 / 3;
-		int width = displayMetrics.heightPixels / 2;
-		m_CameraParamsList.getLayoutParams().height = width;
+		m_CameraParamsList.getLayoutParams().width = (int)(displaySize.width * 2 / 3);
+		int height = (int)(displaySize.height / 2);
+		if(height > m_CameraParameterAdapter.getCount() * ExtraLayout.getListCellMinHeight(this)){
+			height = m_CameraParameterAdapter.getCount() * ExtraLayout.getListCellMinHeight(this) + 12;
+		}
+		m_CameraParamsList.getLayoutParams().height = height;
 		m_CameraParamsList.setAdapter(m_CameraParameterAdapter);
 		m_CameraParamsList.setOnItemClickListener(m_CameraParameterListener);
 		m_CameraParamsList.setVisibility(View.GONE);

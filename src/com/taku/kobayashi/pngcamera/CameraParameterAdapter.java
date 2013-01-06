@@ -79,6 +79,8 @@ public class CameraParameterAdapter extends BaseAdapter{
 		return Arrays.asList(strArray);
 	}
 
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	private List<String> conversionSizeToString(List<Size> sizeList){
 		ArrayList<String> converted = new ArrayList<String>();
 		for(int i = 0;i < sizeList.size();i++){
@@ -213,6 +215,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 		if(convertView == null){
 			convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamsadapterview, null);
 		}
+		convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
 		TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
 		int currentPosition = m_CameraParamsCurrentValues.getInt(m_Activity.getResources().getString(R.string.CurrentSelectPositionKey), UNSELECTING);
 		ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ShowKeyListAccessKey));
@@ -223,7 +226,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 			ArrayList<String> ShowList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + keyList.get(currentPosition));
 			ArrayList<String> currentList = m_CameraParamsCurrentValues.getStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey));
 			if(currentPosition < position && position < currentPosition + currentList.size()){
-				convertView.setBackgroundColor(Color.argb(0, 64, 65, 65));
+				convertView.setBackgroundColor(Color.argb(0, 0, 0, 0));
 				paramtext.setText(currentList.get(position - currentPosition - 1));
 			}else if(currentPosition + currentList.size() <= position){
 				convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
