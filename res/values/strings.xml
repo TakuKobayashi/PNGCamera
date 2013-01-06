@@ -7,8 +7,6 @@
 	<string name="CurrentAdapterSizeKey">CurrentAdapterSize</string>
 	<string name="CurrentSelectSupportListKey">CurrentSelectShowList</string>
 	<string name="CurrentSelectPositionKey">CurrentSelectPosition</string>
-	<string name="CurrentFirstVisiblePositionKey">CurrentFirstVisiblePositionKey</string>
-	<string name="CurrentLastVisiblePositionKey">CurrentLastVisiblePositionKey</string>
 	<string name="KeyListAccessKey">KeyListAccess</string>
 	<string name="ShowKeyListAccessKey">ShowKeyListAccess</string>
 	<string name="DefaultAdapterSizeKey">DefaultAdapterSize</string>

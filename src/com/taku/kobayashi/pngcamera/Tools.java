@@ -51,7 +51,7 @@ import android.widget.Toast;
 public class Tools {
 
 	//define
-	private static final String TAG = "Lisa_Tools";
+	private static final String TAG = "PNGCamera_Tools";
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 /*
