@@ -68,6 +68,10 @@ public class CameraParameterAdapter extends BaseAdapter{
 		setParams(R.string.CameraFlashModeKey,cp.getSupportedFlashModes());
 	}
 
+	public void releaseParameters(){
+		m_CameraParamsValues.clear();
+	}
+
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private List<String> getArraysFromXml(int res){
@@ -219,7 +223,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 			ArrayList<String> ShowList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + keyList.get(currentPosition));
 			ArrayList<String> currentList = m_CameraParamsCurrentValues.getStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey));
 			if(currentPosition < position && position < currentPosition + currentList.size()){
-				convertView.setBackgroundColor(Color.argb(218, 64, 65, 65));
+				convertView.setBackgroundColor(Color.argb(0, 64, 65, 65));
 				paramtext.setText(currentList.get(position - currentPosition - 1));
 			}else if(currentPosition + currentList.size() <= position){
 				convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
@@ -235,6 +239,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//TODO クリックするとCameraにParameterが入る
+	/*
 	private OnItemClickListener m_ListValuesListener = new OnItemClickListener(){
 		@Override
 		public void onItemClick(AdapterView<?> adapter, View view, int position, long id) {
@@ -245,6 +250,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 		}
 
 	};
+	*/
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 

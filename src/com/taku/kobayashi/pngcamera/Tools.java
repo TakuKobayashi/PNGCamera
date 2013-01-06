@@ -52,98 +52,9 @@ public class Tools {
 
 	//define
 	private static final String TAG = "Lisa_Tools";
-	private static final float BASE_DISPLAY_WIDTH = com.taku.kobayashi.pngcamera.Config.BASE_DISPLAY_WIDTH;
-	private static final float BASE_DISPLAY_HEIGHT = com.taku.kobayashi.pngcamera.Config.BASE_DISPLAY_HEIGHT;
-	private static final float BASE_ASPECT_RATIO = BASE_DISPLAY_WIDTH / BASE_DISPLAY_HEIGHT;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 /*
-	//端末の解像度を取得
-	private static CGSize getDisplaySize(Context context){
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
-		return new CGSize(displayMetrics.widthPixels,displayMetrics.heightPixels);
-	}
-*/
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-/*
-	//ベース(iPhone)となる縦横比に調整した画面の幅と高さの計算
-	private static CGSize getDisplayResize(Context context) {
-
-		float width;
-		float height;
-
-		CGSize displaySize = getDisplaySize(context);
-
-		// 縦長の解像度端末
-		if (BASE_ASPECT_RATIO > displaySize.aspectRatio) {
-			width = displaySize.width;
-			height = (width * BASE_DISPLAY_HEIGHT / BASE_DISPLAY_WIDTH);
-		} else if (BASE_ASPECT_RATIO < displaySize.aspectRatio) {
-			height = displaySize.height;
-			width = height * BASE_DISPLAY_WIDTH / BASE_DISPLAY_HEIGHT;
-		} else {
-			width = displaySize.width;
-			height = displaySize.height;
-		}
-
-		return new CGSize(width,height);
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	//ベース(iPhone)となる縦横比に調整した場合の拡縮率の計算
-	public static float getResizeRatio(Context context) {
-		//ipone版に合わせたサイズに計算する
-		float sizeRatio;
-
-		CGSize displaySize = getDisplaySize(context);
-
-		// 縦長の解像度端末
-		if (BASE_ASPECT_RATIO >= displaySize.aspectRatio) {
-			sizeRatio = (float) displaySize.width / BASE_DISPLAY_WIDTH;
-		} else {
-			sizeRatio = (float) displaySize.height / BASE_DISPLAY_HEIGHT;
-		}
-
-		return sizeRatio;
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	//画像の幅、高さを取得する
-	public static CGSize getImageSize(Context context, Integer resId) {
-		BitmapFactory.Options options = new BitmapFactory.Options();
-		options.inJustDecodeBounds = true;
-		options.inScaled = false;
-		BitmapFactory.decodeResource(context.getResources(), resId, options);
-		return new CGSize(options.outWidth, options.outHeight);
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	//ベース(iPhone)となる縦横比に調整した場合の画像の画像の幅、高さを拡縮率を反映させた値にする
-	public static CGSize getImageResize(Context context, Integer resId) {
-		CGSize size = getImageSize(context,resId);
-		//iphoneの解像度で使用しているしている画像をAndroidの解像度に合わせたサイズで表示させるための計算
-		return new CGSize(size.width * getResizeRatio(context),size.height * getResizeRatio(context));
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	//ベース(iPhone)となる縦横比にViewを調整する
-	public static View getParenetView(Activity act,Integer layoutID){
-		//レイアウトを作って返す
-		LinearLayout outSideLayout = new LinearLayout(act);
-		outSideLayout.setGravity(Gravity.CENTER);
-		View view = act.getLayoutInflater().inflate(layoutID, null);
-		view.setLayoutParams(new LayoutParams((int)getDisplayResize(act).width,(int)getDisplayResize(act).height));
-		outSideLayout.addView(view);
-		return outSideLayout;
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 	//Resource(drawableフォルダ)から画像を取ってくる場合
 	public static Bitmap getBitmap(Context con, Integer rsc) {
 

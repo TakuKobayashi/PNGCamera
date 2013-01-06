@@ -21,10 +21,6 @@ public class Config {
 	//画像を保存する場合の圧縮率
 	public static final int COMPRESS_QUALITY = 100;
 
-	//Baseとなる画像の縦、横のピクセル値(iphone基準)
-	public static final float BASE_DISPLAY_WIDTH = 640;
-	public static final float BASE_DISPLAY_HEIGHT = 960;
-
 	//アプリを動作することが可能なSDカード内の最低空き容量(1MB)
 	public static final long LIMIT_MINIMAM_SPACE = 1 * 1024;
 

@@ -7,13 +7,16 @@ import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AbsListView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -157,10 +160,12 @@ public class PNGCameraActivity extends Activity {
 		m_CameraPreview.setCameraParams(m_CameraParameterAdapter);
 		DisplayMetrics displayMetrics = new DisplayMetrics();
 		((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(displayMetrics);
+		Log.d(TAG,"width:"+ displayMetrics.widthPixels + " height:"+displayMetrics.heightPixels+" dpi:"+displayMetrics.density);
 
 		m_CameraParamsList = (ListView) findViewById(R.id.CameraParamsList);
-		m_CameraParamsList.getLayoutParams().width = displayMetrics.widthPixels / 2;
-		m_CameraParamsList.getLayoutParams().height = displayMetrics.heightPixels / 2;
+		m_CameraParamsList.getLayoutParams().width = displayMetrics.widthPixels * 2 / 3;
+		int width = displayMetrics.heightPixels / 2;
+		m_CameraParamsList.getLayoutParams().height = width;
 		m_CameraParamsList.setAdapter(m_CameraParameterAdapter);
 		m_CameraParamsList.setOnItemClickListener(m_CameraParameterListener);
 		m_CameraParamsList.setVisibility(View.GONE);
@@ -173,6 +178,7 @@ public class PNGCameraActivity extends Activity {
 		super.onPause();
 		m_CameraPreview.releaseCamera();
 		m_CameraParamsList = null;
+		m_CameraParameterAdapter.releaseParameters();
 	};
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
