@@ -117,6 +117,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 					cp.setColorEffect(value);
 				}else if(key.equals(m_Context.getString(R.string.CameraWhiteBalanceKey))){
 					cp.setWhiteBalance(value);
+				}else if(key.equals(m_Context.getString(R.string.CameraSceneKey))){
+					cp.setSceneMode(value);
 				}
 				m_Camera.setParameters(cp);
 			}

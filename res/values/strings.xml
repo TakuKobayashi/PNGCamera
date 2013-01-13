@@ -58,9 +58,10 @@
 	<string name="Effectsketch">スケッチ</string>
 	<string name="Effectneon">ネオン</string>
 
+	<!-- key + サポートしている名前で命名 -->
 	<string name="CameraWhiteBalanceKey">WhiteBalance</string>
 	<string name="WhiteBalance">ホワイトバランス</string>
-	<string name="WhiteBalanceauto">オート</string>
+	<string name="WhiteBalanceauto">自動</string>
 	<string name="WhiteBalancecloudydaylight">曇り</string>
 	<string name="WhiteBalancedaylight">日光</string>
 	<string name="WhiteBalancefluorescent">蛍光灯</string>
@@ -68,5 +69,27 @@
 	<string name="WhiteBalanceshade">日陰</string>
 	<string name="WhiteBalancetwilight">夕日</string>
 	<string name="WhiteBalancewarmfluorescent">温色電球</string>
+
+	<!-- key + サポートしている名前で命名 -->
+	<string name="CameraSceneKey">Scene</string>
+	<string name="Scene">シーン</string>
+	<string name="Sceneauto">自動</string>
+	<string name="Scenebeach">ビーチ</string>
+	<string name="Scenecandlelight">キャンドルライト</string>
+	<string name="Scenefireworks">花火</string>
+	<string name="Scenelandscape">風景</string>
+	<string name="Scenenight">夜</string>
+	<string name="Scenenightportrait">夜の肖像</string>
+	<string name="Sceneparty">パーティ</string>
+	<string name="Sceneportrait">肖像</string>
+	<string name="Scenesnow">雪</string>
+	<string name="Scenesports">スポーツ</string>
+	<string name="Scenesteadyphoto">位置固定写真</string>
+	<string name="Scenesunset">夕暮れ</string>
+	<string name="Scenetheatre">シアター</string>
+	<string name="Scenebacklight">バックライト</string>
+	<string name="Sceneflowers">花畑</string>
+	<string name="SceneAR">AR</string>
+	<string name="Sceneaction">アクション</string>
 
 </resources>

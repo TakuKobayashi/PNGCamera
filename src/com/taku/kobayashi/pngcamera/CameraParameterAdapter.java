@@ -58,11 +58,16 @@ public class CameraParameterAdapter extends BaseAdapter{
 		//保存画像のサイズ
 		//setParams(R.string.SavePreviewSizeKey, conversionSizeToString(cp.getSupportedPreviewSizes()));
 		//カメラのカラーエフェクト
-		setParams(R.string.CameraColorEffectKey,cp.getSupportedColorEffects());
+		setParams(R.string.CameraColorEffectKey, cp.getSupportedColorEffects());
 		//カメラのフラッシュ
-		setParams(R.string.CameraFlashModeKey,cp.getSupportedFlashModes());
+		setParams(R.string.CameraFlashModeKey, cp.getSupportedFlashModes());
 		//カメラのホワイトバランス
-		setParams(R.string.CameraWhiteBalanceKey,cp.getSupportedWhiteBalance());
+		setParams(R.string.CameraWhiteBalanceKey, cp.getSupportedWhiteBalance());
+		//カメラの撮影シーン
+		List<String> SupportedSceneList = cp.getSupportedSceneModes();
+		List<String> RemoveList =  getArraysFromXml(R.array.SceneExceptValues);
+		SupportedSceneList.removeAll(RemoveList);
+		setParams(R.string.CameraSceneKey, SupportedSceneList);
 	}
 
 	public void releaseParameters(){
