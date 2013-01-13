@@ -160,16 +160,19 @@ public class CameraParameterAdapter extends BaseAdapter{
 			ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
 			setCameraParamsCurrentValue(selectList, defaultAdapterSize + selectList.size(), position);
 		}else if(currentPosition + currentList.size() < position){
+			int keyPosition = position - currentList.size();
 			ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
-			String key = keyList.get(position - currentList.size());
+			String key = keyList.get(keyPosition);
 			ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
-			setCameraParamsCurrentValue(selectList, defaultAdapterSize + selectList.size(), position - currentList.size());
+			setCameraParamsCurrentValue(selectList, defaultAdapterSize + selectList.size(), keyPosition);
 		}else{
 			//TODO CameraParamsをカメラにセット
 			ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
 			String key = keyList.get(currentPosition);
 			ArrayList<String> ParamsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
-			setParamstoCamera(key, ParamsList.get(position - currentPosition - 1));
+			if(SelectListener != null){
+				SelectListener.selected(key, ParamsList.get(position - currentPosition - 1));
+			}
 		}
 		this.notifyDataSetChanged();
 	}
@@ -189,6 +192,8 @@ public class CameraParameterAdapter extends BaseAdapter{
 			//TODO Stringから直す(条件の設定)
 		}else{
 			//TODO そのままカメラにセット
+			if(SelectListener != null){
+			}
 		}
 	}
 
@@ -267,11 +272,9 @@ public class CameraParameterAdapter extends BaseAdapter{
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
-	//検出処理が終わったことを通知する独自のリスナーを作成
 	public interface ParamsSelectListener extends EventListener {
 
-		//検出処理が終了したことを通知する
-		public void selected(Camera.Parameters params);
+		public void selected(String key,String value);
 
 	}
 

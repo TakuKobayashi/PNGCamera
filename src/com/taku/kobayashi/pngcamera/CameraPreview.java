@@ -19,6 +19,7 @@ import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Surface;
@@ -114,8 +115,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		cpa.setParameters(m_Camera.getParameters());
 		cpa.setOnParamsSelectListener(new ParamsSelectListener() {
 			@Override
-			public void selected(Parameters params) {
-				Log.d(TAG,"ParamselectListener:"+params);
+			public void selected(String key, String value) {
+				Camera.Parameters cp = m_Camera.getParameters();
+				if(key.equals(m_Context.getString(R.string.CameraColorEffectKey))){
+					cp.setColorEffect(value);
+				}
+				m_Camera.setParameters(cp);
 			}
 		});
 	}
