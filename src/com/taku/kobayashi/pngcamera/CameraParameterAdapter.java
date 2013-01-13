@@ -69,6 +69,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 	}
 
 	public void releaseParameters(){
+		m_CameraParamsCurrentValues.clear();
 		m_CameraParamsValues.clear();
 	}
 
@@ -99,20 +100,22 @@ public class CameraParameterAdapter extends BaseAdapter{
 			setArrayListAndSize(R.string.KeyListAccessKey, key);
 			setArrayListAndSize(R.string.ShowKeyListAccessKey, m_Activity.getString(m_Activity.getResources().getIdentifier(key, "string", m_Activity.getPackageName())));
 			//keyに該当する日本語のリスト保存する
+			ArrayList<String> showValueList = new ArrayList<String>();
 			ArrayList<String> valueList = new ArrayList<String>();
 			for(int i = 0;i < paramsList.size();i++){
 				int value_res = m_Activity.getResources().getIdentifier(key + paramsList.get(i), "string", m_Activity.getPackageName());
 				Log.d(TAG,"key:"+key+" values:"+value_res);
 				if(value_res != 0){
-					valueList.add(m_Activity.getString(value_res));
+					showValueList.add(m_Activity.getString(value_res));
 				}else{
-					valueList.add(paramsList.get(i));
+					showValueList.add(paramsList.get(i));
 				}
+				valueList.add(paramsList.get(i));
 			}
-			m_CameraParamsValues.putStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key, valueList);
+			m_CameraParamsValues.putStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key, showValueList);
 
 			//keyに該当するCameraParamasを記録
-			m_CameraParamsValues.putStringArray(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key, paramsList.toArray(new String[0]));
+			m_CameraParamsValues.putStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key, valueList);
 
 			//m_CameraParamsValues.put(key, valueList);
 			//TODO Bundleにする
@@ -149,37 +152,39 @@ public class CameraParameterAdapter extends BaseAdapter{
 		int currentPosition = m_CameraParamsCurrentValues.getInt(m_Activity.getResources().getString(R.string.CurrentSelectPositionKey), UNSELECTING);
 		int defaultAdapterSize = m_CameraParamsValues.getInt(m_Activity.getResources().getString(R.string.DefaultAdapterSizeKey), 0);
 		ArrayList<String> currentList = m_CameraParamsCurrentValues.getStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey));
-		Log.d(TAG,"position:"+position+" defaultAdapterSize:"+defaultAdapterSize+" currentList:"+currentList);
 		if(currentPosition == position){
-			//CameraParamsのリスト
-			m_CameraParamsCurrentValues.putStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey), new ArrayList<String>());
-			//表示する項目の件数
-			m_CameraParamsCurrentValues.putInt(m_Activity.getResources().getString(R.string.CurrentAdapterSizeKey), defaultAdapterSize);
-			//選択されている項目の場所
-			m_CameraParamsCurrentValues.putInt(m_Activity.getResources().getString(R.string.CurrentSelectPositionKey), UNSELECTING);
-		}else if(currentPosition < 0 || position < currentPosition || currentPosition + currentList.size() <= position){
+			setCameraParamsCurrentValue(new ArrayList<String>(),defaultAdapterSize, UNSELECTING);
+		}else if(currentPosition < 0 || position < currentPosition){
 			ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
 			String key = keyList.get(position);
-			Log.d(TAG,"key:"+key);
 			ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
-			//CameraParamsのリスト
-			Log.d(TAG, "selectList:"+selectList);
-			m_CameraParamsCurrentValues.putStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey), selectList);
-			//表示する項目の件数
-			m_CameraParamsCurrentValues.putInt(m_Activity.getResources().getString(R.string.CurrentAdapterSizeKey), defaultAdapterSize + selectList.size());
-			//選択されている項目の場所
-			m_CameraParamsCurrentValues.putInt(m_Activity.getResources().getString(R.string.CurrentSelectPositionKey), position);
+			setCameraParamsCurrentValue(selectList, defaultAdapterSize + selectList.size(), position);
+		}else if(currentPosition + currentList.size() < position){
+			ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
+			String key = keyList.get(position - currentList.size());
+			ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
+			setCameraParamsCurrentValue(selectList, defaultAdapterSize + selectList.size(), position - currentList.size());
 		}else{
 			//TODO CameraParamsをカメラにセット
 			ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
 			String key = keyList.get(currentPosition);
-			String[] Params = m_CameraParamsValues.getStringArray(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
-			setParamstoCamera(key, Params[position - currentPosition]);
+			ArrayList<String> ParamsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
+			setParamstoCamera(key, ParamsList.get(position - currentPosition - 1));
 		}
 		this.notifyDataSetChanged();
 	}
 
+	private void setCameraParamsCurrentValue(ArrayList<String> selectSupportList,int adapaterSize, int selectPosition){
+		//CameraParamsのリスト
+		m_CameraParamsCurrentValues.putStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey), selectSupportList);
+		//表示する項目の件数
+		m_CameraParamsCurrentValues.putInt(m_Activity.getString(R.string.CurrentAdapterSizeKey), adapaterSize);
+		//選択されている項目の場所
+		m_CameraParamsCurrentValues.putInt(m_Activity.getString(R.string.CurrentSelectPositionKey), selectPosition);
+	}
+
 	private void setParamstoCamera(String key, String Param){
+		Log.d(TAG, "selectParam:"+Param);
 		if(key == ""){
 			//TODO Stringから直す(条件の設定)
 		}else{
@@ -223,17 +228,19 @@ public class CameraParameterAdapter extends BaseAdapter{
 			convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
 			paramtext.setText(keyList.get(position));
 		}else{
-			ArrayList<String> ShowList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + keyList.get(currentPosition));
 			ArrayList<String> currentList = m_CameraParamsCurrentValues.getStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey));
 			if(currentPosition < position && position <= currentPosition + currentList.size()){
 				convertView.setBackgroundColor(Color.argb(0, 0, 0, 0));
-				paramtext.setText(currentList.get(position - currentPosition - 1));
-			}else if(currentPosition + currentList.size() <= position){
+				String word = currentList.get(position - currentPosition - 1);
+				paramtext.setText(word);
+			}else if(currentPosition + currentList.size() < position){
+				String word = keyList.get(position - currentList.size());
 				convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
-				paramtext.setText(keyList.get(position - currentList.size()));
+				paramtext.setText(word);
 			}else{
+				String word = keyList.get(position);
 				convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
-				paramtext.setText(keyList.get(position));
+				paramtext.setText(word);
 			}
 		}
 		return convertView;
