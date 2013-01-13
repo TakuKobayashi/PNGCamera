@@ -39,6 +39,8 @@
 	<string name="FlashModeauto">オート</string>
 	<string name="FlashModeon">フラッシュオン</string>
 	<string name="FlashModetorch">トーチ</string>
+	<string name="FlashModeredeye">レッドアイ</string>
+
 
 	<!-- key + サポートしている名前で命名 -->
 	<string name="CameraColorEffectKey">Effect</string>
@@ -56,5 +58,15 @@
 	<string name="Effectsketch">スケッチ</string>
 	<string name="Effectneon">ネオン</string>
 
+	<string name="CameraWhiteBalanceKey">WhiteBalance</string>
+	<string name="WhiteBalance">ホワイトバランス</string>
+	<string name="WhiteBalanceauto">オート</string>
+	<string name="WhiteBalancecloudydaylight">曇り</string>
+	<string name="WhiteBalancedaylight">日光</string>
+	<string name="WhiteBalancefluorescent">蛍光灯</string>
+	<string name="WhiteBalanceincandescent">白熱電球</string>
+	<string name="WhiteBalanceshade">日陰</string>
+	<string name="WhiteBalancetwilight">夕日</string>
+	<string name="WhiteBalancewarmfluorescent">温色電球</string>
 
 </resources>

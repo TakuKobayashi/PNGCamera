@@ -6,25 +6,21 @@ package com.taku.kobayashi.pngcamera;
 import java.io.IOException;
 import java.util.List;
 
-import com.taku.kobayashi.pngcamera.CameraParameterAdapter.ParamsSelectListener;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
-import android.hardware.Camera.Parameters;
-import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.PreviewCallback;
-import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size;
 import android.os.Build;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.taku.kobayashi.pngcamera.CameraParameterAdapter.ParamsSelectListener;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback{
 
@@ -119,6 +115,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 				Camera.Parameters cp = m_Camera.getParameters();
 				if(key.equals(m_Context.getString(R.string.CameraColorEffectKey))){
 					cp.setColorEffect(value);
+				}else if(key.equals(m_Context.getString(R.string.CameraWhiteBalanceKey))){
+					cp.setWhiteBalance(value);
 				}
 				m_Camera.setParameters(cp);
 			}

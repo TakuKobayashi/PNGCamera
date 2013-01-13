@@ -8,7 +8,6 @@ import java.util.List;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
@@ -16,8 +15,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -64,8 +61,8 @@ public class CameraParameterAdapter extends BaseAdapter{
 		setParams(R.string.CameraColorEffectKey,cp.getSupportedColorEffects());
 		//カメラのフラッシュ
 		setParams(R.string.CameraFlashModeKey,cp.getSupportedFlashModes());
-		//カメラのフォーカス
-		setParams(R.string.CameraFlashModeKey,cp.getSupportedFlashModes());
+		//カメラのホワイトバランス
+		setParams(R.string.CameraWhiteBalanceKey,cp.getSupportedWhiteBalance());
 	}
 
 	public void releaseParameters(){
@@ -103,7 +100,9 @@ public class CameraParameterAdapter extends BaseAdapter{
 			ArrayList<String> showValueList = new ArrayList<String>();
 			ArrayList<String> valueList = new ArrayList<String>();
 			for(int i = 0;i < paramsList.size();i++){
-				int value_res = m_Activity.getResources().getIdentifier(key + paramsList.get(i), "string", m_Activity.getPackageName());
+				//リソース名に-は使えない
+				String processingResouceWord = paramsList.get(i).replaceAll("-", "");
+				int value_res = m_Activity.getResources().getIdentifier(key + processingResouceWord, "string", m_Activity.getPackageName());
 				Log.d(TAG,"key:"+key+" values:"+value_res);
 				if(value_res != 0){
 					showValueList.add(m_Activity.getString(value_res));
