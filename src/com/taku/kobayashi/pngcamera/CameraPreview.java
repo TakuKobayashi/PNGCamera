@@ -15,7 +15,6 @@ import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -66,7 +65,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void setCamera(int nCameraID){
+	public void setCamera(int nCameraID, CameraParameterAdapter cpa){
 		if(Build.VERSION.SDK_INT < 9){
 			m_Camera = Camera.open();
 		}else{
@@ -77,9 +76,16 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		} catch (Exception e) {}
 
 		Camera.Parameters cp = m_Camera.getParameters();
+		cpa.setParameters(m_Camera);
+		cpa.setOnParamsSelectListener(new ParamsSelectListener() {
+			@Override
+			public void selected(String key, String value) {
+				Tools.setCameraParams(m_Context, m_Camera, key, value);
+			}
+		});
 		//Log.d(TAG,"RateList:"+cp.getZoomRatios());
 		//Log.d(TAG,"FlashMode:"+cp.getSupportedFlashModes());
-		Log.d(TAG,"Format:"+cp.getSupportedPictureFormats());
+		//Log.d(TAG,"Format:"+cp.getSupportedPictureFormats());
 		//Log.d(TAG,"Effects:"+cp.getSupportedColorEffects());
 		//Log.d(TAG,"AntiBanding:"+cp.getSupportedAntibanding());
 		//Log.d(TAG,"WhiteBalance:"+cp.getSupportedWhiteBalance());
@@ -107,23 +113,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void setCameraParams(CameraParameterAdapter cpa){
-		cpa.setParameters(m_Camera.getParameters());
-		cpa.setOnParamsSelectListener(new ParamsSelectListener() {
-			@Override
-			public void selected(String key, String value) {
-				Camera.Parameters cp = m_Camera.getParameters();
-				if(key.equals(m_Context.getString(R.string.CameraColorEffectKey))){
-					cp.setColorEffect(value);
-				}else if(key.equals(m_Context.getString(R.string.CameraWhiteBalanceKey))){
-					cp.setWhiteBalance(value);
-				}else if(key.equals(m_Context.getString(R.string.CameraSceneKey))){
-					cp.setSceneMode(value);
-				}
-				m_Camera.setParameters(cp);
-			}
-		});
-	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 

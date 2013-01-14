@@ -26,6 +26,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -37,10 +38,12 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
+import android.hardware.Camera;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -215,6 +218,37 @@ public class Tools {
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public static void recordParams(Context con, String key,String value){
+		SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(con);
+		SharedPreferences.Editor editor = setting.edit();
+		editor.putString(key, value);
+		editor.commit();
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public static String getRecordParam(Context con, String key){
+		SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(con);
+		return setting.getString(key, null);
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public static final void setCameraParams(Context con, Camera camera, String key, String value){
+		Camera.Parameters cp = camera.getParameters();
+		if(key.equals(con.getString(R.string.CameraColorEffectKey))){
+			cp.setColorEffect(value);
+		}else if(key.equals(con.getString(R.string.CameraWhiteBalanceKey))){
+			cp.setWhiteBalance(value);
+		}else if(key.equals(con.getString(R.string.CameraSceneKey))){
+			cp.setSceneMode(value);
+		}
+		camera.setParameters(cp);
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 /*
 	//縮小させる画像の縮小値(自然数)の計算
 	//例：return = 2の場合、画像は縦:1/2、横：1/2のサイズになる

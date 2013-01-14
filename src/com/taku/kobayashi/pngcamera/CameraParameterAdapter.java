@@ -6,16 +6,15 @@ import java.util.EventListener;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 public class CameraParameterAdapter extends BaseAdapter{
@@ -48,26 +47,25 @@ public class CameraParameterAdapter extends BaseAdapter{
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//TODO PNG.JPEG シャッター音 オートフォーカス サイズ
-	public void setParameters(Camera.Parameters cp){
-		m_Parameter = cp;
-
+	public final void setParameters(Camera camera){
+		Camera.Parameters cp = camera.getParameters();
 		//PNG,JPEG
-		setParams(R.string.SaveFormatKey,getArraysFromXml(R.array.SaveFormatValues));
+		setParams(camera, m_Activity.getString(R.string.SaveFormatKey), getArraysFromXml(R.array.SaveFormatValues));
 		//シャッター音
-		setParams(R.string.SutterSoundKey,getArraysFromXml(R.array.SutterSoundValues));
+		setParams(camera, m_Activity.getString(R.string.SutterSoundKey), getArraysFromXml(R.array.SutterSoundValues));
 		//保存画像のサイズ
 		//setParams(R.string.SavePreviewSizeKey, conversionSizeToString(cp.getSupportedPreviewSizes()));
 		//カメラのカラーエフェクト
-		setParams(R.string.CameraColorEffectKey, cp.getSupportedColorEffects());
+		setParams(camera, m_Activity.getString(R.string.CameraColorEffectKey), cp.getSupportedColorEffects());
 		//カメラのフラッシュ
-		setParams(R.string.CameraFlashModeKey, cp.getSupportedFlashModes());
+		setParams(camera, m_Activity.getString(R.string.CameraFlashModeKey), cp.getSupportedFlashModes());
 		//カメラのホワイトバランス
-		setParams(R.string.CameraWhiteBalanceKey, cp.getSupportedWhiteBalance());
+		setParams(camera, m_Activity.getString(R.string.CameraWhiteBalanceKey), cp.getSupportedWhiteBalance());
 		//カメラの撮影シーン
 		List<String> SupportedSceneList = cp.getSupportedSceneModes();
 		List<String> RemoveList =  getArraysFromXml(R.array.SceneExceptValues);
 		SupportedSceneList.removeAll(RemoveList);
-		setParams(R.string.CameraSceneKey, SupportedSceneList);
+		setParams(camera, m_Activity.getString(R.string.CameraSceneKey), cp.getSupportedSceneModes());
 	}
 
 	public void releaseParameters(){
@@ -96,8 +94,11 @@ public class CameraParameterAdapter extends BaseAdapter{
 		return converted;
 	}
 
-	private void setParams(int keyRes, List<String> paramsList){
-		String key = m_Activity.getString(keyRes);
+	private void setParamsWithCameraParams(String key, Camera.Parameters cp, List<String> paramsList){
+
+	}
+
+	private void setParams(Camera camera,String key, List<String> paramsList){
 		if(paramsList.isEmpty() == false){
 			setArrayListAndSize(R.string.KeyListAccessKey, key);
 			setArrayListAndSize(R.string.ShowKeyListAccessKey, m_Activity.getString(m_Activity.getResources().getIdentifier(key, "string", m_Activity.getPackageName())));
@@ -120,7 +121,10 @@ public class CameraParameterAdapter extends BaseAdapter{
 
 			//keyに該当するCameraParamasを記録
 			m_CameraParamsValues.putStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key, valueList);
-
+			String defaultParam = Tools.getRecordParam(m_Activity, key);
+			if(defaultParam != null){
+				Tools.setCameraParams(m_Activity, camera, key, defaultParam);
+			}
 			//m_CameraParamsValues.put(key, valueList);
 			//TODO Bundleにする
 			//m_bSelected.put(key, false);
@@ -139,15 +143,6 @@ public class CameraParameterAdapter extends BaseAdapter{
 		//表示させるList数を保存する
 		m_CameraParamsValues.putInt(m_Activity.getResources().getString(R.string.DefaultAdapterSizeKey), keyList.size());
 		m_CameraParamsCurrentValues.putInt(m_Activity.getResources().getString(R.string.CurrentAdapterSizeKey), keyList.size());
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	private void recordParams(String key,String value){
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(m_Activity);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putString(key, value);
-		editor.commit();
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -226,29 +221,38 @@ public class CameraParameterAdapter extends BaseAdapter{
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent){
-		if(convertView == null){
-			convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamsadapterview, null);
-		}
-		convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
-		TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
 		int currentPosition = m_CameraParamsCurrentValues.getInt(m_Activity.getResources().getString(R.string.CurrentSelectPositionKey), UNSELECTING);
 		ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ShowKeyListAccessKey));
 		if(currentPosition == UNSELECTING){
+			convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamskeylistcellview, null);
+			convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
 			convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
+			TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
 			paramtext.setText(keyList.get(position));
 		}else{
 			ArrayList<String> currentList = m_CameraParamsCurrentValues.getStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey));
 			if(currentPosition < position && position <= currentPosition + currentList.size()){
+				convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamsvaluecellview, null);
+				convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
+				TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
 				convertView.setBackgroundColor(Color.argb(0, 0, 0, 0));
 				String word = currentList.get(position - currentPosition - 1);
 				paramtext.setText(word);
+				RadioButton selectButton = (RadioButton) convertView.findViewById(R.id.CameraRadioButton);
+				selectButton.setChecked(true);
 			}else if(currentPosition + currentList.size() < position){
 				String word = keyList.get(position - currentList.size());
+				convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamskeylistcellview, null);
+				convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
 				convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
+				TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
 				paramtext.setText(word);
 			}else{
 				String word = keyList.get(position);
+				convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamskeylistcellview, null);
+				convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
 				convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
+				TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
 				paramtext.setText(word);
 			}
 		}
