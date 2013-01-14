@@ -47,8 +47,9 @@ public class CameraParameterAdapter extends BaseAdapter{
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//TODO PNG.JPEG シャッター音 オートフォーカス サイズ
-	public final void setParameters(Camera camera){
+	public void setParameters(Camera camera){
 		Camera.Parameters cp = camera.getParameters();
+		String key = null;
 		//PNG,JPEG
 		setParams(camera, m_Activity.getString(R.string.SaveFormatKey), getArraysFromXml(R.array.SaveFormatValues));
 		//シャッター音
@@ -66,6 +67,13 @@ public class CameraParameterAdapter extends BaseAdapter{
 		List<String> RemoveList =  getArraysFromXml(R.array.SceneExceptValues);
 		SupportedSceneList.removeAll(RemoveList);
 		setParams(camera, m_Activity.getString(R.string.CameraSceneKey), cp.getSupportedSceneModes());
+	}
+
+	private void setDefaultValue(String key,String defaultValue){
+		String recordValue = Tools.getRecordParam(m_Activity, key);
+		if(recordValue == null){
+			Tools.recordParams(m_Activity, key, defaultValue);
+		}
 	}
 
 	public void releaseParameters(){
@@ -152,33 +160,39 @@ public class CameraParameterAdapter extends BaseAdapter{
 		int defaultAdapterSize = m_CameraParamsValues.getInt(m_Activity.getResources().getString(R.string.DefaultAdapterSizeKey), 0);
 		ArrayList<String> currentList = m_CameraParamsCurrentValues.getStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey));
 		if(currentPosition == position){
-			setCameraParamsCurrentValue(new ArrayList<String>(),defaultAdapterSize, UNSELECTING);
+			setCameraParamsCurrentValue(new ArrayList<String>(), new ArrayList<String>(),defaultAdapterSize, UNSELECTING);
 		}else if(currentPosition < 0 || position < currentPosition){
 			ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
 			String key = keyList.get(position);
+			ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
 			ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
-			setCameraParamsCurrentValue(selectList, defaultAdapterSize + selectList.size(), position);
+			setCameraParamsCurrentValue(paramsList, selectList, defaultAdapterSize + selectList.size(), position);
 		}else if(currentPosition + currentList.size() < position){
 			int keyPosition = position - currentList.size();
 			ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
 			String key = keyList.get(keyPosition);
+			ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
 			ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
-			setCameraParamsCurrentValue(selectList, defaultAdapterSize + selectList.size(), keyPosition);
+			setCameraParamsCurrentValue(paramsList,selectList, defaultAdapterSize + selectList.size(), keyPosition);
 		}else{
 			//TODO CameraParamsをカメラにセット
 			ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
 			String key = keyList.get(currentPosition);
-			ArrayList<String> ParamsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
+			ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
+			ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
+			Tools.recordParams(m_Activity, key, paramsList.get(position - currentPosition - 1));
+			Tools.recordParams(m_Activity, m_Activity.getString(R.string.RecordShowPrefixKey) + key, selectList.get(position - currentPosition - 1));
 			if(SelectListener != null){
-				SelectListener.selected(key, ParamsList.get(position - currentPosition - 1));
+				SelectListener.selected(key, paramsList.get(position - currentPosition - 1));
 			}
 		}
 		this.notifyDataSetChanged();
 	}
 
-	private void setCameraParamsCurrentValue(ArrayList<String> selectSupportList,int adapaterSize, int selectPosition){
+	private void setCameraParamsCurrentValue(ArrayList<String> selectSupportList,ArrayList<String> selectShowList,int adapaterSize, int selectPosition){
+		m_CameraParamsCurrentValues.putStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectParamListKey), selectSupportList);
 		//CameraParamsのリスト
-		m_CameraParamsCurrentValues.putStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey), selectSupportList);
+		m_CameraParamsCurrentValues.putStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey), selectShowList);
 		//表示する項目の件数
 		m_CameraParamsCurrentValues.putInt(m_Activity.getString(R.string.CurrentAdapterSizeKey), adapaterSize);
 		//選択されている項目の場所
@@ -222,13 +236,13 @@ public class CameraParameterAdapter extends BaseAdapter{
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent){
 		int currentPosition = m_CameraParamsCurrentValues.getInt(m_Activity.getResources().getString(R.string.CurrentSelectPositionKey), UNSELECTING);
-		ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ShowKeyListAccessKey));
+		ArrayList<String> showList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ShowKeyListAccessKey));
 		if(currentPosition == UNSELECTING){
 			convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamskeylistcellview, null);
 			convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
 			convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
 			TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
-			paramtext.setText(keyList.get(position));
+			paramtext.setText(showList.get(position));
 		}else{
 			ArrayList<String> currentList = m_CameraParamsCurrentValues.getStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey));
 			if(currentPosition < position && position <= currentPosition + currentList.size()){
@@ -238,17 +252,23 @@ public class CameraParameterAdapter extends BaseAdapter{
 				convertView.setBackgroundColor(Color.argb(0, 0, 0, 0));
 				String word = currentList.get(position - currentPosition - 1);
 				paramtext.setText(word);
+				ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
+				String recordValue = Tools.getRecordParam(m_Activity, m_Activity.getString(R.string.RecordShowPrefixKey) + keyList.get(currentPosition));
 				RadioButton selectButton = (RadioButton) convertView.findViewById(R.id.CameraRadioButton);
-				selectButton.setChecked(true);
+				if(word.equals(recordValue) == true){
+					selectButton.setChecked(true);
+				}else{
+					selectButton.setChecked(false);
+				}
 			}else if(currentPosition + currentList.size() < position){
-				String word = keyList.get(position - currentList.size());
+				String word = showList.get(position - currentList.size());
 				convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamskeylistcellview, null);
 				convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
 				convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
 				TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
 				paramtext.setText(word);
 			}else{
-				String word = keyList.get(position);
+				String word = showList.get(position);
 				convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamskeylistcellview, null);
 				convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
 				convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));

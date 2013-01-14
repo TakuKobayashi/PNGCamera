@@ -7,12 +7,13 @@
 	<string name="CurrentAdapterSizeKey">CurrentAdapterSize</string>
 	<string name="CurrentSelectSupportListKey">CurrentSelectShowList</string>
 	<string name="CurrentSelectPositionKey">CurrentSelectPosition</string>
+	<string name="CurrentSelectParamListKey">CurrentSelectParamList</string>
 	<string name="KeyListAccessKey">KeyListAccess</string>
 	<string name="ShowKeyListAccessKey">ShowKeyListAccess</string>
 	<string name="DefaultAdapterSizeKey">DefaultAdapterSize</string>
 	<string name="SupportListPrefixKey">ShowListPrefix</string>
 	<string name="ValueListPrefixKey">ValueListPrefix</string>
-
+	<string name="RecordShowPrefixKey">RecordShowPrefix</string>
 
 	<string name="Autofocus">CameraID</string>
 
