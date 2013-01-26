@@ -170,7 +170,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void takuPreviewPicture() {
+	public void takePreviewPicture() {
 
 		//TODO サイズ調整
 		Camera.Parameters cp = m_Camera.getParameters();

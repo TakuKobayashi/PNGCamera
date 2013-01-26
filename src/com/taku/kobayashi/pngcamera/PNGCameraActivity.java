@@ -131,7 +131,7 @@ public class PNGCameraActivity extends Activity {
 
 	private Camera.AutoFocusCallback CameraAutoFocusCallback = new Camera.AutoFocusCallback() {
 		public void onAutoFocus(boolean success, Camera camera) {
-			m_CameraPreview.takuPreviewPicture();
+			m_CameraPreview.takePreviewPicture();
 		}
 	};
 
