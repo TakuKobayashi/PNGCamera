@@ -50,7 +50,7 @@ Copyright (c) 2012年 __CompanyName__. All rights reserved.
 			android:layout_gravity="center"
 			android:scaleType="fitXY"
 			android:background="@drawable/camera_buttonshape"
-		 />
+		/>
 
 	</FrameLayout>
 
@@ -83,7 +83,7 @@ Copyright (c) 2012年 __CompanyName__. All rights reserved.
 		android:background="@drawable/switchcamera_buttonshape"
 		android:scaleType="fitXY" />
 
-	<ListView
+	<ExpandableListView
 		android:id="@+id/CameraParamsList"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"

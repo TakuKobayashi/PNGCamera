@@ -11,6 +11,8 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,8 +22,8 @@ public class PNGCameraActivity extends Activity {
 	private static final String TAG = "PNGCamera_AnotherWorldActivity";
 	private CameraPreview m_CameraPreview = null;
 	private int m_nCameraID = 0;
-	private ListView m_CameraParamsList;
-	private CameraParameterAdapter m_CameraParameterAdapter;
+	private ExpandableListView m_CameraParamsList;
+	private CameraParameterExpandableAdapter m_CameraParameterAdapter;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -54,7 +56,7 @@ public class PNGCameraActivity extends Activity {
 		//CameraOptionButton.setImageResource(R.drawable.setting_icon);
 		CameraOptionButton.setOnClickListener(m_CameraOptionListener);
 
-		m_CameraParameterAdapter = new CameraParameterAdapter(this);
+		m_CameraParameterAdapter = new CameraParameterExpandableAdapter(this);
 
 	}
 
@@ -118,11 +120,12 @@ public class PNGCameraActivity extends Activity {
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	private OnItemClickListener m_CameraParameterListener = new OnItemClickListener() {
+	private OnChildClickListener m_CameraParameterListener = new OnChildClickListener() {
 
 		@Override
-		public void onItemClick(AdapterView<?> adapterview, View view, int position,long id) {
-			m_CameraParameterAdapter.switchSelected(position);
+		public boolean onChildClick(ExpandableListView parent, View v,int groupPosition, int childPosition, long id) {
+			m_CameraParameterAdapter.setSelectParam(groupPosition, childPosition);
+			return true;
 		}
 
 	};
@@ -154,15 +157,12 @@ public class PNGCameraActivity extends Activity {
 		//m_CameraPreview.customCameraParams(m_CameraParameterAdapter);
 		CGSize displaySize = ExtraLayout.getDisplaySize(this);
 
-		m_CameraParamsList = (ListView) findViewById(R.id.CameraParamsList);
+		m_CameraParamsList = (ExpandableListView) findViewById(R.id.CameraParamsList);
 		m_CameraParamsList.getLayoutParams().width = (int)(displaySize.width * 2 / 3);
 		int height = (int)(displaySize.height / 2);
-		if(height > m_CameraParameterAdapter.getCount() * ExtraLayout.getListCellMinHeight(this)){
-			height = m_CameraParameterAdapter.getCount() * ExtraLayout.getListCellMinHeight(this) + 12;
-		}
 		m_CameraParamsList.getLayoutParams().height = height;
 		m_CameraParamsList.setAdapter(m_CameraParameterAdapter);
-		m_CameraParamsList.setOnItemClickListener(m_CameraParameterListener);
+		m_CameraParamsList.setOnChildClickListener(m_CameraParameterListener);
 		m_CameraParamsList.setVisibility(View.GONE);
 	};
 

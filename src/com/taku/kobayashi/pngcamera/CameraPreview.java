@@ -6,6 +6,8 @@ package com.taku.kobayashi.pngcamera;
 import java.io.IOException;
 import java.util.List;
 
+import com.taku.kobayashi.pngcamera.CameraParameterExpandableAdapter.ParamsSelectListener;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,8 +20,6 @@ import android.util.AttributeSet;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import com.taku.kobayashi.pngcamera.CameraParameterAdapter.ParamsSelectListener;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback{
 
@@ -65,7 +65,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void setCamera(int nCameraID, CameraParameterAdapter cpa){
+	public void setCamera(int nCameraID, CameraParameterExpandableAdapter cpa){
 		if(Build.VERSION.SDK_INT < 9){
 			m_Camera = Camera.open();
 		}else{

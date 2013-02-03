@@ -31,7 +31,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 	private Bundle m_CameraParamsCurrentValues;
 	//private HashMap<String,List<String>> m_CameraParamsValues;
 	//private HashMap<String,Boolean> m_bSelected;
-	private ParamsSelectListener SelectListener = null;
+	//private ParamsSelectListener SelectListener = null;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -182,9 +182,11 @@ public class CameraParameterAdapter extends BaseAdapter{
 			ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
 			Tools.recordParams(m_Activity, key, paramsList.get(position - currentPosition - 1));
 			Tools.recordParams(m_Activity, m_Activity.getString(R.string.RecordShowPrefixKey) + key, selectList.get(position - currentPosition - 1));
+			/*
 			if(SelectListener != null){
 				SelectListener.selected(key, paramsList.get(position - currentPosition - 1));
 			}
+			*/
 		}
 		this.notifyDataSetChanged();
 	}
@@ -205,8 +207,10 @@ public class CameraParameterAdapter extends BaseAdapter{
 			//TODO Stringから直す(条件の設定)
 		}else{
 			//TODO そのままカメラにセット
+			/*
 			if(SelectListener != null){
 			}
+			*/
 		}
 	}
 
@@ -254,12 +258,14 @@ public class CameraParameterAdapter extends BaseAdapter{
 				paramtext.setText(word);
 				ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
 				String recordValue = Tools.getRecordParam(m_Activity, m_Activity.getString(R.string.RecordShowPrefixKey) + keyList.get(currentPosition));
+				/*
 				RadioButton selectButton = (RadioButton) convertView.findViewById(R.id.CameraRadioButton);
 				if(word.equals(recordValue) == true){
 					selectButton.setChecked(true);
 				}else{
 					selectButton.setChecked(false);
 				}
+				*/
 			}else if(currentPosition + currentList.size() < position){
 				String word = showList.get(position - currentList.size());
 				convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamskeylistcellview, null);
@@ -281,18 +287,13 @@ public class CameraParameterAdapter extends BaseAdapter{
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * リスナーを追加する
-	 */
+/*
 	public void setOnParamsSelectListener(ParamsSelectListener listener){
 		this.SelectListener = listener;
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * リスナーを削除する
-	 */
 	public void removeListener(){
 		this.SelectListener = null;
 	}
@@ -305,6 +306,7 @@ public class CameraParameterAdapter extends BaseAdapter{
 		public void selected(String key,String value);
 
 	}
+*/
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
