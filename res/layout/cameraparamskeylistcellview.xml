@@ -9,12 +9,12 @@ Copyright (c) 2012年 __CompanyName__. All rights reserved.
 	android:layout_height="wrap_content"
 	android:background="#FFFFFFFF" >
 
-		<TextView
-			android:id="@+id/CameraParamsText"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerHorizontal="true"
-			android:layout_centerVertical="true"
-		/>
+	<TextView
+		android:id="@+id/CameraParamsText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:layout_centerVertical="true"
+	/>
 
 </RelativeLayout>

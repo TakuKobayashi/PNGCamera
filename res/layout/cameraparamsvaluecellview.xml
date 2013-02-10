@@ -16,4 +16,5 @@ Copyright (c) 2012年 __CompanyName__. All rights reserved.
 		android:layout_centerHorizontal="true"
 		android:layout_centerVertical="true"
 	/>
+
 </RelativeLayout>

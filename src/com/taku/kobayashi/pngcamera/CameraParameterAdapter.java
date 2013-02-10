@@ -2,7 +2,6 @@ package com.taku.kobayashi.pngcamera;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EventListener;
 import java.util.List;
 
 import android.app.Activity;
@@ -14,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 public class CameraParameterAdapter extends BaseAdapter{
@@ -70,10 +68,6 @@ public class CameraParameterAdapter extends BaseAdapter{
 	}
 
 	private void setDefaultValue(String key,String defaultValue){
-		String recordValue = Tools.getRecordParam(m_Activity, key);
-		if(recordValue == null){
-			Tools.recordParams(m_Activity, key, defaultValue);
-		}
 	}
 
 	public void releaseParameters(){
@@ -129,10 +123,6 @@ public class CameraParameterAdapter extends BaseAdapter{
 
 			//keyに該当するCameraParamasを記録
 			m_CameraParamsValues.putStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key, valueList);
-			String defaultParam = Tools.getRecordParam(m_Activity, key);
-			if(defaultParam != null){
-				Tools.setCameraParams(m_Activity, camera, key, defaultParam);
-			}
 			//m_CameraParamsValues.put(key, valueList);
 			//TODO Bundleにする
 			//m_bSelected.put(key, false);
@@ -180,8 +170,6 @@ public class CameraParameterAdapter extends BaseAdapter{
 			String key = keyList.get(currentPosition);
 			ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
 			ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
-			Tools.recordParams(m_Activity, key, paramsList.get(position - currentPosition - 1));
-			Tools.recordParams(m_Activity, m_Activity.getString(R.string.RecordShowPrefixKey) + key, selectList.get(position - currentPosition - 1));
 			/*
 			if(SelectListener != null){
 				SelectListener.selected(key, paramsList.get(position - currentPosition - 1));
@@ -257,7 +245,6 @@ public class CameraParameterAdapter extends BaseAdapter{
 				String word = currentList.get(position - currentPosition - 1);
 				paramtext.setText(word);
 				ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
-				String recordValue = Tools.getRecordParam(m_Activity, m_Activity.getString(R.string.RecordShowPrefixKey) + keyList.get(currentPosition));
 				/*
 				RadioButton selectButton = (RadioButton) convertView.findViewById(R.id.CameraRadioButton);
 				if(word.equals(recordValue) == true){

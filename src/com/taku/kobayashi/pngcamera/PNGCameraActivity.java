@@ -9,12 +9,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 public class PNGCameraActivity extends Activity {
@@ -55,7 +52,6 @@ public class PNGCameraActivity extends Activity {
 		//ImageButton CameraOptionButton = (ImageButton) findViewById(R.id.CameraParamsButton);
 		//CameraOptionButton.setImageResource(R.drawable.setting_icon);
 		CameraOptionButton.setOnClickListener(m_CameraOptionListener);
-
 		m_CameraParameterAdapter = new CameraParameterExpandableAdapter(this);
 
 	}

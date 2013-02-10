@@ -219,19 +219,7 @@ public class Tools {
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public static void recordParams(Context con, String key,String value){
-		SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(con);
-		SharedPreferences.Editor editor = setting.edit();
-		editor.putString(key, value);
-		editor.commit();
-	}
-
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	public static String getRecordParam(Context con, String key){
-		SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(con);
-		return setting.getString(key, null);
-	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -918,6 +906,22 @@ public class Tools {
 		imageView.setImageBitmap(image);
 	}
 	*/
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public static void recordParam(Context con,String key, String value){
+		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(con);
+		SharedPreferences.Editor editor = sp.edit();
+		editor.putString(key, value);
+		editor.commit();
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public static String getRecordingParam(Context con, String key){
+		SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(con);
+		return setting.getString(key, "");
+	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 

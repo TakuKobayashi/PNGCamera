@@ -3,6 +3,7 @@ package com.taku.kobayashi.pngcamera;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EventListener;
+import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
@@ -13,9 +14,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
@@ -33,6 +33,7 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 	//private HashMap<String,List<String>> m_CameraParamsValues;
 	//private HashMap<String,Boolean> m_bSelected;
 	private ParamsSelectListener SelectListener = null;
+	private HashMap<Integer,RadioGroup> m_RadioGroupList;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -43,6 +44,7 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		m_CameraParamsCurrentValues = new Bundle();
 		m_CameraParamsValues = new Bundle();
 		//m_bSelected = new HashMap<String, Boolean>();
+		m_RadioGroupList = new HashMap<Integer, RadioGroup>();
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -71,10 +73,6 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 	}
 
 	private void setDefaultValue(String key,String defaultValue){
-		String recordValue = Tools.getRecordParam(m_Activity, key);
-		if(recordValue == null){
-			Tools.recordParams(m_Activity, key, defaultValue);
-		}
 	}
 
 	public void releaseParameters(){
@@ -130,10 +128,6 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 
 			//keyに該当するCameraParamasを記録
 			m_CameraParamsValues.putStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key, valueList);
-			String defaultParam = Tools.getRecordParam(m_Activity, key);
-			if(defaultParam != null){
-				Tools.setCameraParams(m_Activity, camera, key, defaultParam);
-			}
 			//m_CameraParamsValues.put(key, valueList);
 			//TODO Bundleにする
 			//m_bSelected.put(key, false);
@@ -181,8 +175,6 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 			String key = keyList.get(currentPosition);
 			ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
 			ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
-			Tools.recordParams(m_Activity, key, paramsList.get(position - currentPosition - 1));
-			Tools.recordParams(m_Activity, m_Activity.getString(R.string.RecordShowPrefixKey) + key, selectList.get(position - currentPosition - 1));
 			if(SelectListener != null){
 				SelectListener.selected(key, paramsList.get(position - currentPosition - 1));
 			}
@@ -215,11 +207,12 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
 		String key = keyList.get(groupPosition);
 		ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
-		Tools.recordParams(m_Activity, key, paramsList.get(childPosition));
+		Tools.recordParam(m_Activity, key, paramsList.get(childPosition));
 		Log.d(TAG,"key:"+key+" param:"+paramsList.get(childPosition));
 		if(SelectListener != null){
 			SelectListener.selected(key, paramsList.get(childPosition));
 		}
+		this.notifyDataSetChanged();
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -343,12 +336,25 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
 		String key = keyList.get(groupPosition);
 		ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
+		ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
+		String record = Tools.getRecordingParam(m_Activity, key);
 		convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamsvaluecellview, null);
 		convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
 		TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
 		paramtext.setText(selectList.get(childPosition));
-		convertView.setBackgroundColor(Color.argb(0, 0, 0, 0));
+		if(paramsList.get(childPosition).equals(record)){
+			convertView.setBackgroundColor(Color.argb(218, 243, 153, 32));
+		}else{
+			convertView.setBackgroundColor(Color.argb(0, 0, 0, 0));
+		}
 		return convertView;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public boolean areAllItemsEnabled(){
+		return true;
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -395,6 +401,8 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
 		TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
 		paramtext.setText(showList.get(groupPosition));
+		RadioGroup radioGroup = new RadioGroup(m_Activity,null);
+		m_RadioGroupList.put(groupPosition, radioGroup);
 		return convertView;
 	}
 
