@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -22,6 +26,9 @@ public class PNGCameraActivity extends Activity {
 	private int m_nCameraID = 0;
 	private ExpandableListView m_CameraParamsList;
 	private CameraParameterExpandableAdapter m_CameraParameterAdapter;
+	private SensorManager m_SensorManager = null;
+	private boolean m_bMoveSurFace = false;
+	private boolean m_bAutoFocus = false;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -54,6 +61,8 @@ public class PNGCameraActivity extends Activity {
 		//CameraOptionButton.setImageResource(R.drawable.setting_icon);
 		CameraOptionButton.setOnClickListener(m_CameraOptionListener);
 		m_CameraParameterAdapter = new CameraParameterExpandableAdapter(this);
+
+		m_SensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 
 	}
 
@@ -133,7 +142,8 @@ public class PNGCameraActivity extends Activity {
 
 	private Camera.AutoFocusCallback CameraAutoFocusCallback = new Camera.AutoFocusCallback() {
 		public void onAutoFocus(boolean success, Camera camera) {
-			m_CameraPreview.takePreviewPicture();
+			m_bAutoFocus = false;
+			//m_CameraPreview.takePreviewPicture();
 		}
 	};
 
@@ -154,12 +164,42 @@ public class PNGCameraActivity extends Activity {
 		}
 	};
 
+	private SensorEventListener m_SensorEventListener = new SensorEventListener() {
+
+		private float before = 0f;
+
+		@Override
+		public void onSensorChanged(SensorEvent event) {
+			if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
+				float[] gravity = event.values;
+				float sum = Math.abs(gravity[0])+Math.abs(gravity[1])+Math.abs(gravity[2]);
+				if(Math.abs(before - sum) < 0.7){
+					if(m_bMoveSurFace == true && m_bAutoFocus == false){
+						m_bMoveSurFace = false;
+						m_bAutoFocus = true;
+						m_CameraPreview.autoFocus(CameraAutoFocusCallback);
+					}
+				}else{
+					m_bMoveSurFace = true;
+				}
+				before = sum;
+			}
+		}
+
+		@Override
+		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+		}
+	};
+
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@Override
 	protected void onResume(){
 		super.onResume();
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
+		m_SensorManager.registerListener(m_SensorEventListener, m_SensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_UI);
+
 		m_CameraPreview.setCamera(m_nCameraID, m_CameraParameterAdapter);
 		//m_CameraPreview.customCameraParams(m_CameraParameterAdapter);
 		CGSize displaySize = ExtraLayout.getDisplaySize(this);
@@ -181,6 +221,9 @@ public class PNGCameraActivity extends Activity {
 		m_CameraPreview.releaseCamera();
 		m_CameraParamsList = null;
 		m_CameraParameterAdapter.releaseParameters();
+		if(m_SensorManager != null){
+			m_SensorManager.unregisterListener(m_SensorEventListener);
+		}
 	};
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

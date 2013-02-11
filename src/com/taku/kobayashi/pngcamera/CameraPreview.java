@@ -24,7 +24,7 @@ import android.view.SurfaceView;
 
 import com.taku.kobayashi.pngcamera.CameraParameterExpandableAdapter.ParamsSelectListener;
 
-public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, SurfaceHolder.Callback2{
+public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback{
 
 	public Bitmap PreviewImage;
 	private static final String TAG = "PNGCamera_CameraPreView";
@@ -282,12 +282,5 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			m_Camera = null;
 		};
 	}
-
-	@Override
-	public void surfaceRedrawNeeded(SurfaceHolder holder) {
-		// TODO 自動生成されたメソッド・スタブ
-		Log.d(TAG, "redraw");
-	}
-
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 }
