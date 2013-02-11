@@ -70,6 +70,9 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		List<String> RemoveList =  getArraysFromXml(R.array.SceneExceptValues);
 		SupportedSceneList.removeAll(RemoveList);
 		setParams(camera, m_Activity.getString(R.string.CameraSceneKey), cp.getSupportedSceneModes());
+
+		setParams(camera, m_Activity.getString(R.string.CameraPreviewSizeKey), convertSizeToString(cp.getSupportedPreviewSizes()));
+		setParams(camera, m_Activity.getString(R.string.CameraFocusModeKey), cp.getSupportedFocusModes());
 	}
 
 	private void setDefaultValue(String key,String defaultValue){
@@ -85,6 +88,15 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 	private List<String> getArraysFromXml(int res){
 		String[] strArray = m_Activity.getResources().getStringArray(res);
 		return Arrays.asList(strArray);
+	}
+
+	private List<String> convertSizeToString(List<Size> sizeList){
+		String[] result = new String[sizeList.size()];
+		for(int i = 0;i < sizeList.size();i++){
+			String convert = sizeList.get(i).width + m_Activity.getString(R.string.SizeConnectionWord) + sizeList.get(i).height;
+			result[i] = convert;
+		}
+		return Arrays.asList(result);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

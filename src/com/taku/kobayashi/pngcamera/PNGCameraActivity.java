@@ -2,6 +2,7 @@ package com.taku.kobayashi.pngcamera;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
@@ -77,6 +78,8 @@ public class PNGCameraActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			if (m_CameraPreview != null) {
+				//m_CameraPreview.takePicture(CameraShutterCallback, null, CamerPictureCallback);
+				//m_CameraPreview.takePreviewPicture();
 				m_CameraPreview.autoFocus(CameraAutoFocusCallback);
 			}
 		}
@@ -140,6 +143,14 @@ public class PNGCameraActivity extends Activity {
 		@Override
 		public void onShutter() {
 
+		}
+	};
+
+	private Camera.PictureCallback CamerPictureCallback = new Camera.PictureCallback() {
+		public void onPictureTaken(byte[] data, Camera camera) {
+			if (data != null) {
+				Bitmap bitmap = Tools.getBitmap(PNGCameraActivity.this, data, 0);
+			}
 		}
 	};
 

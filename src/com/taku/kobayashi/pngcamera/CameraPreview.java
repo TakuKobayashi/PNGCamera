@@ -6,22 +6,25 @@ package com.taku.kobayashi.pngcamera;
 import java.io.IOException;
 import java.util.List;
 
-import com.taku.kobayashi.pngcamera.CameraParameterExpandableAdapter.ParamsSelectListener;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
+import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.PreviewCallback;
+import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback{
+import com.taku.kobayashi.pngcamera.CameraParameterExpandableAdapter.ParamsSelectListener;
+
+public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, SurfaceHolder.Callback2{
 
 	public Bitmap PreviewImage;
 	private static final String TAG = "PNGCamera_CameraPreView";
@@ -39,11 +42,15 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		m_Context = context;
 		m_Holder = getHolder();
 		m_Holder.addCallback(this);
+		if(Build.VERSION.SDK_INT < 11){
+			m_Holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		}
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void surfaceCreated(SurfaceHolder holder) {
+		Log.d(TAG,"Create");
 		try {
 			m_Camera.setPreviewDisplay(holder);
 		} catch (IOException exception) {
@@ -54,13 +61,14 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
+		Log.d(TAG,"Destory");
 		this.releaseCamera();
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-
+		Log.d(TAG,"Change");
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -73,7 +81,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		}
 		try {
 			m_Camera.setPreviewDisplay(m_Holder);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		Camera.Parameters cp = m_Camera.getParameters();
 		cpa.setParameters(m_Camera);
@@ -171,7 +181,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void takePreviewPicture() {
-
 		//TODO サイズ調整
 		Camera.Parameters cp = m_Camera.getParameters();
 		cp.setPreviewSize(m_PreviewList.get(0).width, m_PreviewList.get(0).height);
@@ -182,6 +191,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		Camera.Parameters acp = m_Camera.getParameters();
 		cp.setPreviewSize(m_PreViewSize.width, m_PreViewSize.height);
 		m_Camera.setParameters(acp);
+		m_Camera.startPreview();
+	}
+
+	public void takePicture(ShutterCallback sc,PictureCallback raw,PictureCallback jpeg) {
+		//TODO サイズ調整
+		m_Camera.takePicture(sc, raw, jpeg);
+		m_Camera.stopPreview();
 		m_Camera.startPreview();
 	}
 
@@ -265,6 +281,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			m_Camera.release();
 			m_Camera = null;
 		};
+	}
+
+	@Override
+	public void surfaceRedrawNeeded(SurfaceHolder holder) {
+		// TODO 自動生成されたメソッド・スタブ
+		Log.d(TAG, "redraw");
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

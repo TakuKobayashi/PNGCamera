@@ -14,6 +14,7 @@
 	<string name="SupportListPrefixKey">ShowListPrefix</string>
 	<string name="ValueListPrefixKey">ValueListPrefix</string>
 	<string name="RecordShowPrefixKey">RecordShowPrefix</string>
+	<string name="SizeConnectionWord">×</string>
 
 	<string name="Autofocus">CameraID</string>
 
@@ -26,13 +27,13 @@
 
 	<string name="SaveFormatKey">SaveFormat</string>
 	<string name="SaveFormat">保存画像のフォーマット</string>
-	<string name="SaveFormatPNG">PNG</string>
-	<string name="SaveFormatJPEG">JPEG</string>
+	<string name="SaveFormatpng">PNG</string>
+	<string name="SaveFormatjpg">JPEG</string>
 
 	<string name="SutterSoundKey">SutterSound</string>
 	<string name="SutterSound">シャッター音</string>
-	<string name="SutterSoundON">有り</string>
-	<string name="SutterSoundOFF">なし</string>
+	<string name="SutterSoundtrue">有り</string>
+	<string name="SutterSoundfalse">なし</string>
 
 	<string name="CameraFlashModeKey">FlashMode</string>
 	<string name="FlashMode">フラッシュモード</string>
@@ -93,4 +94,17 @@
 	<string name="SceneAR">AR</string>
 	<string name="Sceneaction">アクション</string>
 
+	<!-- key + サポートしている名前で命名 -->
+	<string name="CameraPreviewSizeKey">PreviewSize</string>
+	<string name="PreviewSize">撮影画像サイズ(幅×高さ)</string>
+
+		<!-- key + サポートしている名前で命名 -->
+	<string name="CameraFocusModeKey">FocusMode</string>
+	<string name="FocusMode">フォーカスモード</string>
+	<string name="FocusModeauto">オート</string>
+	<string name="FocusModeinfinity">ずっと</string>
+	<string name="FocusModenormal">普通</string>
+	<string name="FocusModemacro">マクロ</string>
+	<string name="FocusModecontinuousvideo">ビデオ</string>
+	<string name="FocusModecontinuouspicture">写真</string>
 </resources>

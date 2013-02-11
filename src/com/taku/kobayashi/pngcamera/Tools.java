@@ -231,6 +231,8 @@ public class Tools {
 			cp.setWhiteBalance(value);
 		}else if(key.equals(con.getString(R.string.CameraSceneKey))){
 			cp.setSceneMode(value);
+		}else if(key.equals(con.getString(R.string.CameraFocusModeKey))){
+			cp.setFocusMode(value);
 		}
 		camera.setParameters(cp);
 	}
@@ -1067,5 +1069,15 @@ public class Tools {
 		}
 	}
 
+	public static String getSDCardFolderPath(){
+		String path = "/sdcard2/";
+		File file = new File(path);
+		file.getTotalSpace();
+		if(file.exists() && file.isDirectory()){
+			return path;
+		}else{
+			return Environment.getExternalStorageState().toString() + "/";
+		}
+	}
 
 }
