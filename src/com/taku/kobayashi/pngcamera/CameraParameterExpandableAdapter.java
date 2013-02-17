@@ -140,6 +140,13 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 
 			//keyに該当するCameraParamasを記録
 			m_CameraParamsValues.putStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key, valueList);
+			String defaultParam = Tools.getRecordParam(m_Activity, key);
+			if(defaultParam != null){
+				Tools.setCameraParams(m_Activity, camera, key, defaultParam);
+			}
+			if(Tools.getRecordParam(m_Activity, key).length() == 0){
+				Tools.recordParams(m_Activity, key, paramsList.get(0));
+			}
 			//m_CameraParamsValues.put(key, valueList);
 			//TODO Bundleにする
 			//m_bSelected.put(key, false);
