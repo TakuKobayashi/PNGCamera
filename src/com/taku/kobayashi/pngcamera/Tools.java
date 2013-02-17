@@ -43,6 +43,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
@@ -448,7 +449,7 @@ public class Tools {
 		String strTempName = new String();
 		int i = 0;
 		while (true) {
-			String strExtDir = Environment.getExternalStorageDirectory().toString()+"/"+com.taku.kobayashi.pngcamera.Config.DIRECTORY_NAME_TO_SAVE;
+			String strExtDir = Tools.getSDCardFolderPath() + "/" + com.taku.kobayashi.pngcamera.Config.DIRECTORY_NAME_TO_SAVE;
 			File files = new File(strExtDir);
 			// 今の時間をミリ秒で返す(PHPのstrtotimeと同じ)
 			long dateTaken = System.currentTimeMillis();
@@ -1080,6 +1081,23 @@ public class Tools {
 			return path;
 		}else{
 			return Environment.getExternalStorageState().toString() + "/";
+		}
+	}
+
+	public static boolean checkSDcardMount() {
+		return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+	}
+
+	public static boolean checkSDcardAvailableSpace() {
+		String strSDcardPath = getSDCardFolderPath();
+		StatFs statFs = new StatFs(strSDcardPath);
+
+		double SDcardAvailableSpace = Math.abs((double)statFs.getAvailableBlocks() * (double)statFs.getBlockSize() / 1024.0);
+		Log.d(TAG,"SDCard_Space:"+SDcardAvailableSpace+" Config:"+com.taku.kobayashi.pngcamera.Config.LIMIT_MINIMAM_SPACE);
+		if (SDcardAvailableSpace >= com.taku.kobayashi.pngcamera.Config.LIMIT_MINIMAM_SPACE) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 

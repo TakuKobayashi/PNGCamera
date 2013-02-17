@@ -21,8 +21,8 @@ public class Config {
 	//画像を保存する場合の圧縮率
 	public static final int COMPRESS_QUALITY = 100;
 
-	//アプリを動作することが可能なSDカード内の最低空き容量(1MB)
-	public static final long LIMIT_MINIMAM_SPACE = 1 * 1024;
+	//アプリを動作することが可能なSDカード内の最低空き容量(10MB)
+	public static final long LIMIT_MINIMAM_SPACE = 10 * 1024;
 
 	public static final float RENDER_IMAGE_RESIZE_RATE = 0.9f;
 

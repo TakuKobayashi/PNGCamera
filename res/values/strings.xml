@@ -25,6 +25,9 @@
 
 	<string name="SavePreviewSizeKey">SavePreviewSize</string>
 
+	<string name="AlertSDcardMountMessage">SDカードを挿入してください</string>
+	<string name="AlertSDcardLackSpace">SDカードの空き容量が足りません。SDcardの空き容量が*MB以上になるようにしてください。</string>
+
 	<string name="SaveFormatKey">SaveFormat</string>
 	<string name="SaveFormat">保存画像のフォーマット</string>
 	<string name="SaveFormatpng">PNG</string>

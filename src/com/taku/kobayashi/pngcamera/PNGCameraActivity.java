@@ -63,6 +63,9 @@ public class PNGCameraActivity extends Activity {
 		m_CameraParameterAdapter = new CameraParameterExpandableAdapter(this);
 
 		m_SensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
+		if(checkAllSDcardStatus() == false){
+			finish();
+		}
 
 	}
 
@@ -92,7 +95,7 @@ public class PNGCameraActivity extends Activity {
 	private OnClickListener m_ShatterListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
-			if (m_CameraPreview != null) {
+			if (m_CameraPreview != null && checkAllSDcardStatus()) {
 				//m_CameraPreview.takePicture(CameraShutterCallback, null, CamerPictureCallback);
 				m_CameraPreview.takePreviewPicture();
 				//m_CameraPreview.autoFocus(CameraAutoFocusCallback);
@@ -243,5 +246,16 @@ public class PNGCameraActivity extends Activity {
 	}
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	private boolean checkAllSDcardStatus(){
+		if(Tools.checkSDcardMount() == false){
+			Tools.showToast(this, this.getString(R.string.AlertSDcardMountMessage));
+			return false;
+		}else if(Tools.checkSDcardAvailableSpace() == false){
+			Tools.showToast(this, this.getString(R.string.AlertSDcardLackSpace).replace("*", String.valueOf(Config.LIMIT_MINIMAM_SPACE/ 1024)));
+			return false;
+		}
+		return true;
+	}
 
 }
