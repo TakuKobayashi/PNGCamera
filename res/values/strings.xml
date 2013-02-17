@@ -96,9 +96,11 @@
 
 	<!-- key + サポートしている名前で命名 -->
 	<string name="CameraPreviewSizeKey">PreviewSize</string>
-	<string name="PreviewSize">撮影画像サイズ(幅×高さ)</string>
+	<string name="PreviewSize0">撮影画像サイズ(幅×高さ)</string>
+	<string name="PreviewSize1">撮影画像サイズ(幅×高さ)</string>
+	<string name="PreviewSize2">撮影画像サイズ(幅×高さ)</string>
 
-		<!-- key + サポートしている名前で命名 -->
+	<!-- key + サポートしている名前で命名 -->
 	<string name="CameraFocusModeKey">FocusMode</string>
 	<string name="FocusMode">フォーカスモード</string>
 	<string name="FocusModeauto">オート</string>

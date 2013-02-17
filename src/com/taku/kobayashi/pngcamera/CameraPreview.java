@@ -15,6 +15,7 @@ import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -34,6 +35,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	private Camera m_Camera = null;
 	private Size m_PreViewSize;
 	private List<Size> m_PreviewList;
+	private CameraParameterExpandableAdapter m_CPEA;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -74,6 +76,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void setCamera(int nCameraID, CameraParameterExpandableAdapter cpa){
+		Tools.recordParam(m_Context, m_Context.getString(R.string.IntentCameraIDKey), String.valueOf(nCameraID));
 		if(Build.VERSION.SDK_INT < 9){
 			m_Camera = Camera.open();
 		}else{
@@ -87,12 +90,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 		Camera.Parameters cp = m_Camera.getParameters();
 		cpa.setParameters(m_Camera);
-		cpa.setOnParamsSelectListener(new ParamsSelectListener() {
-			@Override
-			public void selected(String key, String value) {
-				Tools.setCameraParams(m_Context, m_Camera, key, value);
-			}
-		});
+		m_CPEA = cpa;
 		//Log.d(TAG,"RateList:"+cp.getZoomRatios());
 		//Log.d(TAG,"FlashMode:"+cp.getSupportedFlashModes());
 		//Log.d(TAG,"Format:"+cp.getSupportedPictureFormats());
@@ -156,16 +154,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	private PreviewCallback m_PreViewCallback = new PreviewCallback(){
-		@Override
-		public void onPreviewFrame(byte[] data, Camera camera) {
-			decodeBitmapData(data,m_PreviewList.get(0).width,m_PreviewList.get(0).height);
-			savePicture(PreviewImage);
-		}
-	};
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 	private void savePicture(Bitmap picture){
 		StringBuffer name = new StringBuffer();
 		// 画像のおいてある場所と保存する画像のファイル名の情報をとって来る
@@ -181,13 +169,40 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void takePreviewPicture() {
-		//TODO サイズ調整
 		Camera.Parameters cp = m_Camera.getParameters();
-		cp.setPreviewSize(m_PreviewList.get(0).width, m_PreviewList.get(0).height);
+		//シャッター音
+		String sound = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.SutterSoundKey));
+		Log.d(TAG, sound + ":");
+		if(Boolean.parseBoolean(sound)){
+			Log.d(TAG, sound + ":");
+			MediaPlayer mp= MediaPlayer.create(m_Context, R.raw.camera_shutter);
+			try {
+				mp.prepare();
+				mp.start();
+			} catch (IllegalStateException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		//画像の大きさ
+		String size = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.CameraPreviewSizeKey) + Tools.getRecordingParam(m_Context, m_Context.getString(R.string.IntentCameraIDKey)));
+		String[] imageSize = size.split(m_Context.getString(R.string.ConnectSizeAndSize));
+		for(int i = 0;i < imageSize.length;i++){
+			Log.d(TAG, "Size:"+imageSize[i]);
+		}
+		cp.setPreviewSize(Integer.parseInt(imageSize[0]),Integer.parseInt(imageSize[1]));
 		m_Camera.setParameters(cp);
 		m_Camera.setOneShotPreviewCallback(null);
 		m_Camera.stopPreview();
-		m_Camera.setOneShotPreviewCallback(m_PreViewCallback);
+		m_Camera.setOneShotPreviewCallback(new PreviewCallback() {
+			@Override
+			public void onPreviewFrame(byte[] data, Camera camera) {
+				Size size = camera.getParameters().getPreviewSize();
+				decodeBitmapData(data, size.width, size.height);
+				savePicture(PreviewImage);
+			}
+		});
 		Camera.Parameters acp = m_Camera.getParameters();
 		cp.setPreviewSize(m_PreViewSize.width, m_PreViewSize.height);
 		m_Camera.setParameters(acp);

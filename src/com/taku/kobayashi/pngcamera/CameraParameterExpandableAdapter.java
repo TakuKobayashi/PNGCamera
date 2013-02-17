@@ -1,5 +1,7 @@
 package com.taku.kobayashi.pngcamera;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EventListener;
@@ -10,6 +12,8 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -71,7 +75,7 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		SupportedSceneList.removeAll(RemoveList);
 		setParams(camera, m_Activity.getString(R.string.CameraSceneKey), cp.getSupportedSceneModes());
 
-		setParams(camera, m_Activity.getString(R.string.CameraPreviewSizeKey), convertSizeToString(cp.getSupportedPreviewSizes()));
+		setParams(camera, m_Activity.getString(R.string.CameraPreviewSizeKey) + Tools.getRecordingParam(m_Activity, m_Activity.getString(R.string.IntentCameraIDKey)), convertSizeToString(cp.getSupportedPreviewSizes()));
 		setParams(camera, m_Activity.getString(R.string.CameraFocusModeKey), cp.getSupportedFocusModes());
 	}
 
@@ -118,7 +122,7 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 	}
 
 	private void setParams(Camera camera,String key, List<String> paramsList){
-		if(paramsList.isEmpty() == false){
+		if(paramsList != null && paramsList.isEmpty() == false){
 			setArrayListAndSize(R.string.KeyListAccessKey, key);
 			setArrayListAndSize(R.string.ShowKeyListAccessKey, m_Activity.getString(m_Activity.getResources().getIdentifier(key, "string", m_Activity.getPackageName())));
 			//keyに該当する日本語のリスト保存する

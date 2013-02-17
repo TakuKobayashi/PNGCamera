@@ -88,8 +88,8 @@ public class PNGCameraActivity extends Activity {
 		public void onClick(View v) {
 			if (m_CameraPreview != null) {
 				//m_CameraPreview.takePicture(CameraShutterCallback, null, CamerPictureCallback);
-				//m_CameraPreview.takePreviewPicture();
-				m_CameraPreview.autoFocus(CameraAutoFocusCallback);
+				m_CameraPreview.takePreviewPicture();
+				//m_CameraPreview.autoFocus(CameraAutoFocusCallback);
 			}
 		}
 	};
