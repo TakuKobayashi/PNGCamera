@@ -172,7 +172,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		Camera.Parameters cp = m_Camera.getParameters();
 		//シャッター音
 		String sound = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.SutterSoundKey));
-		Log.d(TAG, sound + ":");
 		if(Boolean.parseBoolean(sound)){
 			Log.d(TAG, sound + ":");
 			MediaPlayer mp= MediaPlayer.create(m_Context, R.raw.camera_shutter);
@@ -188,9 +187,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		//画像の大きさ
 		String size = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.CameraPreviewSizeKey) + Tools.getRecordingParam(m_Context, m_Context.getString(R.string.IntentCameraIDKey)));
 		String[] imageSize = size.split(m_Context.getString(R.string.ConnectSizeAndSize));
-		for(int i = 0;i < imageSize.length;i++){
-			Log.d(TAG, "Size:"+imageSize[i]);
-		}
 		cp.setPreviewSize(Integer.parseInt(imageSize[0]),Integer.parseInt(imageSize[1]));
 		m_Camera.setParameters(cp);
 		m_Camera.setOneShotPreviewCallback(null);
