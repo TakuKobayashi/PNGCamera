@@ -70,6 +70,12 @@ public class PNGCameraActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(m_CameraParamsList.getVisibility() == View.VISIBLE){
+			if(keyCode == KeyEvent.KEYCODE_BACK){
+				m_CameraParamsList.setVisibility(View.GONE);
+				return true;
+			}
+		}
 		if (keyCode == KeyEvent.KEYCODE_CAMERA) {
 			if (m_CameraPreview != null) {
 				m_CameraPreview.autoFocus(CameraAutoFocusCallback);
@@ -218,12 +224,12 @@ public class PNGCameraActivity extends Activity {
 	@Override
 	protected void onPause(){
 		super.onPause();
-		m_CameraPreview.releaseCamera();
-		m_CameraParamsList = null;
-		m_CameraParameterAdapter.releaseParameters();
 		if(m_SensorManager != null){
 			m_SensorManager.unregisterListener(m_SensorEventListener);
 		}
+		m_CameraPreview.releaseCamera();
+		m_CameraParamsList = null;
+		m_CameraParameterAdapter.releaseParameters();
 	};
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

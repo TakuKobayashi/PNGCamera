@@ -35,7 +35,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	private Camera m_Camera = null;
 	private Size m_PreViewSize;
 	private List<Size> m_PreviewList;
-	private CameraParameterExpandableAdapter m_CPEA;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -87,7 +86,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 		Camera.Parameters cp = m_Camera.getParameters();
 		cpa.setParameters(m_Camera);
-		m_CPEA = cpa;
 		//Log.d(TAG,"RateList:"+cp.getZoomRatios());
 		//Log.d(TAG,"FlashMode:"+cp.getSupportedFlashModes());
 		//Log.d(TAG,"Format:"+cp.getSupportedPictureFormats());
