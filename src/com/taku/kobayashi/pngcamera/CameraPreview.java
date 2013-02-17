@@ -52,7 +52,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void surfaceCreated(SurfaceHolder holder) {
-		Log.d(TAG,"Create");
 		try {
 			m_Camera.setPreviewDisplay(holder);
 		} catch (IOException exception) {
@@ -63,14 +62,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		Log.d(TAG,"Destory");
 		this.releaseCamera();
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-		Log.d(TAG,"Change");
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -155,10 +152,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void savePicture(Bitmap picture){
-		StringBuffer name = new StringBuffer();
 		// 画像のおいてある場所と保存する画像のファイル名の情報をとって来る
-		String savedImagePathstr = Tools.getFilePath(Config.SAVE_IMG_EXTENSION_PNG);
-		Tools.SaveImage(m_Context.getContentResolver(), picture, savedImagePathstr, name.toString(), (Activity) m_Context);
+		String savedImagePathstr = Tools.getFilePath("." + Tools.getRecordingParam(m_Context,m_Context.getString(R.string.SaveFormatKey)));
+		Tools.SaveImage(m_Context.getContentResolver(), picture, savedImagePathstr, (Activity) m_Context);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -173,7 +169,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		//シャッター音
 		String sound = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.SutterSoundKey));
 		if(Boolean.parseBoolean(sound)){
-			Log.d(TAG, sound + ":");
 			MediaPlayer mp= MediaPlayer.create(m_Context, R.raw.camera_shutter);
 			try {
 				mp.prepare();

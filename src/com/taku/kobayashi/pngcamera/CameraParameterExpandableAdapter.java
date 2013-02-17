@@ -132,7 +132,6 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 				//リソース名に-は使えない
 				String processingResouceWord = paramsList.get(i).replaceAll("-", "");
 				int value_res = m_Activity.getResources().getIdentifier(key + processingResouceWord, "string", m_Activity.getPackageName());
-				Log.d(TAG,"key:"+key+" values:"+value_res);
 				if(value_res != 0){
 					showValueList.add(m_Activity.getString(value_res));
 				}else{

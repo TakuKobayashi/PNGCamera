@@ -400,7 +400,8 @@ public class Tools {
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//画像をSDカードに保存する
-	public static boolean SaveImage(ContentResolver contentResolver, Bitmap bitmap, String strFilePath, String strFileName, Activity act) {
+	public static boolean SaveImage(ContentResolver contentResolver, Bitmap bitmap, String strFilePath, Activity act) {
+		String name = new StringBuffer().toString();
 		Uri imageUri = null;
 		// 保存する画像の情報をDBに登録してギャラリーなどで検索してデータが出てくるようにする。
 		if (act != null) {
@@ -408,8 +409,8 @@ public class Tools {
 			Uri mediaUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 			ContentValues contentValues = new ContentValues();
 			contentValues.put(MediaStore.Images.Media.DATA, strFilePath);
-			contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, strFileName);
-			contentValues.put(MediaStore.Images.Media.TITLE, strFileName);
+			contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, name);
+			contentValues.put(MediaStore.Images.Media.TITLE, name);
 			contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
 			// DBに新しくとってきたコンテンツの情報を挿入する(contentResolver.insert)
 			imageUri = contentResolver.insert(mediaUri, contentValues);
@@ -420,7 +421,12 @@ public class Tools {
 			// imageUriにあるファイルを開く(openOutputStream)
 			OutputStream outputStream = contentResolver.openOutputStream(imageUri);
 			// bitmap画像を圧縮する(圧縮後の拡張子,圧縮率,画像)
-			bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+			String value = Tools.getRecordingParam(act, act.getString(R.string.SaveFormatKey));
+			if(value.equals(act.getString(R.string.SaveFormatpng))){
+				bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+			}else{
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+			}
 			outputStream.close();
 			if (act != null) {
 				File file = new File(strFilePath);
@@ -428,7 +434,7 @@ public class Tools {
 				act.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
 			}
 		} catch (Exception e) {
-			Log.d(TAG, "Savefalse");
+			e.printStackTrace();
 			return false;
 		}
 		return true;

@@ -111,7 +111,6 @@ public class CameraParameterAdapter extends BaseAdapter{
 				//リソース名に-は使えない
 				String processingResouceWord = paramsList.get(i).replaceAll("-", "");
 				int value_res = m_Activity.getResources().getIdentifier(key + processingResouceWord, "string", m_Activity.getPackageName());
-				Log.d(TAG,"key:"+key+" values:"+value_res);
 				if(value_res != 0){
 					showValueList.add(m_Activity.getString(value_res));
 				}else{
@@ -190,7 +189,6 @@ public class CameraParameterAdapter extends BaseAdapter{
 	}
 
 	private void setParamstoCamera(String key, String Param){
-		Log.d(TAG, "selectParam:"+Param);
 		if(key == ""){
 			//TODO Stringから直す(条件の設定)
 		}else{
