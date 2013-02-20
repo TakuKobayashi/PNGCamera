@@ -3,6 +3,10 @@
 	<string name="app_name">PNGCamera</string>
 	<string name="title_activity_main">MainActivity</string>
 	<string name="IntentCameraIDKey">CameraID</string>
+	<string name="IntentPictureByteDateKey">PictureByteData</string>
+	<string name="IntentPictureWidthKey">PictureWidth</string>
+	<string name="IntentPictureHeightKey">PictureHeight</string>
+	<string name="IntentCameraOrientationKey">CameraOrientation</string>
 
 	<string name="CurrentAdapterSizeKey">CurrentAdapterSize</string>
 	<string name="CurrentSelectSupportListKey">CurrentSelectShowList</string>

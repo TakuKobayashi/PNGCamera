@@ -252,7 +252,7 @@ public class PNGCameraActivity extends Activity {
 			Tools.showToast(this, this.getString(R.string.AlertSDcardMountMessage));
 			return false;
 		}else if(Tools.checkSDcardAvailableSpace() == false){
-			Tools.showToast(this, this.getString(R.string.AlertSDcardLackSpace).replace("*", String.valueOf(Config.LIMIT_MINIMAM_SPACE/ 1024)));
+			Tools.showToast(this, this.getString(R.string.AlertSDcardLackSpace).replace("*", String.valueOf(Config.LIMIT_MINIMAM_SPACE / 1024)));
 			return false;
 		}
 		return true;

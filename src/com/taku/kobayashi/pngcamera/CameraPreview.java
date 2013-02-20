@@ -8,6 +8,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
@@ -16,6 +17,7 @@ import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -188,6 +190,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			@Override
 			public void onPreviewFrame(byte[] data, Camera camera) {
 				Size size = camera.getParameters().getPreviewSize();
+				Intent intent = new Intent(m_Context, SaveImageService.class);
+				intent.putExtra(m_Context.getString(R.string.IntentPictureByteDateKey), data);
+				intent.putExtra(m_Context.getString(R.string.IntentPictureWidthKey), size.width);
+				intent.putExtra(m_Context.getString(R.string.IntentPictureHeightKey), size.height);
+				intent.putExtra(m_Context.getString(R.string.IntentCameraOrientationKey), m_CameraDisplayOrientation);
+				m_Context.startService(intent);
 				decodeBitmapData(data, size.width, size.height);
 				savePicture(PreviewImage);
 			}
