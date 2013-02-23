@@ -1076,11 +1076,10 @@ public class Tools {
 	public static String getSDCardFolderPath(){
 		String path = "/sdcard2/";
 		File file = new File(path);
-		file.getTotalSpace();
 		if(file.exists() && file.isDirectory()){
 			return path;
 		}else{
-			return Environment.getExternalStorageState().toString() + "/";
+			return Environment.getExternalStorageDirectory().toString() + "/";
 		}
 	}
 
@@ -1093,7 +1092,6 @@ public class Tools {
 		StatFs statFs = new StatFs(strSDcardPath);
 
 		double SDcardAvailableSpace = Math.abs((double)statFs.getAvailableBlocks() * (double)statFs.getBlockSize() / 1024.0);
-		Log.d(TAG,"SDCard_Space:"+SDcardAvailableSpace+" Config:"+com.taku.kobayashi.pngcamera.Config.LIMIT_MINIMAM_SPACE);
 		if (SDcardAvailableSpace >= com.taku.kobayashi.pngcamera.Config.LIMIT_MINIMAM_SPACE) {
 			return true;
 		} else {
