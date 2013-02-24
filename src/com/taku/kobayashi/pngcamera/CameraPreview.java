@@ -3,6 +3,7 @@
 
 package com.taku.kobayashi.pngcamera;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -18,14 +19,18 @@ import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.ImageView;
 
 import com.taku.kobayashi.pngcamera.CameraParameterExpandableAdapter.ParamsSelectListener;
+import com.taku.kobayashi.pngcamera.SaveImageService.SaveCompleteListener;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback{
 
@@ -37,6 +42,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	private Camera m_Camera = null;
 	private Size m_PreViewSize;
 	private List<Size> m_PreviewList;
+	private ImageView m_Thumbnail;
+	private Size m_ThumbnailSize;
+	private Thread m_Thread = null;
+	private Handler m_Handler;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -47,6 +56,26 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		m_Holder.addCallback(this);
 		if(Build.VERSION.SDK_INT < 11){
 			m_Holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		}
+		m_Handler = new Handler();
+	}
+
+	public void setThumbnailImageView(ImageView iv){
+		m_Thumbnail = iv;
+		//以下のフォルダの中から画像
+		String path = Tools.getSDCardFolderPath() + "/" + com.taku.kobayashi.pngcamera.Config.DIRECTORY_NAME_TO_SAVE;
+		File file = new File(path);
+		String[] fileNames = file.list();
+		//多分昇順でほぞんされているので後ろから取ってくるといい
+		for(int i = fileNames.length - 1;i >= 0; i--){
+			if(fileNames[i].contains(".jpg") || fileNames[i].contains(".png")){
+				String imagePath = path + "/" + fileNames[i];
+				m_ThumbnailSize = m_Camera.getParameters().getJpegThumbnailSize();
+				Log.d(TAG, "width:" + m_ThumbnailSize.width + " height:" + m_ThumbnailSize.height);
+				Bitmap image = Tools.getSelectSizeBitmap(m_Context, Uri.fromFile(new File(imagePath)), m_ThumbnailSize.width, m_ThumbnailSize.height);
+				m_Thumbnail.setImageBitmap(image);
+				break;
+			}
 		}
 	}
 
@@ -187,17 +216,50 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		m_Camera.setOneShotPreviewCallback(null);
 		m_Camera.stopPreview();
 		m_Camera.setOneShotPreviewCallback(new PreviewCallback() {
+
+			private byte[] m_Data;
+			private Size m_Size;
+
 			@Override
 			public void onPreviewFrame(byte[] data, Camera camera) {
-				Size size = camera.getParameters().getPreviewSize();
-				Intent intent = new Intent(m_Context, SaveImageService.class);
-				intent.putExtra(m_Context.getString(R.string.IntentPictureByteDateKey), data);
-				intent.putExtra(m_Context.getString(R.string.IntentPictureWidthKey), size.width);
-				intent.putExtra(m_Context.getString(R.string.IntentPictureHeightKey), size.height);
-				intent.putExtra(m_Context.getString(R.string.IntentCameraOrientationKey), m_CameraDisplayOrientation);
-				m_Context.startService(intent);
-				decodeBitmapData(data, size.width, size.height);
-				savePicture(PreviewImage);
+
+				m_Size = camera.getParameters().getPreviewSize();
+				m_Data = data;
+
+				m_Thread = new Thread(new Runnable() {
+					private Bitmap m_ThumbnailImage;
+
+					@Override
+					public void run() {
+						int[] rgb = new int[(m_Size.width * m_Size.height)];
+						Tools.decodeYUV420SP(rgb, m_Data, m_Size.width, m_Size.height);
+						Bitmap image = Bitmap.createBitmap(rgb, m_Size.width, m_Size.height, Bitmap.Config.ARGB_8888);
+						rgb = null;
+
+						if (m_CameraDisplayOrientation != 0) {
+							//画像を回転させて取ってくる。
+							Bitmap work = Tools.bitmapRotate(image, m_CameraDisplayOrientation);
+							image.recycle();
+							image = null;
+							image = work;
+						}
+
+						String savedImagePathstr = Tools.getFilePath("." + Tools.getRecordingParam(m_Context, m_Context.getString(R.string.SaveFormatKey)));
+						Tools.SaveImage(m_Context.getContentResolver(), image, savedImagePathstr, m_Context);
+						m_ThumbnailImage = Tools.getSelectSizeBitmap(m_Context, Uri.fromFile(new File(savedImagePathstr)), m_ThumbnailSize.width, m_ThumbnailSize.height);
+						m_Handler.post(new Runnable() {
+
+							@Override
+							public void run() {
+								Tools.releaseImageView(m_Thumbnail);
+								m_Thumbnail.setImageBitmap(m_ThumbnailImage);
+							}
+						});
+					}
+				});
+				m_Thread.start();
+				//decodeBitmapData(data, size.width, size.height);
+				//savePicture(PreviewImage);
 			}
 		});
 		Camera.Parameters acp = m_Camera.getParameters();
@@ -293,6 +355,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			m_Camera.release();
 			m_Camera = null;
 		};
+		if(m_Thread != null && m_Thread.isAlive()){
+			try {
+				m_Thread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 }

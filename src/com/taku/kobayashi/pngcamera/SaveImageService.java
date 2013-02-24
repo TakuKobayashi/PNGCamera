@@ -1,5 +1,9 @@
 package com.taku.kobayashi.pngcamera;
 
+import java.util.EventListener;
+
+import com.taku.kobayashi.pngcamera.CameraParameterExpandableAdapter.ParamsSelectListener;
+
 import android.app.Activity;
 import android.app.IntentService;
 import android.content.Context;
@@ -22,26 +26,13 @@ import android.widget.TextView;
 public class SaveImageService extends IntentService {
 
 	private final static String TAG = "PNGCamera_SaveImageService";
+	private SaveCompleteListener CompleteListener = null;
 	//private boolean m_bRecording;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public SaveImageService(String name) {
 		super(name);
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	public SaveImageService() {
-		super("VoiceRecorderOnBackGroundService");
-		//ファイル保存容量の限界、ファイル保存時間の限界等が訪れた時呼ばれる。
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public void onCreate() {
-		super.onCreate();
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -55,6 +46,9 @@ public class SaveImageService extends IntentService {
 		Bitmap image = decodeBitmapData(data, width, height, orientation);
 		String savedImagePathstr = Tools.getFilePath("." + Tools.getRecordingParam(this,this.getString(R.string.SaveFormatKey)));
 		Tools.SaveImage(this.getContentResolver(), image, savedImagePathstr, this);
+		if(CompleteListener != null){
+			CompleteListener.complete(savedImagePathstr);
+		}
 	}
 
 	private Bitmap decodeBitmapData(byte[] data, int width, int height, int orientation) {
@@ -78,6 +72,31 @@ public class SaveImageService extends IntentService {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+	}
+
+	/**
+	 * リスナーを追加する
+	 */
+	public void setOnSaveCompleteLister(SaveCompleteListener listener){
+		this.CompleteListener = listener;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * リスナーを削除する
+	 */
+	public void removeListener(){
+		this.CompleteListener = null;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+	public interface SaveCompleteListener extends EventListener {
+
+		public void complete(String filePath);
+
 	}
 
 }

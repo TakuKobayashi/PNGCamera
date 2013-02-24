@@ -10,13 +10,18 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PNGCameraActivity extends Activity {
@@ -27,6 +32,7 @@ public class PNGCameraActivity extends Activity {
 	private ExpandableListView m_CameraParamsList;
 	private CameraParameterExpandableAdapter m_CameraParameterAdapter;
 	private SensorManager m_SensorManager = null;
+	private OrientationEventListener m_OrientationListener;
 	private boolean m_bMoveSurFace = false;
 	private boolean m_bAutoFocus = false;
 
@@ -62,6 +68,13 @@ public class PNGCameraActivity extends Activity {
 		CameraOptionButton.setOnClickListener(m_CameraOptionListener);
 		m_CameraParameterAdapter = new CameraParameterExpandableAdapter(this);
 
+		m_OrientationListener = new OrientationEventListener(this,SensorManager.SENSOR_DELAY_UI) {
+
+			@Override
+			public void onOrientationChanged(int orientation) {
+				Log.d(TAG,"orientation:"+orientation);
+			}
+		};
 		m_SensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
 		if(checkAllSDcardStatus() == false){
 			finish();
@@ -182,7 +195,7 @@ public class PNGCameraActivity extends Activity {
 			if(event.sensor.getType() == Sensor.TYPE_ACCELEROMETER){
 				float[] gravity = event.values;
 				float sum = Math.abs(gravity[0])+Math.abs(gravity[1])+Math.abs(gravity[2]);
-				if(Math.abs(before - sum) < 0.7){
+				if(Math.abs(before - sum) < 0.8){
 					if(m_bMoveSurFace == true && m_bAutoFocus == false){
 						m_bMoveSurFace = false;
 						m_bAutoFocus = true;
@@ -207,9 +220,12 @@ public class PNGCameraActivity extends Activity {
 	protected void onResume(){
 		super.onResume();
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
+		ImageView im = (ImageView) findViewById(R.id.ThumbnailImageview);
 		m_SensorManager.registerListener(m_SensorEventListener, m_SensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_UI);
+		m_OrientationListener.enable();
 
 		m_CameraPreview.setCamera(m_nCameraID, m_CameraParameterAdapter);
+		m_CameraPreview.setThumbnailImageView(im);
 		//m_CameraPreview.customCameraParams(m_CameraParameterAdapter);
 		CGSize displaySize = ExtraLayout.getDisplaySize(this);
 
@@ -230,8 +246,10 @@ public class PNGCameraActivity extends Activity {
 		if(m_SensorManager != null){
 			m_SensorManager.unregisterListener(m_SensorEventListener);
 		}
+		m_OrientationListener.disable();
 		m_CameraPreview.releaseCamera();
 		m_CameraParamsList = null;
+		Tools.releaseImageView((ImageView) findViewById(R.id.ThumbnailImageview));
 		m_CameraParameterAdapter.releaseParameters();
 	};
 

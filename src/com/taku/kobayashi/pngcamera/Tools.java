@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -93,6 +94,70 @@ public class Tools {
 			Log.d(TAG, "openInputStream failed  ***ERROR***");
 		} catch (IOException e) {
 			Log.d(TAG, "closeInputStream failed  ***ERROR***");
+		}
+
+		Bitmap bitmap = tmp.copy(Config.ARGB_8888, true);
+
+		if (orientation != 0) {
+			//画像を回転させて取ってくる。
+			Bitmap work = Tools.bitmapRotate(tmp, orientation);
+			bitmap.recycle();
+			bitmap = null;
+			bitmap = work;
+		}
+		tmp.recycle();
+		tmp = null;
+
+		return bitmap;
+	}
+
+	public static Bitmap getSelectSizeBitmap(Context con, Uri uri,int width, int height) {
+
+		//分割させる値の計算
+		int orientation = Tools.getImageOrientation(uri, con);
+		BitmapFactory.Options calcOptions = new BitmapFactory.Options();
+		calcOptions.inJustDecodeBounds = true;
+		int imageWidth = 0;
+		int imageHeight = 0;
+		int currentWidth = 0;
+		int currentHeight = 0;
+		try {
+			InputStream is = con.getContentResolver().openInputStream(uri);
+			BitmapFactory.decodeStream(is, null, calcOptions);
+			is.close();
+			imageWidth = calcOptions.outWidth;
+			imageHeight = calcOptions.outHeight;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		//90度回転させるとき
+		if(Math.abs(orientation % 180) == 90){
+			currentWidth = imageHeight;
+			currentHeight = imageWidth;
+		}else{
+			currentWidth = imageWidth;
+			currentHeight = imageHeight;
+		}
+		int nSampleSize = 1;
+		if (currentWidth > width || currentHeight > height) {
+			nSampleSize = (int) Math.max(Math.max(Math.ceil(currentWidth / width), Math.ceil((currentHeight / height))), 1);
+		}
+
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inSampleSize = nSampleSize;
+		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+		Bitmap tmp = null;
+		try {
+			InputStream is = con.getContentResolver().openInputStream(uri);
+			tmp = BitmapFactory.decodeStream(is, null, options);
+			is.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
 		Bitmap bitmap = tmp.copy(Config.ARGB_8888, true);
