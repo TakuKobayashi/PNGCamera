@@ -68,11 +68,26 @@ public class PNGCameraActivity extends Activity {
 		CameraOptionButton.setOnClickListener(m_CameraOptionListener);
 		m_CameraParameterAdapter = new CameraParameterExpandableAdapter(this);
 
+		//OrientationListenerを測定した結果、画面の向きに該当する値を割り当てた
 		m_OrientationListener = new OrientationEventListener(this,SensorManager.SENSOR_DELAY_UI) {
 
 			@Override
 			public void onOrientationChanged(int orientation) {
-				Log.d(TAG,"orientation:"+orientation);
+				if(m_CameraPreview != null){
+					if((68 <= orientation && orientation < 113) || (248 <= orientation && orientation < 270)){
+						m_CameraPreview.m_CameraDisplayOrientation = 90;
+					}else if(113 <= orientation && orientation < 158){
+						m_CameraPreview.m_CameraDisplayOrientation = 180;
+					}else if(158 <= orientation && orientation < 203){
+						m_CameraPreview.m_CameraDisplayOrientation = 270;
+					}else if(203 <= orientation && orientation < 248){
+						m_CameraPreview.m_CameraDisplayOrientation = 90;
+					}else if(orientation == OrientationEventListener.ORIENTATION_UNKNOWN){
+
+					}else{
+						m_CameraPreview.m_CameraDisplayOrientation = 90;
+					}
+				}
 			}
 		};
 		m_SensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -230,8 +245,11 @@ public class PNGCameraActivity extends Activity {
 		CGSize displaySize = ExtraLayout.getDisplaySize(this);
 
 		m_CameraParamsList = (ExpandableListView) findViewById(R.id.CameraParamsList);
-		m_CameraParamsList.getLayoutParams().width = (int)(displaySize.width * 2 / 3);
-		int height = (int)(displaySize.height / 2);
+		m_CameraParamsList.getLayoutParams().width = (int)(displaySize.width * 3 / 4);
+		int height = m_CameraParameterAdapter.getGroupTypeCount() * ExtraLayout.getListCellMinHeight(this);
+		if(height < (displaySize.height / 2)){
+			height = (int)(displaySize.height / 2);
+		}
 		m_CameraParamsList.getLayoutParams().height = height;
 		m_CameraParamsList.setAdapter(m_CameraParameterAdapter);
 		m_CameraParamsList.setOnChildClickListener(m_CameraParameterListener);

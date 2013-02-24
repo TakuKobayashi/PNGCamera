@@ -38,7 +38,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	private static final String TAG = "PNGCamera_CameraPreView";
 	private Context m_Context;
 	private SurfaceHolder m_Holder;
-	private int m_CameraDisplayOrientation = 0;
+	public int m_CameraDisplayOrientation = 0;
 	private Camera m_Camera = null;
 	private Size m_PreViewSize;
 	private List<Size> m_PreviewList;
