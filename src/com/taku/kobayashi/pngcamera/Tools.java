@@ -129,8 +129,10 @@ public class Tools {
 			imageHeight = calcOptions.outHeight;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
 		}
 		//90度回転させるとき
 		if(Math.abs(orientation % 180) == 90){
@@ -156,8 +158,10 @@ public class Tools {
 			is.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
 		}
 
 		Bitmap bitmap = tmp.copy(Config.ARGB_8888, true);

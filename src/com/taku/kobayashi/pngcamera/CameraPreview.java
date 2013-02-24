@@ -62,19 +62,25 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	public void setThumbnailImageView(ImageView iv){
 		m_Thumbnail = iv;
-		//以下のフォルダの中から画像
+		//以下のフォルダの中から画像ファイルを読み込む
 		String path = Tools.getSDCardFolderPath() + "/" + com.taku.kobayashi.pngcamera.Config.DIRECTORY_NAME_TO_SAVE;
-		File file = new File(path);
-		String[] fileNames = file.list();
+		File dir = new File(path);
+		String[] fileNames = dir.list();
 		//多分昇順でほぞんされているので後ろから取ってくるといい
 		for(int i = fileNames.length - 1;i >= 0; i--){
 			if(fileNames[i].contains(".jpg") || fileNames[i].contains(".png")){
 				String imagePath = path + "/" + fileNames[i];
 				m_ThumbnailSize = m_Camera.getParameters().getJpegThumbnailSize();
 				Log.d(TAG, "width:" + m_ThumbnailSize.width + " height:" + m_ThumbnailSize.height);
-				Bitmap image = Tools.getSelectSizeBitmap(m_Context, Uri.fromFile(new File(imagePath)), m_ThumbnailSize.width, m_ThumbnailSize.height);
-				m_Thumbnail.setImageBitmap(image);
-				break;
+				File file = new File(imagePath);
+				Bitmap image = Tools.getSelectSizeBitmap(m_Context, Uri.fromFile(file), m_ThumbnailSize.width, m_ThumbnailSize.height);
+				//画像ファイルとしては正しいが、画像ではなかったり壊れているファイルなら消す
+				if(image != null){
+					m_Thumbnail.setImageBitmap(image);
+					break;
+				}else{
+					file.delete();
+				}
 			}
 		}
 	}
@@ -225,7 +231,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 				m_Size = camera.getParameters().getPreviewSize();
 				m_Data = data;
-
+				//画像の保存が完了するまで次のスレッドは起動させない
+				joinThread();
 				m_Thread = new Thread(new Runnable() {
 					private Bitmap m_ThumbnailImage;
 
@@ -355,6 +362,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			m_Camera.release();
 			m_Camera = null;
 		};
+		//アプリ起動時に画像を保存するスレッドが動いていて、終了するとファイルが壊れるので、保存が完了するまで待つ
+		joinThread();
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	private void joinThread(){
 		if(m_Thread != null && m_Thread.isAlive()){
 			try {
 				m_Thread.join();
@@ -363,5 +377,4 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			}
 		}
 	}
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 }
