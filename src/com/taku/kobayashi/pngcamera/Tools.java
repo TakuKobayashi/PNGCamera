@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -40,6 +41,7 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
+import android.hardware.Camera.Size;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -1193,6 +1195,22 @@ public class Tools {
 				rgb[yp] = 0xff000000 | ((r << 6) & 0xff0000) | ((g >> 2) & 0xff00) | ((b >> 10) & 0xff);
 			}
 		}
+	}
+
+	public static CGSize getFitPreviewSize(Context con, List<Size> suppoortSizeList){
+		CGSize displaySize = ExtraLayout.getDisplaySize(con);
+		int resultWidth = 1;
+		int resultHeight = 1;
+		for(int i = 0;i < suppoortSizeList.size(); i++){
+			Size size = suppoortSizeList.get(i);
+			//縦長で、画面の大きさに一番近く、画面より大きいサイズを設定する
+			//カメラは横向きで使うことが前提なので、縦横反転して判別する
+			if((size.width >= displaySize.height && size.height >= displaySize.width && size.height < size.width) && (resultWidth == 1 && resultHeight == 1) || (resultWidth > size.width && resultHeight > size.height)){
+				resultWidth = size.width;
+				resultHeight = size.height;
+			}
+		}
+		return new CGSize(resultWidth, resultHeight);
 	}
 
 }

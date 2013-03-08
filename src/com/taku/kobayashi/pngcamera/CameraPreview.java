@@ -30,7 +30,6 @@ import android.view.SurfaceView;
 import android.widget.ImageView;
 
 import com.taku.kobayashi.pngcamera.CameraParameterExpandableAdapter.ParamsSelectListener;
-import com.taku.kobayashi.pngcamera.SaveImageService.SaveCompleteListener;
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback{
 
@@ -40,8 +39,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	private SurfaceHolder m_Holder;
 	public int m_CameraDisplayOrientation = 0;
 	private Camera m_Camera = null;
-	private Size m_PreViewSize;
-	private List<Size> m_PreviewList;
+	private Size m_PreviewSize;
 	private ImageView m_Thumbnail;
 	private Size m_ThumbnailSize;
 	private Thread m_Thread = null;
@@ -123,32 +121,15 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 		Camera.Parameters cp = m_Camera.getParameters();
 		cpa.setParameters(m_Camera);
-		//Log.d(TAG,"RateList:"+cp.getZoomRatios());
-		//Log.d(TAG,"FlashMode:"+cp.getSupportedFlashModes());
-		//Log.d(TAG,"Format:"+cp.getSupportedPictureFormats());
-		//Log.d(TAG,"Effects:"+cp.getSupportedColorEffects());
-		//Log.d(TAG,"AntiBanding:"+cp.getSupportedAntibanding());
-		//Log.d(TAG,"WhiteBalance:"+cp.getSupportedWhiteBalance());
-		//Log.d(TAG,"Scene:"+cp.getSupportedSceneModes());
-		//Log.d(TAG,"Focus:"+cp.getSupportedFocusModes());
-
-		m_PreviewList = cp.getSupportedPreviewSizes();
-		/*
-		List<Size> Picture = cp.getSupportedPictureSizes();
-		for(int i = 0;i < Picture.size();i++){
-			Log.d(TAG,"Picture width:"+Picture.get(i).width+" height:"+Picture.get(i).height);
-		}
-		List<Size> PreView = cp.getSupportedPreviewSizes();
-		for(int i = 0;i < PreView.size();i++){
-			Log.d(TAG,"PreView width:"+PreView.get(i).width+" height:"+PreView.get(i).height);
-		}
-		*/
-
-		m_PreViewSize = cp.getPreviewSize();
+		CGSize previewSize = Tools.getFitPreviewSize(m_Context , cp.getSupportedPreviewSizes());
+		Log.d(TAG, "width:"+ previewSize.width + " height:"+ previewSize.height);
+		cp.setPreviewSize((int)previewSize.width, (int)previewSize.height);
+		m_PreviewSize = cp.getPreviewSize();
 		m_CameraDisplayOrientation = getCameraDisplayOrientation((Activity) m_Context, nCameraID);
 		m_Camera.setDisplayOrientation(m_CameraDisplayOrientation);
 		m_Camera.setParameters(cp);
 		m_Camera.startPreview();
+		Log.d(TAG, "width:"+ m_PreviewSize.width + " height:"+ m_PreviewSize.height);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -270,7 +251,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			}
 		});
 		Camera.Parameters acp = m_Camera.getParameters();
-		cp.setPreviewSize(m_PreViewSize.width, m_PreViewSize.height);
+		cp.setPreviewSize(m_PreviewSize.width, m_PreviewSize.height);
 		m_Camera.setParameters(acp);
 		m_Camera.startPreview();
 	}
