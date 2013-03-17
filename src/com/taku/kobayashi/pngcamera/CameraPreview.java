@@ -19,6 +19,7 @@ import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.taku.kobayashi.pngcamera.CameraParameterExpandableAdapter.ParamsSelectListener;
 
@@ -184,15 +186,24 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		//シャッター音
 		String sound = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.SutterSoundKey));
 		if(Boolean.parseBoolean(sound)){
-			MediaPlayer mp= MediaPlayer.create(m_Context, R.raw.camera_shutter);
+			MediaPlayer mp = MediaPlayer.create(m_Context, R.raw.camera_shutter);
 			try {
 				mp.prepare();
-				mp.start();
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			mp.start();
+			mp.setOnCompletionListener(new OnCompletionListener(){
+				@Override
+				public void onCompletion(MediaPlayer mp) {
+					mp.stop();
+					mp.release();
+					mp = null;
+				}
+			});
+
 		}
 		//画像の大きさ
 		String size = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.CameraPreviewSizeKey) + Tools.getRecordingParam(m_Context, m_Context.getString(R.string.IntentCameraIDKey)));
