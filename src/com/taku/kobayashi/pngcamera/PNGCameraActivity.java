@@ -67,6 +67,7 @@ public class PNGCameraActivity extends Activity {
 		//CameraOptionButton.setImageResource(R.drawable.setting_icon);
 		CameraOptionButton.setOnClickListener(m_CameraOptionListener);
 		m_CameraParameterAdapter = new CameraParameterExpandableAdapter(this);
+		m_CameraParameterAdapter.setCameraId(m_nCameraID);
 
 		//OrientationListenerを測定した結果、画面の向きに該当する値を割り当てた
 		m_OrientationListener = new OrientationEventListener(this,SensorManager.SENSOR_DELAY_UI) {
@@ -193,14 +194,6 @@ public class PNGCameraActivity extends Activity {
 		}
 	};
 
-	private Camera.PictureCallback CamerPictureCallback = new Camera.PictureCallback() {
-		public void onPictureTaken(byte[] data, Camera camera) {
-			if (data != null) {
-				Bitmap bitmap = Tools.getBitmap(PNGCameraActivity.this, data, 0);
-			}
-		}
-	};
-
 	private SensorEventListener m_SensorEventListener = new SensorEventListener() {
 
 		private float before = 0f;
@@ -236,7 +229,6 @@ public class PNGCameraActivity extends Activity {
 		super.onResume();
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
 		ImageView im = (ImageView) findViewById(R.id.ThumbnailImageview);
-		Log.d(TAG, ""+im.getHeight());
 		m_SensorManager.registerListener(m_SensorEventListener, m_SensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_UI);
 		m_OrientationListener.enable();
 

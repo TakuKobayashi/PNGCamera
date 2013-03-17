@@ -133,9 +133,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 	//YUV420 to BMP
 	public static final void decodeYUV420SP(int[] rgb, byte[] yuv420sp, int width, int height) {
 		final int frameSize = width * height;

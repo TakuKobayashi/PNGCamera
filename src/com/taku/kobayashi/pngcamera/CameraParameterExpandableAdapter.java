@@ -26,29 +26,23 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 
 	private static final String TAG = "PNGCamera_Parameter";
 	//Listやbundleをbooleanの型で扱おうとすると何かとめんどくさくなるので定義する
-	private static final int BOOLEAN_FALSE = 0;
-	private static final int BOOLEAN_TRUE = 1;
 	private static final int UNSELECTING = -1;
-	private Camera.Parameters m_Parameter;
 	private Activity m_Activity;
-	private ArrayList<String> m_CameraParamsList;
 	private Bundle m_CameraParamsValues;
 	private Bundle m_CameraParamsCurrentValues;
-	//private HashMap<String,List<String>> m_CameraParamsValues;
-	//private HashMap<String,Boolean> m_bSelected;
 	private ParamsSelectListener SelectListener = null;
-	private HashMap<Integer,RadioGroup> m_RadioGroupList;
+	private int m_nCameraId = 0;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public CameraParameterExpandableAdapter(Activity act){
 		m_Activity = act;
-		m_CameraParamsList = new ArrayList<String>();
-		//m_CameraParamsValues = new HashMap<String, List<String>>();
 		m_CameraParamsCurrentValues = new Bundle();
 		m_CameraParamsValues = new Bundle();
-		//m_bSelected = new HashMap<String, Boolean>();
-		m_RadioGroupList = new HashMap<Integer, RadioGroup>();
+	}
+
+	public void setCameraId(int cameraId){
+		m_nCameraId = cameraId;
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -56,13 +50,10 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 	//TODO PNG.JPEG シャッター音 オートフォーカス サイズ
 	public void setParameters(Camera camera){
 		Camera.Parameters cp = camera.getParameters();
-		String key = null;
 		//PNG,JPEG
-		setParams(camera, m_Activity.getString(R.string.SaveFormatKey), getArraysFromXml(R.array.SaveFormatValues));
+		setParams(camera, commonIdParamsKey(m_Activity.getString(R.string.SaveFormatKey)), getArraysFromXml(R.array.SaveFormatValues));
 		//シャッター音
-		setParams(camera, m_Activity.getString(R.string.SutterSoundKey), getArraysFromXml(R.array.SutterSoundValues));
-		//保存画像のサイズ
-		//setParams(R.string.SavePreviewSizeKey, conversionSizeToString(cp.getSupportedPreviewSizes()));
+		setParams(camera, commonIdParamsKey(m_Activity.getString(R.string.SutterSoundKey)), getArraysFromXml(R.array.SutterSoundValues));
 		//カメラのカラーエフェクト
 		setParams(camera, m_Activity.getString(R.string.CameraColorEffectKey), cp.getSupportedColorEffects());
 		//カメラのフラッシュ
@@ -75,11 +66,8 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		SupportedSceneList.removeAll(RemoveList);
 		setParams(camera, m_Activity.getString(R.string.CameraSceneKey), cp.getSupportedSceneModes());
 
-		setParams(camera, m_Activity.getString(R.string.CameraPreviewSizeKey) + Tools.getRecordingParam(m_Activity, m_Activity.getString(R.string.IntentCameraIDKey)), convertSizeToString(cp.getSupportedPreviewSizes()));
+		setParams(camera, m_Activity.getString(R.string.CameraPreviewSizeKey), convertSizeToString(cp.getSupportedPreviewSizes()));
 		setParams(camera, m_Activity.getString(R.string.CameraFocusModeKey), cp.getSupportedFocusModes());
-	}
-
-	private void setDefaultValue(String key,String defaultValue){
 	}
 
 	public void releaseParameters(){
@@ -88,6 +76,18 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	//カメラIdに関係なく使用するKeyはあらかじめ登録しておく
+	private String commonIdParamsKey(String key){
+		ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.ExceptSwitchIdKeyListKey));
+		if(keyList == null){
+			keyList = new ArrayList<String>();
+		}
+		//keyのpositionの情報を記録する
+		keyList.add(key);
+		m_CameraParamsValues.putStringArrayList(m_Activity.getString(R.string.ExceptSwitchIdKeyListKey), keyList);
+		return key;
+	}
 
 	private List<String> getArraysFromXml(int res){
 		String[] strArray = m_Activity.getResources().getStringArray(res);
@@ -105,24 +105,9 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	private List<String> conversionSizeToString(List<Size> sizeList){
-		ArrayList<String> converted = new ArrayList<String>();
-		for(int i = 0;i < sizeList.size();i++){
-			//TODO 縦横によってサイズを絞り込む
-			String width = String.valueOf(sizeList.get(i).width);
-			String cross = m_Activity.getString(R.string.ConnectSizeAndSize);
-			String height = String.valueOf(sizeList.get(i).height);
-			converted.add(width + cross + height);
-		}
-		return converted;
-	}
-
-	private void setParamsWithCameraParams(String key, Camera.Parameters cp, List<String> paramsList){
-
-	}
-
 	private void setParams(Camera camera,String key, List<String> paramsList){
 		if(paramsList != null && paramsList.isEmpty() == false){
+			Log.d(TAG, key);
 			setArrayListAndSize(R.string.KeyListAccessKey, key);
 			setArrayListAndSize(R.string.ShowKeyListAccessKey, m_Activity.getString(m_Activity.getResources().getIdentifier(key, "string", m_Activity.getPackageName())));
 			//keyに該当する日本語のリスト保存する
@@ -139,20 +124,22 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 				}
 				valueList.add(paramsList.get(i));
 			}
-			m_CameraParamsValues.putStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key, showValueList);
+			m_CameraParamsValues.putStringArrayList(m_Activity.getString(R.string.SupportListPrefixKey) + key, showValueList);
 
 			//keyに該当するCameraParamasを記録
-			m_CameraParamsValues.putStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key, valueList);
-			String defaultParam = Tools.getRecordingParam(m_Activity, key);
+			m_CameraParamsValues.putStringArrayList(m_Activity.getString(R.string.ValueListPrefixKey) + key, valueList);
+			ArrayList<String> commonKeyList = m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.ExceptSwitchIdKeyListKey));
+			String currentKey = key;
+			if(commonKeyList.contains(key) == false){
+				currentKey = currentKey + m_nCameraId;
+			}
+			String defaultParam = Tools.getRecordingParam(m_Activity, currentKey);
 			if(defaultParam.length() > 0){
 				Tools.setCameraParams(m_Activity, camera, key, defaultParam);
 			}else{
-				Tools.recordParam(m_Activity, key, paramsList.get(0));
+				Tools.recordParam(m_Activity, currentKey, paramsList.get(0));
 				Tools.setCameraParams(m_Activity, camera, key, paramsList.get(0));
 			}
-			//m_CameraParamsValues.put(key, valueList);
-			//TODO Bundleにする
-			//m_bSelected.put(key, false);
 		}
 	}
 
@@ -214,98 +201,21 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		m_CameraParamsCurrentValues.putInt(m_Activity.getString(R.string.CurrentSelectPositionKey), selectPosition);
 	}
 
-	private void setParamstoCamera(String key, String Param){
-		Log.d(TAG, "selectParam:"+Param);
-		if(key == ""){
-			//TODO Stringから直す(条件の設定)
-		}else{
-			//TODO そのままカメラにセット
-			if(SelectListener != null){
-			}
-		}
-	}
-
 	public void setSelectParam(int groupPosition, int childPosition){
 		ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
 		String key = keyList.get(groupPosition);
 		ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
-		Tools.recordParam(m_Activity, key, paramsList.get(childPosition));
-		Log.d(TAG,"key:"+key+" param:"+paramsList.get(childPosition));
+		ArrayList<String> commonKeyList = m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.ExceptSwitchIdKeyListKey));
+		String currentKey = key;
+		if(commonKeyList.contains(key) == false){
+			currentKey = currentKey + m_nCameraId;
+		}
+		Tools.recordParam(m_Activity, currentKey, paramsList.get(childPosition));
 		if(SelectListener != null){
 			SelectListener.selected(key, paramsList.get(childPosition));
 		}
 		this.notifyDataSetChanged();
 	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-/*
-	@Override
-	public int getCount(){
-		return m_CameraParamsCurrentValues.getInt(m_Activity.getResources().getString(R.string.CurrentAdapterSizeKey));
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public Object getItem(int position){
-		return position;
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public long getItemId(int position){
-		return position;
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent){
-		int currentPosition = m_CameraParamsCurrentValues.getInt(m_Activity.getResources().getString(R.string.CurrentSelectPositionKey), UNSELECTING);
-		ArrayList<String> showList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ShowKeyListAccessKey));
-		if(currentPosition == UNSELECTING){
-			convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamskeylistcellview, null);
-			convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
-			convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
-			TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
-			paramtext.setText(showList.get(position));
-		}else{
-			ArrayList<String> currentList = m_CameraParamsCurrentValues.getStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectSupportListKey));
-			if(currentPosition < position && position <= currentPosition + currentList.size()){
-				convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamsvaluecellview, null);
-				convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
-				TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
-				convertView.setBackgroundColor(Color.argb(0, 0, 0, 0));
-				String word = currentList.get(position - currentPosition - 1);
-				paramtext.setText(word);
-				ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
-				String recordValue = Tools.getRecordParam(m_Activity, m_Activity.getString(R.string.RecordShowPrefixKey) + keyList.get(currentPosition));
-				RadioButton selectButton = (RadioButton) convertView.findViewById(R.id.CameraRadioButton);
-				if(word.equals(recordValue) == true){
-					selectButton.setChecked(true);
-				}else{
-					selectButton.setChecked(false);
-				}
-			}else if(currentPosition + currentList.size() < position){
-				String word = showList.get(position - currentList.size());
-				convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamskeylistcellview, null);
-				convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
-				convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
-				TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
-				paramtext.setText(word);
-			}else{
-				String word = showList.get(position);
-				convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamskeylistcellview, null);
-				convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
-				convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
-				TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
-				paramtext.setText(word);
-			}
-		}
-		return convertView;
-	}
-*/
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -423,8 +333,6 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		convertView.setBackgroundColor(Color.argb(218, 29, 29, 29));
 		TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
 		paramtext.setText(showList.get(groupPosition));
-		RadioGroup radioGroup = new RadioGroup(m_Activity,null);
-		m_RadioGroupList.put(groupPosition, radioGroup);
 		return convertView;
 	}
 
