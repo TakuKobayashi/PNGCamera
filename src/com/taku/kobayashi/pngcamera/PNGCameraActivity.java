@@ -81,7 +81,7 @@ public class PNGCameraActivity extends Activity {
 					}else if(158 <= orientation && orientation < 203){
 						m_CameraPreview.m_CameraDisplayOrientation = 270;
 					}else if(203 <= orientation && orientation < 248){
-						m_CameraPreview.m_CameraDisplayOrientation = 90;
+						m_CameraPreview.m_CameraDisplayOrientation = 0;
 					}else if(orientation == OrientationEventListener.ORIENTATION_UNKNOWN){
 
 					}else{
@@ -236,12 +236,12 @@ public class PNGCameraActivity extends Activity {
 		super.onResume();
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
 		ImageView im = (ImageView) findViewById(R.id.ThumbnailImageview);
+		Log.d(TAG, ""+im.getHeight());
 		m_SensorManager.registerListener(m_SensorEventListener, m_SensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_UI);
 		m_OrientationListener.enable();
 
 		m_CameraPreview.setCamera(m_nCameraID, m_CameraParameterAdapter);
 		m_CameraPreview.setThumbnailImageView(im);
-		//m_CameraPreview.customCameraParams(m_CameraParameterAdapter);
 		CGSize displaySize = ExtraLayout.getDisplaySize(this);
 
 		m_CameraParamsList = (ExpandableListView) findViewById(R.id.CameraParamsList);
@@ -261,14 +261,16 @@ public class PNGCameraActivity extends Activity {
 	@Override
 	protected void onPause(){
 		super.onPause();
+		//センサーを切る
 		if(m_SensorManager != null){
 			m_SensorManager.unregisterListener(m_SensorEventListener);
 		}
 		m_OrientationListener.disable();
+		//カメラを切る
 		m_CameraPreview.releaseCamera();
 		m_CameraParamsList = null;
-		Tools.releaseImageView((ImageView) findViewById(R.id.ThumbnailImageview));
 		m_CameraParameterAdapter.releaseParameters();
+		Tools.releaseImageView((ImageView) findViewById(R.id.ThumbnailImageview));
 	};
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
