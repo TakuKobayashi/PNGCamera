@@ -24,6 +24,7 @@ import org.apache.http.util.ByteArrayBuffer;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -91,6 +92,7 @@ public class Tools {
 		try {
 			InputStream is = con.getContentResolver().openInputStream(uri);
 			tmp = BitmapFactory.decodeStream(is, null, options);
+
 			is.close();
 		} catch (FileNotFoundException e) {
 			Log.d(TAG, "openInputStream failed  ***ERROR***");
@@ -165,8 +167,12 @@ public class Tools {
 			e.printStackTrace();
 			return null;
 		}
-
-		Bitmap bitmap = tmp.copy(Config.ARGB_8888, true);
+		Bitmap bitmap = null;
+		if(tmp == null){
+			return null;
+		}else{
+			bitmap = tmp.copy(Config.ARGB_8888, true);
+		}
 
 		if (orientation != 0) {
 			//画像を回転させて取ってくる。
@@ -1199,18 +1205,24 @@ public class Tools {
 
 	public static CGSize getFitPreviewSize(Context con, List<Size> suppoortSizeList){
 		CGSize displaySize = ExtraLayout.getDisplaySize(con);
-		int resultWidth = 1;
-		int resultHeight = 1;
+		int resultWidth = 0;
+		int resultHeight = 0;
 		for(int i = 0;i < suppoortSizeList.size(); i++){
 			Size size = suppoortSizeList.get(i);
-			//縦長で、画面の大きさに一番近く、画面より大きいサイズを設定する
+			//縦長で、画面の大きさに一番近く、画面より大きいサイズをせっていする
 			//カメラは横向きで使うことが前提なので、縦横反転して判別する
-			if((size.width >= displaySize.height && size.height >= displaySize.width && size.height < size.width) && (resultWidth == 1 && resultHeight == 1) || (resultWidth > size.width && resultHeight > size.height)){
-				resultWidth = size.width;
-				resultHeight = size.height;
+			if(size.width >= displaySize.height && size.height >= displaySize.width && size.height < size.width){
+				if(resultWidth < size.width && resultHeight < size.height){
+					resultWidth = size.width;
+					resultHeight = size.height;
+				}
 			}
 		}
-		return new CGSize(resultWidth, resultHeight);
+		if(resultWidth != 1 && resultHeight != 1){
+			return new CGSize(resultWidth, resultHeight);
+		}else{
+			return null;
+		}
 	}
 
 }

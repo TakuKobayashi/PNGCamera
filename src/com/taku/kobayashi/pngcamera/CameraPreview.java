@@ -39,7 +39,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	private SurfaceHolder m_Holder;
 	public int m_CameraDisplayOrientation = 0;
 	private Camera m_Camera = null;
-	private Size m_PreviewSize;
 	private ImageView m_Thumbnail;
 	private Size m_ThumbnailSize;
 	private Thread m_Thread = null;
@@ -64,12 +63,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		String path = Tools.getSDCardFolderPath() + "/" + com.taku.kobayashi.pngcamera.Config.DIRECTORY_NAME_TO_SAVE;
 		File dir = new File(path);
 		String[] fileNames = dir.list();
+		m_ThumbnailSize = m_Camera.getParameters().getJpegThumbnailSize();
 		//多分昇順でほぞんされているので後ろから取ってくるといい
 		for(int i = fileNames.length - 1;i >= 0; i--){
 			if(fileNames[i].contains(".jpg") || fileNames[i].contains(".png")){
 				String imagePath = path + "/" + fileNames[i];
-				m_ThumbnailSize = m_Camera.getParameters().getJpegThumbnailSize();
-				Log.d(TAG, "width:" + m_ThumbnailSize.width + " height:" + m_ThumbnailSize.height);
 				File file = new File(imagePath);
 				Bitmap image = Tools.getSelectSizeBitmap(m_Context, Uri.fromFile(file), m_ThumbnailSize.width, m_ThumbnailSize.height);
 				//画像ファイルとしては正しいが、画像ではなかったり壊れているファイルなら消す
@@ -121,15 +119,14 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 		Camera.Parameters cp = m_Camera.getParameters();
 		cpa.setParameters(m_Camera);
-		CGSize previewSize = Tools.getFitPreviewSize(m_Context , cp.getSupportedPreviewSizes());
-		Log.d(TAG, "width:"+ previewSize.width + " height:"+ previewSize.height);
-		cp.setPreviewSize((int)previewSize.width, (int)previewSize.height);
-		m_PreviewSize = cp.getPreviewSize();
+		//CGSize previewSize = Tools.getFitPreviewSize(m_Context , cp.getSupportedPreviewSizes());
+		//Log.d(TAG,"width:"+previewSize.width+"height:"+previewSize.height);
 		m_CameraDisplayOrientation = getCameraDisplayOrientation((Activity) m_Context, nCameraID);
 		m_Camera.setDisplayOrientation(m_CameraDisplayOrientation);
+
+			//cp.setPreviewSize((int)previewSize.width, (int)previewSize.height);
 		m_Camera.setParameters(cp);
 		m_Camera.startPreview();
-		Log.d(TAG, "width:"+ m_PreviewSize.width + " height:"+ m_PreviewSize.height);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -182,6 +179,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	public void takePreviewPicture() {
 		Camera.Parameters cp = m_Camera.getParameters();
+		Size previewSize = cp.getPreviewSize();
+		Log.d(TAG,"width:"+previewSize.width+"height:"+previewSize.height);
 		//シャッター音
 		String sound = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.SutterSoundKey));
 		if(Boolean.parseBoolean(sound)){
@@ -234,7 +233,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 						String savedImagePathstr = Tools.getFilePath("." + Tools.getRecordingParam(m_Context, m_Context.getString(R.string.SaveFormatKey)));
 						Tools.SaveImage(m_Context.getContentResolver(), image, savedImagePathstr, m_Context);
-						m_ThumbnailImage = Tools.getSelectSizeBitmap(m_Context, Uri.fromFile(new File(savedImagePathstr)), m_ThumbnailSize.width, m_ThumbnailSize.height);
+						m_ThumbnailImage = Tools.getSelectSizeBitmap(m_Context, Uri.fromFile(new File(savedImagePathstr)), m_ThumbnailSize.height, m_ThumbnailSize.width);
 						m_Handler.post(new Runnable() {
 
 							@Override
@@ -246,12 +245,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 					}
 				});
 				m_Thread.start();
+
 				//decodeBitmapData(data, size.width, size.height);
 				//savePicture(PreviewImage);
 			}
 		});
 		Camera.Parameters acp = m_Camera.getParameters();
-		cp.setPreviewSize(m_PreviewSize.width, m_PreviewSize.height);
+		acp.setPreviewSize(previewSize.width, previewSize.height);
 		m_Camera.setParameters(acp);
 		m_Camera.startPreview();
 	}
