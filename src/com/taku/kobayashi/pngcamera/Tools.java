@@ -436,13 +436,13 @@ public class Tools {
 		// アプリのメモリ情報を取得
 		Runtime runtime = Runtime.getRuntime();
 		// トータルメモリ
-		Log.v(TAG, "totalMemory[KB] = " + (int)(runtime.totalMemory()/1024));
+		Log.d(TAG, "totalMemory[KB] = " + (int)(runtime.totalMemory()/1024));
 		// 空きメモリ
-		Log.v(TAG, "freeMemory[KB] = " + (int)(runtime.freeMemory()/1024));
+		Log.d(TAG, "freeMemory[KB] = " + (int)(runtime.freeMemory()/1024));
 		//現在使用しているメモリ
-		Log.v(TAG, "usedMemory[KB] = " + (int)( (runtime.totalMemory() - runtime.freeMemory())/1024) );
+		Log.d(TAG, "usedMemory[KB] = " + (int)( (runtime.totalMemory() - runtime.freeMemory())/1024) );
 		// Dalvikで使用できる最大メモリ
-		Log.v(TAG, "maxMemory[KB] = " + (int)(runtime.maxMemory()/1024));
+		Log.d(TAG, "maxMemory[KB] = " + (int)(runtime.maxMemory()/1024));
 
 	}
 
