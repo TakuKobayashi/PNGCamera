@@ -107,8 +107,8 @@ public class PNGCameraActivity extends Activity {
 			}
 		}
 		if (keyCode == KeyEvent.KEYCODE_CAMERA) {
-			if (m_CameraPreview != null) {
-				m_CameraPreview.autoFocus(CameraAutoFocusCallback);
+			if (m_CameraPreview != null && checkAllSDcardStatus()) {
+				m_CameraPreview.takePreviewPicture();
 				return true;
 			}
 		} else if (keyCode == KeyEvent.KEYCODE_MENU && event.isLongPress()) {
@@ -183,13 +183,6 @@ public class PNGCameraActivity extends Activity {
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	private Camera.ShutterCallback CameraShutterCallback = new Camera.ShutterCallback() {
-		@Override
-		public void onShutter() {
-
-		}
-	};
-
 	private SensorEventListener m_SensorEventListener = new SensorEventListener() {
 
 		private float before = 0f;
@@ -250,6 +243,7 @@ public class PNGCameraActivity extends Activity {
 	protected void onPause(){
 		super.onPause();
 		//センサーを切る
+		m_bMoveSurFace = false;
 		if(m_SensorManager != null){
 			m_SensorManager.unregisterListener(m_SensorEventListener);
 		}
