@@ -182,7 +182,6 @@ public class PNGCameraActivity extends Activity {
 	private Camera.AutoFocusCallback CameraAutoFocusCallback = new Camera.AutoFocusCallback() {
 		public void onAutoFocus(boolean success, Camera camera) {
 			m_bAutoFocus = false;
-			//m_CameraPreview.takePreviewPicture();
 		}
 	};
 
@@ -239,10 +238,11 @@ public class PNGCameraActivity extends Activity {
 
 		m_CameraParamsList = (ExpandableListView) findViewById(R.id.CameraParamsList);
 		m_CameraParamsList.getLayoutParams().width = (int)(displaySize.width * 3 / 4);
-		int height = m_CameraParameterAdapter.getGroupTypeCount() * ExtraLayout.getListCellMinHeight(this);
-		if(height < (displaySize.height / 2)){
+		int height = m_CameraParameterAdapter.getGroupCount() * ExtraLayout.getListCellMinHeight(this);
+		if(height > (displaySize.height / 2)){
 			height = (int)(displaySize.height / 2);
 		}
+		Log.d(TAG, "afterheight:"+height);
 		m_CameraParamsList.getLayoutParams().height = height;
 		m_CameraParamsList.setAdapter(m_CameraParameterAdapter);
 		m_CameraParamsList.setOnChildClickListener(m_CameraParameterListener);
@@ -273,7 +273,6 @@ public class PNGCameraActivity extends Activity {
 		super.onDestroy();
 		Tools.releaseImageView((ImageButton) findViewById(R.id.ShutterButton));
 		Tools.releaseImageView((ImageButton) findViewById(R.id.InOutButton));
-		//Tools.releaseImageView((ImageButton) findViewById(R.id.CameraParamsButton));
 	}
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------
