@@ -108,7 +108,7 @@ public class PNGCameraActivity extends Activity {
 		}
 		if (keyCode == KeyEvent.KEYCODE_CAMERA) {
 			if (m_CameraPreview != null && checkAllSDcardStatus()) {
-				m_CameraPreview.takePreviewPicture();
+				m_CameraPreview.takePreviewPicture(m_nCameraID);
 				return true;
 			}
 		} else if (keyCode == KeyEvent.KEYCODE_MENU && event.isLongPress()) {
@@ -123,7 +123,7 @@ public class PNGCameraActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			if (m_CameraPreview != null && checkAllSDcardStatus()) {
-				m_CameraPreview.takePreviewPicture();
+				m_CameraPreview.takePreviewPicture(m_nCameraID);
 			}
 		}
 	};
