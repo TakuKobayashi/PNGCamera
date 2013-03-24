@@ -137,6 +137,7 @@ public class PNGCameraActivity extends Activity {
 	private OnClickListener m_InOutButtonListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
+			m_CameraParamsList.setVisibility(View.GONE);
 			if (m_nCameraID == 0) {
 				m_nCameraID = 1;
 			} else {
