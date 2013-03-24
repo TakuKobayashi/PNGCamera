@@ -63,8 +63,6 @@ public class PNGCameraActivity extends Activity {
 		}
 
 		TextView CameraOptionButton = (TextView) findViewById(R.id.CameraParamsButton);
-		//ImageButton CameraOptionButton = (ImageButton) findViewById(R.id.CameraParamsButton);
-		//CameraOptionButton.setImageResource(R.drawable.setting_icon);
 		CameraOptionButton.setOnClickListener(m_CameraOptionListener);
 		m_CameraParameterAdapter = new CameraParameterExpandableAdapter(this);
 		m_CameraParameterAdapter.setCameraId(m_nCameraID);
@@ -125,9 +123,7 @@ public class PNGCameraActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			if (m_CameraPreview != null && checkAllSDcardStatus()) {
-				//m_CameraPreview.takePicture(CameraShutterCallback, null, CamerPictureCallback);
 				m_CameraPreview.takePreviewPicture();
-				//m_CameraPreview.autoFocus(CameraAutoFocusCallback);
 			}
 		}
 	};
@@ -242,7 +238,6 @@ public class PNGCameraActivity extends Activity {
 		if(height > (displaySize.height / 2)){
 			height = (int)(displaySize.height / 2);
 		}
-		Log.d(TAG, "afterheight:"+height);
 		m_CameraParamsList.getLayoutParams().height = height;
 		m_CameraParamsList.setAdapter(m_CameraParameterAdapter);
 		m_CameraParamsList.setOnChildClickListener(m_CameraParameterListener);

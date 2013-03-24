@@ -107,7 +107,6 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 
 	private void setParams(Camera camera,String key, List<String> paramsList){
 		if(paramsList != null && paramsList.isEmpty() == false){
-			Log.d(TAG, key);
 			setArrayListAndSize(R.string.KeyListAccessKey, key);
 			setArrayListAndSize(R.string.ShowKeyListAccessKey, m_Activity.getString(m_Activity.getResources().getIdentifier(key, "string", m_Activity.getPackageName())));
 			//keyに該当する日本語のリスト保存する
@@ -270,12 +269,11 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.SupportListPrefixKey) + key);
 		ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.ValueListPrefixKey) + key);
 		ArrayList<String> exceptIdList = m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.ExceptSwitchIdKeyListKey));
-		String record = null;
+		String currentKey = key;
 		if(exceptIdList.contains(key)){
-			record = Tools.getRecordingParam(m_Activity, key);
-		}else{
-			record = Tools.getRecordingParam(m_Activity, key + m_nCameraId);
+			currentKey = currentKey + m_nCameraId;
 		}
+		String record = Tools.getRecordingParam(m_Activity, currentKey);
 		convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamsvaluecellview, null);
 		convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
 		TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
