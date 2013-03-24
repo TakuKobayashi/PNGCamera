@@ -47,7 +47,6 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	//TODO PNG.JPEG シャッター音 オートフォーカス サイズ
 	public void setParameters(Camera camera){
 		Camera.Parameters cp = camera.getParameters();
 		//PNG,JPEG
@@ -210,7 +209,7 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 			currentKey = currentKey + m_nCameraId;
 		}
 		Tools.recordParam(m_Activity, currentKey, paramsList.get(childPosition));
-		if(SelectListener != null){
+		if(SelectListener != null && key != null){
 			SelectListener.selected(key, paramsList.get(childPosition));
 		}
 		this.notifyDataSetChanged();

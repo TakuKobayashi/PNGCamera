@@ -242,8 +242,9 @@ public class PNGCameraActivity extends Activity {
 	@Override
 	protected void onPause(){
 		super.onPause();
-		//センサーを切る
+		//最初にfalseにしておかないとたまにオートフォーカスが走って落ちることがある
 		m_bMoveSurFace = false;
+		//センサーを切る
 		if(m_SensorManager != null){
 			m_SensorManager.unregisterListener(m_SensorEventListener);
 		}

@@ -66,7 +66,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		File dir = new File(path);
 		String[] fileNames = dir.list();
 		m_ThumbnailSize = m_Camera.getParameters().getJpegThumbnailSize();
-		//多分昇順でほぞんされているので後ろから取ってくるといい
+		//多分昇順で保存されているので後ろから取ってくるといい
 		for(int i = fileNames.length - 1;i >= 0; i--){
 			if(fileNames[i].contains(".jpg") || fileNames[i].contains(".png")){
 				String imagePath = path + "/" + fileNames[i];
@@ -107,7 +107,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void setCamera(int nCameraID, CameraParameterExpandableAdapter cpa){
-		Tools.recordParam(m_Context, m_Context.getString(R.string.IntentCameraIDKey), String.valueOf(nCameraID));
 		if(Build.VERSION.SDK_INT < 9){
 			m_Camera = Camera.open();
 		}else{
@@ -121,12 +120,14 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 		Camera.Parameters cp = m_Camera.getParameters();
 		cpa.setParameters(m_Camera);
-		//CGSize previewSize = Tools.getFitPreviewSize(m_Context , cp.getSupportedPreviewSizes());
-		//Log.d(TAG,"width:"+previewSize.width+"height:"+previewSize.height);
+		cpa.setOnParamsSelectListener(new ParamsSelectListener() {
+			@Override
+			public void selected(String key, String value) {
+				Tools.setCameraParams(m_Context, m_Camera, key, value);
+			}
+		});
 		m_CameraDisplayOrientation = getCameraDisplayOrientation((Activity) m_Context, nCameraID);
 		m_Camera.setDisplayOrientation(m_CameraDisplayOrientation);
-
-			//cp.setPreviewSize((int)previewSize.width, (int)previewSize.height);
 		m_Camera.setParameters(cp);
 		m_Camera.startPreview();
 	}
@@ -166,7 +167,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		}
 		//画像の大きさ
 		String size = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.CameraPreviewSizeKey) + Tools.getRecordingParam(m_Context, m_Context.getString(R.string.IntentCameraIDKey)));
-		String[] imageSize = size.split(m_Context.getString(R.string.ConnectSizeAndSize));
+		String[] imageSize = size.split(m_Context.getString(R.string.SizeConnectionWord));
 		cp.setPreviewSize(Integer.parseInt(imageSize[0]),Integer.parseInt(imageSize[1]));
 		m_Camera.setParameters(cp);
 		m_Camera.setOneShotPreviewCallback(null);

@@ -1,12 +1,8 @@
 <resources>
 
 	<string name="app_name">PNGCamera</string>
-	<string name="title_activity_main">MainActivity</string>
+	<string name="title_activity_main">PNGCameraActivity</string>
 	<string name="IntentCameraIDKey">CameraID</string>
-	<string name="IntentPictureByteDateKey">PictureByteData</string>
-	<string name="IntentPictureWidthKey">PictureWidth</string>
-	<string name="IntentPictureHeightKey">PictureHeight</string>
-	<string name="IntentCameraOrientationKey">CameraOrientation</string>
 
 	<string name="CurrentAdapterSizeKey">CurrentAdapterSize</string>
 	<string name="CurrentSelectSupportListKey">CurrentSelectShowList</string>
@@ -19,14 +15,13 @@
 	<string name="ValueListPrefixKey">ValueListPrefix</string>
 	<string name="RecordShowPrefixKey">RecordShowPrefix</string>
 	<string name="ExceptSwitchIdKeyListKey">ExceptSwitchIdKeyList</string>
+	<!-- int型でとれるカメラのサポートしているサイズをつなぐ文字列 -->
 	<string name="SizeConnectionWord">×</string>
 
 	<string name="Autofocus">CameraID</string>
 
 	<string name="PrefixSupportOption">SupportOption</string>
 	<string name="SettingButtonText">オプション</string>
-	<!-- int型でとれるカメラのサポートしているサイズをつなぐ文字列 -->
-	<string name="ConnectSizeAndSize">×</string>
 
 	<string name="SavePreviewSizeKey">SavePreviewSize</string>
 
