@@ -265,11 +265,17 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition,boolean isLastChild, View convertView, ViewGroup parent) {
-		ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
+		ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.KeyListAccessKey));
 		String key = keyList.get(groupPosition);
-		ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
-		ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
-		String record = Tools.getRecordingParam(m_Activity, key);
+		ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.SupportListPrefixKey) + key);
+		ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.ValueListPrefixKey) + key);
+		ArrayList<String> exceptIdList = m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.ExceptSwitchIdKeyListKey));
+		String record = null;
+		if(exceptIdList.contains(key)){
+			record = Tools.getRecordingParam(m_Activity, key);
+		}else{
+			record = Tools.getRecordingParam(m_Activity, key + m_nCameraId);
+		}
 		convertView = m_Activity.getLayoutInflater().inflate(R.layout.cameraparamsvaluecellview, null);
 		convertView.setMinimumHeight(ExtraLayout.getListCellMinHeight(m_Activity));
 		TextView paramtext = (TextView) convertView.findViewById(R.id.CameraParamsText);
@@ -312,7 +318,7 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 
 	@Override
 	public int getGroupCount() {
-		return m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey)).size();
+		return m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.KeyListAccessKey)).size();
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
