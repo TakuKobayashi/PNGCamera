@@ -137,6 +137,7 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 			}
 			String defaultParam = Tools.getRecordingParam(m_Activity, currentKey);
 			if(defaultParam.length() > 0){
+				Log.d(TAG,"default:"+defaultParam+" length:"+defaultParam.length()+" key:"+key);
 				Tools.setCameraParams(m_Activity, camera, key, defaultParam);
 			}else{
 				Tools.recordParam(m_Activity, currentKey, paramsList.get(0));

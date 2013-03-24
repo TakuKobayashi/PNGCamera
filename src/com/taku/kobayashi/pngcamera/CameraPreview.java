@@ -118,7 +118,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			e.printStackTrace();
 		}
 
-		Camera.Parameters cp = m_Camera.getParameters();
 		cpa.setParameters(m_Camera);
 		cpa.setOnParamsSelectListener(new ParamsSelectListener() {
 			@Override
@@ -128,7 +127,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		});
 		m_CameraDisplayOrientation = getCameraDisplayOrientation((Activity) m_Context, nCameraID);
 		m_Camera.setDisplayOrientation(m_CameraDisplayOrientation);
-		m_Camera.setParameters(cp);
 		m_Camera.startPreview();
 	}
 

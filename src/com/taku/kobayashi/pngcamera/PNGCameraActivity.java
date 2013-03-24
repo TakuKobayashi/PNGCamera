@@ -244,6 +244,8 @@ public class PNGCameraActivity extends Activity {
 		super.onPause();
 		//最初にfalseにしておかないとたまにオートフォーカスが走って落ちることがある
 		m_bMoveSurFace = false;
+		//まずはとりあえず見えなくさしとく
+		m_CameraParamsList.setVisibility(View.GONE);
 		//センサーを切る
 		if(m_SensorManager != null){
 			m_SensorManager.unregisterListener(m_SensorEventListener);
