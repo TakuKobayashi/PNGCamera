@@ -11,10 +11,8 @@
 	</string-array>
 
 	<!-- カメラの一部シーンは使わないようにする -->
-	<!-- 現在、バーコードとhdr(high dinamic range image . 高画質画像)  -->
 	<string-array name="SceneExceptValues">
 		<item>barcode</item>
-		<item>hdr</item>
 	</string-array>
 
 </resources>
