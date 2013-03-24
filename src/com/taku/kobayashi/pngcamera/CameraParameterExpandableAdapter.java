@@ -88,10 +88,14 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		return key;
 	}
 
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	private List<String> getArraysFromXml(int res){
 		String[] strArray = m_Activity.getResources().getStringArray(res);
 		return Arrays.asList(strArray);
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private List<String> convertSizeToString(List<Size> sizeList){
 		String[] result = new String[sizeList.size()];
@@ -141,6 +145,8 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		}
 	}
 
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	private void setArrayListAndSize(int res, String value){
 		//keyListを保存する
 		ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(res));
@@ -177,17 +183,17 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 			ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
 			setCameraParamsCurrentValue(paramsList,selectList, defaultAdapterSize + selectList.size(), keyPosition);
 		}else{
-			//TODO CameraParamsをカメラにセット
 			ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
 			String key = keyList.get(currentPosition);
 			ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.ValueListPrefixKey) + key);
-			ArrayList<String> selectList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.SupportListPrefixKey) + key);
 			if(SelectListener != null){
 				SelectListener.selected(key, paramsList.get(position - currentPosition - 1));
 			}
 		}
 		this.notifyDataSetChanged();
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void setCameraParamsCurrentValue(ArrayList<String> selectSupportList,ArrayList<String> selectShowList,int adapaterSize, int selectPosition){
 		m_CameraParamsCurrentValues.putStringArrayList(m_Activity.getResources().getString(R.string.CurrentSelectParamListKey), selectSupportList);
@@ -198,6 +204,8 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		//選択されている項目の場所
 		m_CameraParamsCurrentValues.putInt(m_Activity.getString(R.string.CurrentSelectPositionKey), selectPosition);
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void setSelectParam(int groupPosition, int childPosition){
 		ArrayList<String> keyList = m_CameraParamsValues.getStringArrayList(m_Activity.getResources().getString(R.string.KeyListAccessKey));
@@ -235,7 +243,6 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
 	public interface ParamsSelectListener extends EventListener {
 
 		public void selected(String key,String value);
@@ -269,7 +276,7 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		ArrayList<String> paramsList = m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.ValueListPrefixKey) + key);
 		ArrayList<String> exceptIdList = m_CameraParamsValues.getStringArrayList(m_Activity.getString(R.string.ExceptSwitchIdKeyListKey));
 		String currentKey = key;
-		if(exceptIdList.contains(key)){
+		if(exceptIdList.contains(key) == false){
 			currentKey = currentKey + m_nCameraId;
 		}
 		String record = Tools.getRecordingParam(m_Activity, currentKey);
