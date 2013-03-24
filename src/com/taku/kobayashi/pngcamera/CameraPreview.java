@@ -1,35 +1,28 @@
 //  Created by 拓 小林
-//  Copyright (c) 2012年 __CompanyName__. All rights reserved.
+//  Copyright (c) 2013年 TakuKobayashi rights reserved.
 
 package com.taku.kobayashi.pngcamera;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.hardware.Camera.AutoFocusCallback;
-import android.hardware.Camera.PictureCallback;
 import android.hardware.Camera.PreviewCallback;
-import android.hardware.Camera.ShutterCallback;
 import android.hardware.Camera.Size;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.taku.kobayashi.pngcamera.CameraParameterExpandableAdapter.ParamsSelectListener;
 

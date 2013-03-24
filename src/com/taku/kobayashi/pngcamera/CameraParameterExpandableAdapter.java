@@ -1,25 +1,22 @@
+//  Created by 拓 小林
+//  Copyright (c) 2013年 TakuKobayashi All rights reserved.
+
 package com.taku.kobayashi.pngcamera;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EventListener;
-import java.util.HashMap;
 import java.util.List;
 
 import android.app.Activity;
 import android.graphics.Color;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{

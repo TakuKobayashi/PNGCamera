@@ -1,5 +1,5 @@
 //  Created by 拓 小林
-//  Copyright (c) 2012年 TakuKobayashi. All rights reserved.
+//  Copyright (c) 2013年 TakuKobayashi All rights reserved.
 
 package com.taku.kobayashi.pngcamera;
 
