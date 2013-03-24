@@ -20,17 +20,7 @@ Copyright (c) 2012年 __CompanyName__. All rights reserved.
 			android:id="@+id/CameraPreview"
 			android:layout_width="fill_parent"
 			android:layout_height="fill_parent"
-			android:layout_centerHorizontal="true"
 		/>
-
-		<!--
-		<ImageView
-			android:id="@+id/OverrayImage"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
-			android:scaleType="fitCenter"
-		/>
-		-->
 
 	</FrameLayout>
 
@@ -64,26 +54,6 @@ Copyright (c) 2012年 __CompanyName__. All rights reserved.
 
 	</RelativeLayout>
 
-	<!--
-	<ImageButton
-		android:id="@+id/CameraParamsButton"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentTop="true"
-		android:layout_centerHorizontal="true"
-		android:background="#00000000"
-		android:scaleType="fitXY" />
-	-->
-
-	<TextView
-		android:id="@+id/CameraParamsButton"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentTop="true"
-		android:layout_centerHorizontal="true"
-		android:background="@drawable/switchcamera_buttonshape"
-		android:text="@string/SettingButtonText" />
-
 	<ImageButton
 		android:id="@+id/InOutButton"
 		android:layout_width="wrap_content"
@@ -92,6 +62,25 @@ Copyright (c) 2012年 __CompanyName__. All rights reserved.
 		android:layout_alignParentRight="true"
 		android:background="@drawable/switchcamera_buttonshape"
 		android:scaleType="fitXY" />
+
+	<RelativeLayout
+		android:id="@+id/CameraParamsTextLayout"
+		android:layout_width="wrap_content"
+		android:layout_height="32dp"
+		android:layout_alignParentTop="true"
+		android:layout_centerHorizontal="true"
+		android:layout_alignBottom="@+id/InOutButton"
+		android:background="@drawable/switchcamera_buttonshape" >
+
+		<TextView
+			android:id="@+id/CameraParamsText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="18dp"
+			android:layout_centerInParent="true"
+			android:text="@string/SettingButtonText" />
+
+	</RelativeLayout>
 
 	<ExpandableListView
 		android:id="@+id/CameraParamsList"

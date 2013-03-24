@@ -22,6 +22,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class PNGCameraActivity extends Activity {
@@ -62,8 +63,8 @@ public class PNGCameraActivity extends Activity {
 			InOutButton.setVisibility(View.INVISIBLE);
 		}
 
-		TextView CameraOptionButton = (TextView) findViewById(R.id.CameraParamsButton);
-		CameraOptionButton.setOnClickListener(m_CameraOptionListener);
+		RelativeLayout CameraOptionLayout = (RelativeLayout) findViewById(R.id.CameraParamsTextLayout);
+		CameraOptionLayout.setOnClickListener(m_CameraOptionListener);
 		m_CameraParameterAdapter = new CameraParameterExpandableAdapter(this);
 		m_CameraParameterAdapter.setCameraId(m_nCameraID);
 
