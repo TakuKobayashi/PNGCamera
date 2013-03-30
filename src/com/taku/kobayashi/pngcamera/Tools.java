@@ -30,6 +30,7 @@ import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -143,20 +144,16 @@ public class Tools {
 	//例えば、本来縦長の画像であったとしても横向きで保存されていることがある。そのような画像には回転角度の情報もデータベースに登録されているのでその情報をとってくる
 	private static int getImageOrientation(Uri uri, Context con) {
 		//CursorでSQLite(DB)を操作
-		Cursor cursor = null;
-		try {
-			cursor = ((Activity) con).managedQuery(uri, null, null, null, null);
-
+		Cursor cursor = con.getContentResolver().query(uri, new String[] { MediaStore.Images.ImageColumns.ORIENTATION }, null, null, null);
+		int orientaion = 0;
+		if(cursor != null){
 			int orientation_ColumnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.ImageColumns.ORIENTATION);
 			if (cursor.moveToFirst()) {
-				return cursor.getInt(orientation_ColumnIndex);
+				orientaion = cursor.getInt(orientation_ColumnIndex);
 			}
-		} catch (Exception e) {
-
-		} finally {
-
+			cursor.close();
 		}
-		return 0;
+		return orientaion;
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
