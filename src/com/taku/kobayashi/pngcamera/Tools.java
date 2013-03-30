@@ -183,28 +183,30 @@ public class Tools {
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//画像をSDカードに保存する
-	public static boolean SaveImage(ContentResolver contentResolver, Bitmap bitmap, String strFilePath, Context con) {
+	public static boolean SaveImage(Context con, Bitmap bitmap, String strFilePath) {
+		ContentResolver contentResolver = con.getContentResolver();
+		String value = Tools.getRecordingParam(con, con.getString(R.string.SaveFormatKey));
 		String name = new StringBuffer().toString();
 		Uri imageUri = null;
 		// 保存する画像の情報をDBに登録してギャラリーなどで検索してデータが出てくるようにする。
-		if (con != null) {
-			// 画像が保存されている場所の情報をとって来る
-			Uri mediaUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-			ContentValues contentValues = new ContentValues();
-			contentValues.put(MediaStore.Images.Media.DATA, strFilePath);
-			contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, name);
-			contentValues.put(MediaStore.Images.Media.TITLE, name);
+		// 画像が保存されている場所の情報をとって来る
+		Uri mediaUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(MediaStore.Images.Media.DATA, strFilePath);
+		contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, name);
+		contentValues.put(MediaStore.Images.Media.TITLE, name);
+		if(value.equals(con.getString(R.string.SaveFormatpng))){
+			contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+		}else{
 			contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-			// DBに新しくとってきたコンテンツの情報を挿入する(contentResolver.insert)
-			imageUri = contentResolver.insert(mediaUri, contentValues);
-		} else {
-			imageUri = Uri.fromFile(new File(strFilePath));
 		}
+		// DBに新しくとってきたコンテンツの情報を挿入する(contentResolver.insert)
+		imageUri = contentResolver.insert(mediaUri, contentValues);
+		MediaStore.Images.Media.insertImage(contentResolver, bitmap, con.getString(R.string.app_name), null);
 		try {
 			// imageUriにあるファイルを開く(openOutputStream)
 			OutputStream outputStream = contentResolver.openOutputStream(imageUri);
 			// bitmap画像を圧縮する(圧縮後の拡張子,圧縮率,画像)
-			String value = Tools.getRecordingParam(con, con.getString(R.string.SaveFormatKey));
 			if(value.equals(con.getString(R.string.SaveFormatpng))){
 				bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
 			}else{

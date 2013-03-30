@@ -194,7 +194,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 						//画像を保存
 						String savedImagePathstr = Tools.getFilePath("." + Tools.getRecordingParam(m_Context, m_Context.getString(R.string.SaveFormatKey)));
-						Tools.SaveImage(m_Context.getContentResolver(), image, savedImagePathstr, m_Context);
+						Tools.SaveImage(m_Context, image, savedImagePathstr);
 						m_ThumbnailImage = Tools.getSelectSizeBitmap(m_Context, Uri.fromFile(new File(savedImagePathstr)), m_ThumbnailSize.height, m_ThumbnailSize.width);
 						image.recycle();
 						image = null;
