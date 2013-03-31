@@ -3,6 +3,10 @@
 
 package com.taku.kobayashi.pngcamera;
 
+import java.io.File;
+
+import com.taku.kobayashi.pngcamera.CameraPreview.SaveCompleteListener;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
@@ -10,8 +14,12 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.MediaStore.Audio.Media;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.OrientationEventListener;
 import android.view.View;
@@ -234,6 +242,19 @@ public class PNGCameraActivity extends Activity {
 		m_CameraParamsList.setAdapter(m_CameraParameterAdapter);
 		m_CameraParamsList.setOnChildClickListener(m_CameraParameterListener);
 		m_CameraParamsList.setVisibility(View.GONE);
+		m_CameraPreview.setOnSaveCompleteListener(new SaveCompleteListener() {
+			@Override
+			public void complete(File imageFile) {
+				//Intentでカメラを呼び出したとき、撮影した画像を送って返す。
+				Intent intent = getIntent();
+				String action = intent.getAction();
+				if(MediaStore.ACTION_IMAGE_CAPTURE.equals(action)){
+					intent.setData(Uri.fromFile(imageFile));
+					setResult(Activity.RESULT_OK, intent);
+					finish();
+				}
+			}
+		});
 	};
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

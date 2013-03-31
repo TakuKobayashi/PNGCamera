@@ -5,6 +5,7 @@ package com.taku.kobayashi.pngcamera;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.EventListener;
 
 import android.app.Activity;
 import android.content.Context;
@@ -38,6 +39,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	private Size m_ThumbnailSize;
 	private Thread m_Thread = null;
 	private Handler m_Handler;
+	private SaveCompleteListener SaveListener = null;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -195,9 +197,13 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 						//画像を保存
 						String savedImagePathstr = Tools.getFilePath("." + Tools.getRecordingParam(m_Context, m_Context.getString(R.string.SaveFormatKey)));
 						Tools.SaveImage(m_Context, image, savedImagePathstr);
-						m_ThumbnailImage = Tools.getSelectSizeBitmap(m_Context, Uri.fromFile(new File(savedImagePathstr)), m_ThumbnailSize.height, m_ThumbnailSize.width);
 						image.recycle();
 						image = null;
+						File file = new File(savedImagePathstr);
+						if(SaveListener != null){
+							SaveListener.complete(file);
+						}
+						m_ThumbnailImage = Tools.getSelectSizeBitmap(m_Context, Uri.fromFile(file), m_ThumbnailSize.height, m_ThumbnailSize.width);
 						m_Handler.post(new Runnable() {
 							@Override
 							public void run() {
@@ -272,4 +278,32 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			}
 		}
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * リスナーを追加する
+	 */
+	public void setOnSaveCompleteListener(SaveCompleteListener listener){
+		this.SaveListener = listener;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * リスナーを削除する
+	 */
+	public void removeListener(){
+		this.SaveListener = null;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public interface SaveCompleteListener extends EventListener {
+
+		public void complete(File imageFile);
+
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 }
