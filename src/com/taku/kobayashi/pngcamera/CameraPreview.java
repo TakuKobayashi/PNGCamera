@@ -135,7 +135,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	public void takePreviewPicture(int nCameraId) {
 		Camera.Parameters cp = m_Camera.getParameters();
-		Size previewSize = cp.getPreviewSize();
 		//シャッター音
 		String sound = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.SutterSoundKey));
 		if(Boolean.parseBoolean(sound)){
@@ -157,13 +156,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 				}
 			});
 		}
-		//画像の大きさ
-		String size = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.CameraPreviewSizeKey) + nCameraId);
-		String[] imageSize = size.split(m_Context.getString(R.string.SizeConnectionWord));
-		cp.setPreviewSize(Integer.parseInt(imageSize[0]),Integer.parseInt(imageSize[1]));
 		m_Camera.setParameters(cp);
 		m_Camera.setOneShotPreviewCallback(null);
-		m_Camera.stopPreview();
 		m_Camera.setOneShotPreviewCallback(new PreviewCallback() {
 
 			private byte[] m_Data;
@@ -216,10 +210,6 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 				m_Thread.start();
 			}
 		});
-		Camera.Parameters acp = m_Camera.getParameters();
-		acp.setPreviewSize(previewSize.width, previewSize.height);
-		m_Camera.setParameters(acp);
-		m_Camera.startPreview();
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

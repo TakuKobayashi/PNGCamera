@@ -126,6 +126,7 @@ public class Tools {
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public static final void setCameraParams(Context con, Camera camera, String key, String value){
+		camera.stopPreview();
 		Camera.Parameters cp = camera.getParameters();
 		if(key.equals(con.getString(R.string.CameraColorEffectKey))){
 			cp.setColorEffect(value);
@@ -135,8 +136,12 @@ public class Tools {
 			cp.setSceneMode(value);
 		}else if(key.equals(con.getString(R.string.CameraFocusModeKey))){
 			cp.setFocusMode(value);
+		}else if(key.equals(con.getString(R.string.CameraPreviewSizeKey))){
+			String[] imageSize = value.split(con.getString(R.string.SizeConnectionWord));
+			cp.setPreviewSize(Integer.parseInt(imageSize[0]),Integer.parseInt(imageSize[1]));
 		}
 		camera.setParameters(cp);
+		camera.startPreview();
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
