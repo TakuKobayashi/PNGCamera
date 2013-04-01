@@ -38,10 +38,14 @@ public class ExtraLayout {
 		return minHeight;
 	}
 
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	public static int getListCellHeightPadding(Context context){
 		DisplayMetrics displayMetrics = getDisplayMetrics(context);
 		int paddingHeight = (int)(LIST_CELL_HEIGHT_PADDING * displayMetrics.density);
 		return paddingHeight;
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 }

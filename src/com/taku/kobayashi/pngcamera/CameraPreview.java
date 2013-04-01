@@ -54,6 +54,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 		m_Handler = new Handler();
 	}
 
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	public void setThumbnailImageView(ImageView iv){
 		m_Thumbnail = iv;
 		//以下のフォルダの中から画像ファイルを読み込む
@@ -103,6 +105,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

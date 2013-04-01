@@ -13,7 +13,6 @@ import android.graphics.Color;
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -38,6 +37,8 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		m_CameraParamsValues = new Bundle();
 	}
 
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	public void setCameraId(int cameraId){
 		m_nCameraId = cameraId;
 	}
@@ -50,6 +51,8 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		setParams(camera, commonIdParamsKey(m_Activity.getString(R.string.SaveFormatKey)), getArraysFromXml(R.array.SaveFormatValues));
 		//シャッター音
 		setParams(camera, commonIdParamsKey(m_Activity.getString(R.string.SutterSoundKey)), getArraysFromXml(R.array.SutterSoundValues));
+		//カメラのプレビューサイズ
+		setParams(camera, m_Activity.getString(R.string.CameraPreviewSizeKey), convertSizeToString(cp.getSupportedPreviewSizes()));
 		//カメラのカラーエフェクト
 		setParams(camera, m_Activity.getString(R.string.CameraColorEffectKey), cp.getSupportedColorEffects());
 		//カメラのフラッシュ
@@ -62,9 +65,11 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		SupportedSceneList.removeAll(RemoveList);
 		setParams(camera, m_Activity.getString(R.string.CameraSceneKey), cp.getSupportedSceneModes());
 
-		setParams(camera, m_Activity.getString(R.string.CameraPreviewSizeKey), convertSizeToString(cp.getSupportedPreviewSizes()));
+
 		setParams(camera, m_Activity.getString(R.string.CameraFocusModeKey), cp.getSupportedFocusModes());
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void releaseParameters(){
 		m_CameraParamsCurrentValues.clear();

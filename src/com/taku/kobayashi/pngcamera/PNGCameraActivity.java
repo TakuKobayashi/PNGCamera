@@ -18,8 +18,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.provider.MediaStore.Audio.Media;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.OrientationEventListener;
 import android.view.View;
@@ -103,7 +101,7 @@ public class PNGCameraActivity extends Activity {
 
 	}
 
-	//----------------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -299,4 +297,5 @@ public class PNGCameraActivity extends Activity {
 		return true;
 	}
 
+	//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 }
