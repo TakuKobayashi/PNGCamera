@@ -225,11 +225,10 @@ public class PNGCameraActivity extends Activity {
 		super.onResume();
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
 		ImageView im = (ImageView) findViewById(R.id.ThumbnailImageview);
-		m_SensorManager.registerListener(m_SensorEventListener, m_SensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_UI);
-		m_OrientationListener.enable();
-
 		m_CameraPreview.setCamera(m_nCameraID, m_CameraParameterAdapter);
 		m_CameraPreview.setThumbnailImageView(im);
+		m_SensorManager.registerListener(m_SensorEventListener, m_SensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_UI);
+		m_OrientationListener.enable();
 		CGSize displaySize = ExtraLayout.getDisplaySize(this);
 
 		m_CameraParamsList = (ExpandableListView) findViewById(R.id.CameraParamsList);
