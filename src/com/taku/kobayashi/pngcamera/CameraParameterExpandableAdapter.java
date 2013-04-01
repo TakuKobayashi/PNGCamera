@@ -55,8 +55,6 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		setParams(camera, m_Activity.getString(R.string.CameraPreviewSizeKey), convertSizeToString(cp.getSupportedPreviewSizes()));
 		//カメラのカラーエフェクト
 		setParams(camera, m_Activity.getString(R.string.CameraColorEffectKey), cp.getSupportedColorEffects());
-		//カメラのフラッシュ
-		setParams(camera, m_Activity.getString(R.string.CameraFlashModeKey), cp.getSupportedFlashModes());
 		//カメラのホワイトバランス
 		setParams(camera, m_Activity.getString(R.string.CameraWhiteBalanceKey), cp.getSupportedWhiteBalance());
 		//カメラの撮影シーン
@@ -64,9 +62,6 @@ public class CameraParameterExpandableAdapter extends BaseExpandableListAdapter{
 		List<String> RemoveList =  getArraysFromXml(R.array.SceneExceptValues);
 		SupportedSceneList.removeAll(RemoveList);
 		setParams(camera, m_Activity.getString(R.string.CameraSceneKey), cp.getSupportedSceneModes());
-
-
-		setParams(camera, m_Activity.getString(R.string.CameraFocusModeKey), cp.getSupportedFocusModes());
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

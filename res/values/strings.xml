@@ -99,7 +99,7 @@
 
 	<!-- key + サポートしている名前で命名 -->
 	<string name="CameraPreviewSizeKey">PreviewSize</string>
-	<string name="PreviewSize">撮影画像サイズ(幅×高さ)</string>
+	<string name="PreviewSize">撮影画面サイズ(幅×高さ)</string>
 
 	<!-- key + サポートしている名前で命名 -->
 	<string name="CameraFocusModeKey">FocusMode</string>
