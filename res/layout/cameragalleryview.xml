@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by 拓 小林
+	Copyright (c) 2013年 TakuKobayashi All rights reserved.
+-->
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent" >
+
+	<Gallery
+		android:id="@+id/CameraGallery"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+	/>
+
+</RelativeLayout>
