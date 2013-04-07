@@ -150,17 +150,14 @@ public class CameraGalleryActivity extends Activity{
 		SharedPreferences setting = PreferenceManager.getDefaultSharedPreferences(this);
 		String AccessToken = setting.getString(this.getString(R.string.TwitterAccessTokenKey), null);
 		String AccessTokenSecret = setting.getString(this.getString(R.string.TwitterAccessTokenSecretKey), null);
-		Log.d(TAG,"AT:"+ AccessToken+ " ATS:"+AccessTokenSecret);
 		if(AccessToken != null && AccessTokenSecret != null){
 			m_TwitterAction.setAccessToken(AccessToken, AccessTokenSecret);
 			sendTwitterAction("test");
 		}else{
-			Log.d(TAG, "oauth");
 			m_TwitterAction.setOnOAuthResultListener(new OAuthResultListener() {
 				//認証ページのURLを取得した時に呼ばれる
 				@Override
 				public void requestOAuthUrl(String url) {
-					Log.d(TAG, "url:"+url);
 					if(url != null){
 						m_TwitterWebView.loadUrl(url);
 						m_TwitterWebView.setVisibility(View.VISIBLE);
@@ -212,6 +209,8 @@ public class CameraGalleryActivity extends Activity{
 			}
 		};
 	};
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private UploadListener m_TwitterImageUploadListener = new UploadListener() {
 

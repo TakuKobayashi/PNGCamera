@@ -16,6 +16,7 @@ import twitter4j.conf.Configuration;
 import twitter4j.conf.ConfigurationBuilder;
 import twitter4j.media.MediaProvider;
 
+import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -26,6 +27,7 @@ import android.content.SharedPreferences;
 public class TwitterAction{
 
 	private static final String TAG = "PNGCamera_TwitterAction";
+	private static final String OAUTH_VERIFIER = "oauth_verifier";
 	private Activity m_Activity;
 	private Handler m_Handler;
 	private Twitter m_Twitter;
@@ -129,9 +131,11 @@ public class TwitterAction{
 			@Override
 			public void run() {
 				try {
+					//accessTokenを取得するためのパラメータ(oauth_verifier)がCallBackURLの中にあるのでそれの値を取ってきて認証を行う
+					Uri uri = Uri.parse(url);
+					String oauth_verifier = uri.getQueryParameter(OAUTH_VERIFIER);
 					//AccessTokenを取得する
-					accessToken = m_OAuthAuthorization.getOAuthAccessToken();
-					Log.d(TAG, "AT:"+accessToken.getToken()+"ATS:"+accessToken.getTokenSecret());
+					accessToken = m_OAuthAuthorization.getOAuthAccessToken(oauth_verifier);
 					//AccessTokenを記録する
 					recordAccessToken(accessToken.getToken(),accessToken.getTokenSecret());
 					//メインスレッドに処理を投げる
@@ -258,8 +262,6 @@ public class TwitterAction{
 			}
 		}).start();
 	}
-
-
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
