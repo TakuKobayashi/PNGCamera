@@ -37,7 +37,7 @@ public class CameraGalleryActivity extends Activity{
 			}
 		});
 		ImageButton FacebookButton = (ImageButton) findViewById(R.id.FaceBookButton);
-		FacebookButton.setImageResource(R.id.FaceBookButton);
+		FacebookButton.setImageResource(R.drawable.facebook_icon);
 		ImageButton  TwitterButton =  (ImageButton) findViewById(R.id.TwitterButton);
 		TwitterButton.setImageResource(R.drawable.twitter_icon);
 		ImageButton MailButton = (ImageButton) findViewById(R.id.MailButton);
