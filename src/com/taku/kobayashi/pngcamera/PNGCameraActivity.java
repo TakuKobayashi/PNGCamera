@@ -223,6 +223,13 @@ public class PNGCameraActivity extends Activity {
 		super.onResume();
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
 		ImageView im = (ImageView) findViewById(R.id.ThumbnailImageview);
+		im.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(PNGCameraActivity.this, CameraGalleryActivity.class);
+				startActivity(intent);
+			}
+		});
 		m_CameraPreview.setCamera(m_nCameraID, m_CameraParameterAdapter);
 		m_CameraPreview.setThumbnailImageView(im);
 		m_SensorManager.registerListener(m_SensorEventListener, m_SensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_UI);
@@ -269,6 +276,7 @@ public class PNGCameraActivity extends Activity {
 		}
 		m_OrientationListener.disable();
 		//カメラを切る
+		m_CameraPreview.releaseCamera();
 		m_CameraPreview.releaseCamera();
 		m_CameraParamsList = null;
 		m_CameraParameterAdapter.releaseParameters();

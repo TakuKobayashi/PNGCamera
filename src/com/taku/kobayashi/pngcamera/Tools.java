@@ -29,6 +29,7 @@ import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -110,6 +111,90 @@ public class Tools {
 		tmp = null;
 
 		return bitmap;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	//SDカードから画像をとってくる場合
+	public static Bitmap getBitmap(Context con, Uri uri) {
+
+		int orientation = Tools.getImageOrientation(uri, con);
+
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inSampleSize = getSampleSize(con,uri,orientation);
+		options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+		Bitmap tmp = null;
+		try {
+			InputStream is = con.getContentResolver().openInputStream(uri);
+			tmp = BitmapFactory.decodeStream(is, null, options);
+			is.close();
+		} catch (FileNotFoundException e) {
+			Log.d(TAG, "openInputStream failed  ***ERROR***");
+		} catch (IOException e) {
+			Log.d(TAG, "closeInputStream failed  ***ERROR***");
+		}
+
+		Bitmap bitmap = tmp.copy(Config.ARGB_8888, true);
+
+		if (orientation != 0) {
+			//画像を回転させて取ってくる。
+			Bitmap work = Tools.bitmapRotate(tmp, orientation);
+			bitmap.recycle();
+			bitmap = null;
+			bitmap = work;
+		}
+		tmp.recycle();
+		tmp = null;
+
+		return bitmap;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	//SDカードからの画像を使用する場合の計算
+	private static int getSampleSize(Context con,Uri uri , int orientation) {
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		int nImageSize = 1;
+
+		// 画像のサイズを分ける
+		try {
+			InputStream is = con.getContentResolver().openInputStream(uri);
+			BitmapFactory.decodeStream(is, null, options);
+			is.close();
+			nImageSize = calculateSampleSize(con,options.outWidth,options.outHeight,orientation);
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+		}
+
+		return nImageSize;
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	private static int calculateSampleSize(Context con,int ImgWidth,int ImgHeight,int orientation){
+
+		int width = 0;
+		int height = 0;
+
+		//90度回転させるとき
+		if(Math.abs(orientation % 180) == 90){
+			width = ImgHeight;
+			height = ImgWidth;
+		}else{
+			width = ImgWidth;
+			height = ImgHeight;
+		}
+		int num = 1;
+		// 画面サイズにできるだけ近づけた大きさに縮小させる
+		CGSize displaySize = ExtraLayout.getDisplaySize(con);
+		if (width > displaySize.width || height > displaySize.height) {
+			num = (int) Math.max(Math.max(Math.ceil(width / displaySize.width), Math.ceil((height / displaySize.height))),1);
+			//num = (int) Math.max(Math.max(Math.floor(width / getDisplayResize(con).width), Math.floor((height / getDisplayResize(con).height))),1);
+		}
+
+		return num;
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
