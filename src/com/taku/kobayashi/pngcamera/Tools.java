@@ -190,8 +190,7 @@ public class Tools {
 		// 画面サイズにできるだけ近づけた大きさに縮小させる
 		CGSize displaySize = ExtraLayout.getDisplaySize(con);
 		if (width > displaySize.width || height > displaySize.height) {
-			num = (int) Math.max(Math.max(Math.ceil(width / displaySize.width), Math.ceil((height / displaySize.height))),1);
-			//num = (int) Math.max(Math.max(Math.floor(width / getDisplayResize(con).width), Math.floor((height / getDisplayResize(con).height))),1);
+			num = (int) Math.max(Math.max(Math.floor(width / displaySize.width), Math.floor((height / displaySize.height))),1);
 		}
 
 		return num;

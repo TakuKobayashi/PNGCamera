@@ -114,7 +114,7 @@ public class PNGCameraActivity extends Activity {
 		}
 		if (keyCode == KeyEvent.KEYCODE_CAMERA) {
 			if (m_CameraPreview != null && checkAllSDcardStatus()) {
-				m_CameraPreview.takePreviewPicture(m_nCameraID);
+				m_CameraPreview.takePreviewPicture();
 				return true;
 			}
 		} else if (keyCode == KeyEvent.KEYCODE_MENU && event.isLongPress()) {
@@ -129,7 +129,7 @@ public class PNGCameraActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			if (m_CameraPreview != null && checkAllSDcardStatus()) {
-				m_CameraPreview.takePreviewPicture(m_nCameraID);
+				m_CameraPreview.takePreviewPicture();
 			}
 		}
 	};
@@ -222,7 +222,6 @@ public class PNGCameraActivity extends Activity {
 	@Override
 	protected void onResume(){
 		super.onResume();
-		Log.d(TAG,"onResume");
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
 		ImageView im = (ImageView) findViewById(R.id.ThumbnailImageview);
 		im.setOnClickListener(new OnClickListener() {
@@ -268,7 +267,6 @@ public class PNGCameraActivity extends Activity {
 	@Override
 	protected void onPause(){
 		super.onPause();
-		Log.d(TAG,"onPause");
 		//最初にfalseにしておかないとたまにオートフォーカスが走って落ちることがある
 		m_bMoveSurFace = false;
 		//まずはとりあえず見えなくさしとく

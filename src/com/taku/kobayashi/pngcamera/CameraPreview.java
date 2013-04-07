@@ -148,7 +148,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void takePreviewPicture(int nCameraId) {
+	public void takePreviewPicture() {
 		//シャッター音
 		String sound = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.SutterSoundKey));
 		if(Boolean.parseBoolean(sound)){
