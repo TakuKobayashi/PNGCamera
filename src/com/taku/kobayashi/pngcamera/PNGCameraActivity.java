@@ -18,6 +18,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.OrientationEventListener;
 import android.view.View;
@@ -221,6 +222,7 @@ public class PNGCameraActivity extends Activity {
 	@Override
 	protected void onResume(){
 		super.onResume();
+		Log.d(TAG,"onResume");
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
 		ImageView im = (ImageView) findViewById(R.id.ThumbnailImageview);
 		im.setOnClickListener(new OnClickListener() {
@@ -266,6 +268,7 @@ public class PNGCameraActivity extends Activity {
 	@Override
 	protected void onPause(){
 		super.onPause();
+		Log.d(TAG,"onPause");
 		//最初にfalseにしておかないとたまにオートフォーカスが走って落ちることがある
 		m_bMoveSurFace = false;
 		//まずはとりあえず見えなくさしとく
@@ -275,12 +278,10 @@ public class PNGCameraActivity extends Activity {
 			m_SensorManager.unregisterListener(m_SensorEventListener);
 		}
 		m_OrientationListener.disable();
+		Tools.releaseImageView((ImageView) findViewById(R.id.ThumbnailImageview));		Tools.releaseImageView((ImageView) findViewById(R.id.ThumbnailImageview));
 		//カメラを切る
 		m_CameraPreview.releaseCamera();
-		m_CameraPreview.releaseCamera();
-		m_CameraParamsList = null;
 		m_CameraParameterAdapter.releaseParameters();
-		Tools.releaseImageView((ImageView) findViewById(R.id.ThumbnailImageview));
 	};
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
