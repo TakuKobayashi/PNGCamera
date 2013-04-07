@@ -18,6 +18,10 @@
 	<!-- int型でとれるカメラのサポートしているサイズをつなぐ文字列 -->
 	<string name="SizeConnectionWord">×</string>
 
+
+	<string name="TwitterAccessTokenKey">TwitterAccessToken</string>
+	<string name="TwitterAccessTokenSecretKey">TwitterAccessTokenSecret</string>
+
 	<string name="Autofocus">CameraID</string>
 
 	<string name="PrefixSupportOption">SupportOption</string>
@@ -32,6 +36,8 @@
 	<string name="GalleryDeleteImageMessage">画像を削除しました</string>
 	<string name="SelectYesText">はい</string>
 	<string name="SelectNoText">いいえ</string>
+	<string name="ContributeSucessMessage">投稿しました</string>
+	<string name="ContributeFailedMessage">投稿に失敗しました</string>
 
 
 

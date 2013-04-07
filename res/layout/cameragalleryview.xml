@@ -65,4 +65,10 @@
 		android:layout_above="@+id/CameraGalleryFooterLayout"
 	/>
 
+	<WebView
+		android:id="@+id/TwitterWebView"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+	/>
+
 </RelativeLayout>
