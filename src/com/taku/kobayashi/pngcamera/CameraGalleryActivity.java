@@ -1,9 +1,14 @@
 package com.taku.kobayashi.pngcamera;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Gallery;
@@ -42,8 +47,50 @@ public class CameraGalleryActivity extends Activity{
 		TwitterButton.setImageResource(R.drawable.twitter_icon);
 		ImageButton MailButton = (ImageButton) findViewById(R.id.MailButton);
 		MailButton.setImageResource(R.drawable.mail_icon);
+		MailButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showMailerList();
+			}
+		});
 		ImageButton TrashButton = (ImageButton) findViewById(R.id.TrashButton);
 		TrashButton.setImageResource(R.drawable.trash_icon);
+		TrashButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showDeleteDialog();
+			}
+		});
+	}
+
+	private void showDeleteDialog(){
+		AlertDialog.Builder deleteImgDialog = new AlertDialog.Builder(this);
+		deleteImgDialog.setMessage(this.getString(R.string.GalleryDeleteDialogMessage));
+		deleteImgDialog.setCancelable(true);
+		deleteImgDialog.setPositiveButton(this.getString(R.string.SelectYesText), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				m_CameraGalleryAdapter.FileDelete(m_nSelectImageNumber);
+				if(m_CameraGalleryAdapter.isEmpty() == true){
+					CameraGalleryActivity.this.finish();
+				}
+				Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.GalleryDeleteDialogMessage));
+			}
+		});
+		deleteImgDialog.setNegativeButton(this.getString(R.string.SelectNoText), new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		});
+		deleteImgDialog.create().show();
+	}
+
+	private void showMailerList(){
+		Intent mailIntent = new Intent(Intent.ACTION_SEND);
+		//画像をメールに添付するために必要
+		mailIntent.setType("image/*");
+		//画像へのパス
+		mailIntent.putExtra(Intent.EXTRA_STREAM,Uri.fromFile(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber)));
+		startActivity(mailIntent);
 	}
 
 	@Override

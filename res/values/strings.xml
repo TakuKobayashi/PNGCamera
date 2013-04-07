@@ -28,6 +28,14 @@
 	<string name="AlertSDcardMountMessage">SDカードを挿入してください</string>
 	<string name="AlertSDcardLackSpace">SDカードの空き容量が足りません。SDcardの空き容量が*MB以上になるようにしてください。</string>
 
+	<string name="GalleryDeleteDialogMessage">表示中の画像を削除しますか？</string>
+	<string name="GalleryDeleteImageMessage">画像を削除しました</string>
+	<string name="SelectYesText">はい</string>
+	<string name="SelectNoText">いいえ</string>
+
+
+
+
 	<string name="SaveFormatKey">SaveFormat</string>
 	<string name="SaveFormat">保存画像のフォーマット</string>
 	<string name="SaveFormatpng">PNG</string>
