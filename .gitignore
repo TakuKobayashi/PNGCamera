@@ -22,3 +22,9 @@ local.properties
 .setting/
 proguard-project.txt
 lint.xml
+
+#TwitterConfigFile
+src/com/taku/kobayashi/pngcamera/TwitterConfig.java
+
+#FacebookConfigFile
+src/com/taku/kobayashi/pngcamera/FacebookConfig.java
