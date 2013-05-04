@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -168,6 +169,7 @@ public class CameraGalleryActivity extends Activity{
 						m_TwitterWebView.setVisibility(View.VISIBLE);
 						//WebView上で入力時にキーボードを出現させるためにフォーカスをあてる。
 						m_TwitterWebView.requestFocus();
+						m_DuringTwitterOAuth = true;
 					}
 				}
 
@@ -190,6 +192,16 @@ public class CameraGalleryActivity extends Activity{
 			m_TwitterButton.setClickable(false);
 			m_TwitterAction.startOAuth();
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(m_TwitterWebView.getVisibility() == View.VISIBLE && keyCode == KeyEvent.KEYCODE_BACK){
+			m_TwitterWebView.setVisibility(View.INVISIBLE);
+			m_TwitterButton.setClickable(true);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
