@@ -20,7 +20,6 @@ local.properties
 .checkstyle
 .setting/
 proguard-project.txt
-lint.xml
 
 #TwitterConfigFile
 src/com/taku/kobayashi/pngcamera/TwitterConfig.java
