@@ -169,7 +169,6 @@ public class CameraGalleryActivity extends Activity{
 						m_TwitterWebView.setVisibility(View.VISIBLE);
 						//WebView上で入力時にキーボードを出現させるためにフォーカスをあてる。
 						m_TwitterWebView.requestFocus();
-						m_DuringTwitterOAuth = true;
 					}
 				}
 
