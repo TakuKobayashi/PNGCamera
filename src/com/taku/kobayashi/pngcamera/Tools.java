@@ -3,6 +3,7 @@
 
 package com.taku.kobayashi.pngcamera;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -148,6 +149,24 @@ public class Tools {
 		tmp = null;
 
 		return bitmap;
+	}
+
+	//画像データをbyte[]データに変換する。
+	public static byte[] getImagebyte(Bitmap bitmap, Context con){
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		if(Tools.getRecordingParam(con, con.getString(R.string.SaveFormatKey)).equals(con.getString(R.string.SaveFormatpng))){
+			bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+		}else{
+			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+		}
+		con.getString(R.string.SaveFormatKey);
+		byte[] bMapArray = baos.toByteArray();
+		try {
+			baos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bMapArray;
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

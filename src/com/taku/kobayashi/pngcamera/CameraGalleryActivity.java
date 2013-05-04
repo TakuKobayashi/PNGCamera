@@ -1,22 +1,18 @@
 package com.taku.kobayashi.pngcamera;
 
 import java.io.File;
-
 import com.taku.kobayashi.pngcamera.TwitterAction.OAuthResultListener;
 import com.taku.kobayashi.pngcamera.TwitterAction.UploadListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -27,7 +23,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageButton;
 
@@ -39,7 +34,7 @@ public class CameraGalleryActivity extends Activity{
 	private ImageButton m_TwitterButton;
 	private WebView m_TwitterWebView;
 	private TwitterAction m_TwitterAction;
-
+	private FacebookAction m_FacebookAction;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +60,12 @@ public class CameraGalleryActivity extends Activity{
 		});
 		ImageButton FacebookButton = (ImageButton) findViewById(R.id.FaceBookButton);
 		FacebookButton.setImageResource(R.drawable.facebook_icon);
+		FacebookButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				setupFacebook();
+			}
+		});
 		m_TwitterButton =  (ImageButton) findViewById(R.id.TwitterButton);
 		m_TwitterButton.setImageResource(R.drawable.twitter_icon);
 		m_TwitterButton.setOnClickListener(new OnClickListener() {
@@ -108,6 +109,8 @@ public class CameraGalleryActivity extends Activity{
 
 		m_TwitterAction = new TwitterAction(this);
 		m_TwitterAction.setOnUploadListener(m_TwitterImageUploadListener);
+
+		m_FacebookAction = new FacebookAction(this);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -224,6 +227,18 @@ public class CameraGalleryActivity extends Activity{
 			Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.ContributeFailedMessage));
 		}
 	};
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	private void setupFacebook(){
+		m_FacebookAction.startLogin();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		m_FacebookAction.setLoginResult(requestCode, resultCode, data);
+	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
