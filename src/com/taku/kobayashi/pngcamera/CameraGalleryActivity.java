@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.webkit.WebChromeClient;
@@ -39,6 +40,7 @@ public class CameraGalleryActivity extends Activity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.cameragalleryview);
 		getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
