@@ -33,7 +33,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	private static final String TAG = "PNGCamera_CameraPreView";
 	private Context m_Context;
 	private SurfaceHolder m_Holder;
-	public int m_CameraDisplayOrientation = 0;
+	private int m_CameraDisplayOrientation = 0;
 	private Camera m_Camera = null;
 	private ImageView m_Thumbnail;
 	private Size m_ThumbnailSize;
@@ -107,10 +107,12 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-		try {
-			m_Camera.setPreviewDisplay(holder);
-		} catch (IOException exception) {
-			releaseCamera();
+		if(m_Camera !=  null){
+			try {
+				m_Camera.setPreviewDisplay(holder);
+			} catch (IOException exception) {
+				releaseCamera();
+			}
 		}
 	}
 
@@ -128,8 +130,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 			e.printStackTrace();
 		}
 		m_Camera.stopPreview();
-		m_CameraDisplayOrientation = getCameraDisplayOrientation((Activity) m_Context, nCameraID);
-		m_Camera.setDisplayOrientation(m_CameraDisplayOrientation);
+		int nCameraOrientaion = getCameraDisplayOrientation((Activity) m_Context, nCameraID);
+		m_Camera.setDisplayOrientation(nCameraOrientaion);
 		m_Camera.startPreview();
 		cpa.setParameters(m_Camera);
 		cpa.setOnParamsSelectListener(new ParamsSelectListener() {
@@ -148,7 +150,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public void takePreviewPicture() {
+	public void takePreviewPicture(int orientaion) {
+		m_CameraDisplayOrientation = orientaion;
 		//シャッター音
 		String sound = Tools.getRecordingParam(m_Context, m_Context.getString(R.string.SutterSoundKey));
 		if(Boolean.parseBoolean(sound)){

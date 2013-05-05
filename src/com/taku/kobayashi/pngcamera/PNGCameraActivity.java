@@ -41,6 +41,7 @@ public class PNGCameraActivity extends Activity {
 	private OrientationEventListener m_OrientationListener;
 	private boolean m_bMoveSurFace = false;
 	private boolean m_bAutoFocus = false;
+	private int m_nCameraDisplayOrientation = 90;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -80,17 +81,17 @@ public class PNGCameraActivity extends Activity {
 			public void onOrientationChanged(int orientation) {
 				if(m_CameraPreview != null){
 					if((68 <= orientation && orientation < 113) || (248 <= orientation && orientation < 270)){
-						m_CameraPreview.m_CameraDisplayOrientation = 90;
+						m_nCameraDisplayOrientation = 90;
 					}else if(113 <= orientation && orientation < 158){
-						m_CameraPreview.m_CameraDisplayOrientation = 180;
+						m_nCameraDisplayOrientation = 180;
 					}else if(158 <= orientation && orientation < 203){
-						m_CameraPreview.m_CameraDisplayOrientation = 270;
+						m_nCameraDisplayOrientation = 270;
 					}else if(203 <= orientation && orientation < 248){
-						m_CameraPreview.m_CameraDisplayOrientation = 0;
+						m_nCameraDisplayOrientation = 0;
 					}else if(orientation == OrientationEventListener.ORIENTATION_UNKNOWN){
 
 					}else{
-						m_CameraPreview.m_CameraDisplayOrientation = 90;
+						m_nCameraDisplayOrientation = 90;
 					}
 				}
 			}
@@ -114,7 +115,7 @@ public class PNGCameraActivity extends Activity {
 		}
 		if (keyCode == KeyEvent.KEYCODE_CAMERA) {
 			if (m_CameraPreview != null && checkAllSDcardStatus()) {
-				m_CameraPreview.takePreviewPicture();
+				m_CameraPreview.takePreviewPicture(m_nCameraDisplayOrientation);
 				return true;
 			}
 		} else if (keyCode == KeyEvent.KEYCODE_MENU && event.isLongPress()) {
@@ -129,7 +130,7 @@ public class PNGCameraActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			if (m_CameraPreview != null && checkAllSDcardStatus()) {
-				m_CameraPreview.takePreviewPicture();
+				m_CameraPreview.takePreviewPicture(m_nCameraDisplayOrientation);
 			}
 		}
 	};
