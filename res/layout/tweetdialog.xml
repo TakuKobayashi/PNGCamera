@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Created by 拓 小林
+	Copyright (c) 2013年 TakuKobayashi All rights reserved.
+-->
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="#DE49C8E5" >
+
+	<EditText
+		android:id="@+id/TweetText"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:layout_centerHorizontal="true"
+	/>
+
+	<ImageButton
+		android:id="@+id/SendTweetButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/TweetText"
+		android:layout_alignParentRight="true"
+		android:background="#00000000"
+		android:scaleType="fitXY"
+		android:paddingBottom="5dp"
+		android:paddingRight="5dp"
+	/>
+
+	<TextView
+		android:id="@+id/TweetCountText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/TweetText"
+		android:layout_toLeftOf="@+id/SendTweetButton"
+		android:textSize="20dp"
+		android:layout_marginRight="5dp"
+	/>
+
+</RelativeLayout>

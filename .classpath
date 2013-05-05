@@ -6,6 +6,5 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="lib" path="libs/twitter4j-core-3.0.3.jar"/>
 	<classpathentry kind="lib" path="libs/twitter4j-media-support-3.0.3.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/facebook"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

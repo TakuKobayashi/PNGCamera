@@ -3,8 +3,14 @@
 
 package com.taku.kobayashi.pngcamera;
 
+import android.view.View.OnTouchListener;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.LightingColorFilter;
 import android.util.DisplayMetrics;
 
 public class ExtraLayout {
@@ -47,5 +53,26 @@ public class ExtraLayout {
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	public static OnTouchListener ImageTouchListener = new OnTouchListener() {
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+			switch (event.getAction()) {
+			case MotionEvent.ACTION_DOWN:
+				((ImageView) v).setColorFilter(new LightingColorFilter(Color.LTGRAY, 0));
+				break;
+			case MotionEvent.ACTION_CANCEL:
+				((ImageView) v).clearColorFilter();
+				break;
+			case MotionEvent.ACTION_UP:
+				((ImageView) v).clearColorFilter();
+				break;
+			case MotionEvent.ACTION_OUTSIDE:
+				((ImageView) v).clearColorFilter();
+				break;
+			}
+			return false;
+		}
+	};
 
 }

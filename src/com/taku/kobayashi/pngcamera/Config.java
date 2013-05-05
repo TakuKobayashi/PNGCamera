@@ -25,5 +25,6 @@ public class Config {
 	public static final long LIMIT_MINIMAM_SPACE = 10 * 1024;
 
 	public static final float RENDER_IMAGE_RESIZE_RATE = 0.9f;
+	public static final int TWITTER_MAX_TEXT_COUNT = 140;
 
 }

@@ -1,18 +1,24 @@
 package com.taku.kobayashi.pngcamera;
 
 import java.io.File;
+
 import com.taku.kobayashi.pngcamera.TwitterAction.OAuthResultListener;
 import com.taku.kobayashi.pngcamera.TwitterAction.UploadListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
+import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,8 +31,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 public class CameraGalleryActivity extends Activity{
 
@@ -150,6 +158,56 @@ public class CameraGalleryActivity extends Activity{
 		startActivity(mailIntent);
 	}
 
+	private void showTweetDialog(){
+		AlertDialog.Builder tweetDialogBuilder = new AlertDialog.Builder(this);
+		tweetDialogBuilder.setCancelable(true);
+		final AlertDialog tweetDialog = tweetDialogBuilder.create();
+		tweetDialog.show();
+		tweetDialog.setContentView(R.layout.tweetdialog);
+		final TextView tweetCountText = (TextView) tweetDialog.findViewById(R.id.TweetCountText);
+		tweetCountText.setText(String.valueOf(Config.TWITTER_MAX_TEXT_COUNT - 2));
+		tweetCountText.setTextColor(Color.BLACK);
+		final EditText tweetText = (EditText) tweetDialog.findViewById(R.id.TweetText);
+		tweetText.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				int nEditableLength = Config.TWITTER_MAX_TEXT_COUNT - s.length() - 2;
+				if(nEditableLength >= 0){
+					tweetCountText.setTextColor(Color.BLACK);
+				}else{
+					tweetCountText.setTextColor(Color.RED);
+				}
+				tweetCountText.setText(String.valueOf(nEditableLength));
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+			}
+		});
+		ImageButton sendTweetButton = (ImageButton) tweetDialog.findViewById(R.id.SendTweetButton);
+		sendTweetButton.setImageResource(R.drawable.tweetbutton);
+		sendTweetButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				sendTwitterAction(tweetText.getText().toString());
+				tweetDialog.cancel();
+			}
+		});
+		sendTweetButton.setOnTouchListener(ExtraLayout.ImageTouchListener);
+		tweetDialog.setOnCancelListener(new OnCancelListener() {
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				Tools.releaseImageView((ImageButton) tweetDialog.findViewById(R.id.SendTweetButton));
+			}
+		});
+	}
+
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void setupTweet(){
@@ -158,7 +216,7 @@ public class CameraGalleryActivity extends Activity{
 		String AccessTokenSecret = setting.getString(this.getString(R.string.TwitterAccessTokenSecretKey), null);
 		if(AccessToken != null && AccessTokenSecret != null){
 			m_TwitterAction.setAccessToken(AccessToken, AccessTokenSecret);
-			sendTwitterAction("test");
+			showTweetDialog();
 		}else{
 			m_TwitterAction.setOnOAuthResultListener(new OAuthResultListener() {
 				//認証ページのURLを取得した時に呼ばれる
@@ -178,7 +236,7 @@ public class CameraGalleryActivity extends Activity{
 					m_TwitterButton.setClickable(true);
 					m_TwitterWebView.setVisibility(View.INVISIBLE);
 					m_TwitterAction.setAccessToken(token, tokenSecret);
-					sendTwitterAction("test");
+					showTweetDialog();
 				}
 
 				//認証エラーが発生した時に呼ばれる
