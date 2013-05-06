@@ -152,19 +152,26 @@ public class Tools {
 	}
 
 	//画像データをbyte[]データに変換する。
-	public static byte[] getImagebyte(Bitmap bitmap, Context con){
+	public static byte[] getImageFileToByte(File file, Context con){
+		String filename = file.getName();
+		if(filename.contains(".jpg") == false && filename.contains(".png") == false){
+			return null;
+		}
+		Bitmap bitmap = Tools.getBitmap(con, Uri.fromFile(file));
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		if(Tools.getRecordingParam(con, con.getString(R.string.SaveFormatKey)).equals(con.getString(R.string.SaveFormatpng))){
+		if(filename.contains(".png")){
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
 		}else{
 			bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 		}
-		con.getString(R.string.SaveFormatKey);
 		byte[] bMapArray = baos.toByteArray();
+		bitmap.recycle();
+		bitmap = null;
 		try {
 			baos.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			return null;
 		}
 		return bMapArray;
 	}

@@ -7,6 +7,7 @@ import com.taku.kobayashi.pngcamera.TwitterAction.UploadListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
@@ -18,13 +19,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -44,7 +48,8 @@ public class CameraGalleryActivity extends Activity{
 	private ImageButton m_TwitterButton;
 	private WebView m_TwitterWebView;
 	private TwitterAction m_TwitterAction;
-	private FacebookAction m_FacebookAction;
+//	private FacebookAction m_FacebookAction;
+	private FacebookActionOldVersion m_FacebookActionOldVersion;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -82,7 +87,8 @@ public class CameraGalleryActivity extends Activity{
 		m_TwitterButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				setupTweet();
+				//setupTweet();
+				showTweetDialog();
 			}
 		});
 		ImageButton MailButton = (ImageButton) findViewById(R.id.MailButton);
@@ -121,7 +127,8 @@ public class CameraGalleryActivity extends Activity{
 		m_TwitterAction = new TwitterAction(this);
 		m_TwitterAction.setOnUploadListener(m_TwitterImageUploadListener);
 
-		m_FacebookAction = new FacebookAction(this);
+		//m_FacebookAction = new FacebookAction(this);
+		m_FacebookActionOldVersion = new FacebookActionOldVersion(this);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -158,6 +165,8 @@ public class CameraGalleryActivity extends Activity{
 		startActivity(mailIntent);
 	}
 
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	private void showTweetDialog(){
 		AlertDialog.Builder tweetDialogBuilder = new AlertDialog.Builder(this);
 		tweetDialogBuilder.setCancelable(true);
@@ -168,28 +177,7 @@ public class CameraGalleryActivity extends Activity{
 		tweetCountText.setText(String.valueOf(Config.TWITTER_MAX_TEXT_COUNT - 2));
 		tweetCountText.setTextColor(Color.BLACK);
 		final EditText tweetText = (EditText) tweetDialog.findViewById(R.id.TweetText);
-		tweetText.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				int nEditableLength = Config.TWITTER_MAX_TEXT_COUNT - s.length() - 2;
-				if(nEditableLength >= 0){
-					tweetCountText.setTextColor(Color.BLACK);
-				}else{
-					tweetCountText.setTextColor(Color.RED);
-				}
-				tweetCountText.setText(String.valueOf(nEditableLength));
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-
-			}
-		});
+		tweetText.setInputType(InputType.TYPE_CLASS_TEXT);
 		ImageButton sendTweetButton = (ImageButton) tweetDialog.findViewById(R.id.SendTweetButton);
 		sendTweetButton.setImageResource(R.drawable.tweetbutton);
 		sendTweetButton.setOnClickListener(new OnClickListener() {
@@ -204,6 +192,7 @@ public class CameraGalleryActivity extends Activity{
 			@Override
 			public void onCancel(DialogInterface dialog) {
 				Tools.releaseImageView((ImageButton) tweetDialog.findViewById(R.id.SendTweetButton));
+				getWindow().setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 			}
 		});
 	}
@@ -250,6 +239,8 @@ public class CameraGalleryActivity extends Activity{
 			m_TwitterAction.startOAuth();
 		}
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -302,13 +293,21 @@ public class CameraGalleryActivity extends Activity{
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void setupFacebook(){
-		m_FacebookAction.startLogin();
+		//m_FacebookAction.startLogin();
+		if(m_FacebookActionOldVersion.isLogin()){
+			m_FacebookActionOldVersion.uploadImage(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber));
+		}else{
+			m_FacebookActionOldVersion.startLogin();
+		}
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		m_FacebookAction.setLoginResult(requestCode, resultCode, data);
+		//m_FacebookAction.setLoginResult(requestCode, resultCode, data);
+		m_FacebookActionOldVersion.setLoginResult(requestCode, resultCode, data);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -323,4 +322,6 @@ public class CameraGalleryActivity extends Activity{
 		m_CameraGalleryAdapter.release();
 		Tools.releaseWebView(m_TwitterWebView);
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 }

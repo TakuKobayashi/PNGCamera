@@ -36,6 +36,9 @@
 	<string name="GalleryDeleteImageMessage">画像を削除しました</string>
 	<string name="SelectYesText">はい</string>
 	<string name="SelectNoText">いいえ</string>
+	<string name="AuthorizationFailedMessage">認証に失敗しました</string>
+	<string name="AuthorizationCancelMessage">認証をキャンセルしました</string>
+	<string name="UploadingImageMessage">投稿中</string>
 	<string name="ContributeSucessMessage">投稿しました</string>
 	<string name="ContributeFailedMessage">投稿に失敗しました</string>
 
