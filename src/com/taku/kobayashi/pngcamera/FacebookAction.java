@@ -5,6 +5,8 @@ package com.taku.kobayashi.pngcamera;
 import java.io.File;
 import java.util.Arrays;
 import java.util.EventListener;
+import java.util.Iterator;
+import java.util.Set;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -12,6 +14,7 @@ import com.facebook.internal.Utility;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
 
@@ -48,7 +51,6 @@ public class FacebookAction{
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void startLogin(){
-		Utility.clearFacebookCookies(m_Activity);
 		m_Session.openForRead(this.settingSessionRequest());
 		Log.d(TAG, "at:"+m_Session.getAccessToken()+" b:"+m_Session.getAuthorizationBundle());
 	}
@@ -57,7 +59,14 @@ public class FacebookAction{
 
 	public void setLoginResult(int requestCode, int resultCode, Intent data){
 		Log.d(TAG, "request:"+ requestCode +" result:"+ resultCode +"data:"+data.getExtras());
-		//Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+		Bundle extra = data.getExtras();
+		Set<String> keySet = extra.keySet();
+		Iterator<String> it = keySet.iterator();
+		while (it.hasNext()) {
+			String key = it.next();
+			Log.d(TAG, "key:"+key +" value:"+extra.get(key));
+		}
+		m_Session.onActivityResult(m_Activity, requestCode, resultCode, data);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -48,8 +48,8 @@ public class CameraGalleryActivity extends Activity{
 	private ImageButton m_TwitterButton;
 	private WebView m_TwitterWebView;
 	private TwitterAction m_TwitterAction;
-//	private FacebookAction m_FacebookAction;
-	private FacebookActionOldVersion m_FacebookActionOldVersion;
+	private FacebookAction m_FacebookAction;
+//	private FacebookActionOldVersion m_FacebookActionOldVersion;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -127,8 +127,8 @@ public class CameraGalleryActivity extends Activity{
 		m_TwitterAction = new TwitterAction(this);
 		m_TwitterAction.setOnUploadListener(m_TwitterImageUploadListener);
 
-		//m_FacebookAction = new FacebookAction(this);
-		m_FacebookActionOldVersion = new FacebookActionOldVersion(this);
+		m_FacebookAction = new FacebookAction(this);
+		//m_FacebookActionOldVersion = new FacebookActionOldVersion(this);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -293,12 +293,14 @@ public class CameraGalleryActivity extends Activity{
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void setupFacebook(){
-		//m_FacebookAction.startLogin();
+		m_FacebookAction.startLogin();
+		/*
 		if(m_FacebookActionOldVersion.isLogin()){
 			m_FacebookActionOldVersion.uploadImage(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber));
 		}else{
 			m_FacebookActionOldVersion.startLogin();
 		}
+		*/
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -306,8 +308,8 @@ public class CameraGalleryActivity extends Activity{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		//m_FacebookAction.setLoginResult(requestCode, resultCode, data);
-		m_FacebookActionOldVersion.setLoginResult(requestCode, resultCode, data);
+		m_FacebookAction.setLoginResult(requestCode, resultCode, data);
+		//m_FacebookActionOldVersion.setLoginResult(requestCode, resultCode, data);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
