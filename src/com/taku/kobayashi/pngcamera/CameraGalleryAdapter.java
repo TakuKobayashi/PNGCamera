@@ -5,6 +5,7 @@ package com.taku.kobayashi.pngcamera;
 
 import java.io.File;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
@@ -31,6 +32,8 @@ public class CameraGalleryAdapter extends BaseAdapter{
 		File dir = new File(path);
 		File[] files = dir.listFiles();
 		m_ImgaeFileList = Arrays.asList(files);
+		//日付が新しい順
+		Collections.reverse(m_ImgaeFileList);
 		m_Images = new Bitmap[m_ImgaeFileList.size()];
 	}
 
