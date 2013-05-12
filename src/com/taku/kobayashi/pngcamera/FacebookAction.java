@@ -43,12 +43,20 @@ public class FacebookAction{
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	public FacebookAction(Activity act){
+	public FacebookAction(Activity act, Bundle savedInstanceState){
 		m_Activity = act;
-		Session.Builder sb = new Session.Builder(act);
-		sb.setApplicationId(APP_ID);
-		sb.setTokenCachingStrategy(m_TokenCachingStrategy);
-		m_Session = sb.build();
+		m_Session = Session.getActiveSession();
+		if(m_Session == null){
+			if(savedInstanceState != null){
+				m_Session = Session.restoreSession(m_Activity, m_TokenCachingStrategy, m_SessionStatusCallback, savedInstanceState);
+			}
+			if(m_Session == null){
+				Session.Builder sb = new Session.Builder(act);
+				sb.setApplicationId(APP_ID);
+				sb.setTokenCachingStrategy(m_TokenCachingStrategy);
+				m_Session = sb.build();
+			}
+		}
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -63,42 +71,33 @@ public class FacebookAction{
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+	public boolean isLogin(){
+		return m_Session.isOpened();
+	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 	public void startLogin(){
 		m_Session.openForRead(this.settingSessionRequest());
-		Log.d(TAG, "at:"+m_Session.getAccessToken()+" b:"+m_Session.getAuthorizationBundle());
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void setLoginResult(int requestCode, int resultCode, Intent data){
-		Log.d(TAG, "request:"+ requestCode +" result:"+ resultCode +"data:"+data.getExtras());
-		Bundle extra = data.getExtras();
-		Set<String> keySet = extra.keySet();
-		Iterator<String> it = keySet.iterator();
-		while (it.hasNext()) {
-			String key = it.next();
-			Log.d(TAG, "key:"+key +" value:"+extra.get(key));
-		}
 		if(resultCode == Activity.RESULT_OK){
-			Log.d(TAG, "OK");
 			m_Session.onActivityResult(m_Activity, requestCode, resultCode, data);
-			Log.d(TAG, "AccessToken:"+m_Session.getAccessToken());
 			if(m_LoginResultListener != null){
 				if(m_Session.isOpened() && m_Session.getAccessToken() != null){
-					Log.d(TAG,"open");
 					m_LoginResultListener.success(m_Session.getAccessToken());
 				}else{
-					Log.d(TAG,"error");
 					m_LoginResultListener.error();
 				}
 			}
 		}else if(resultCode == Activity.RESULT_CANCELED){
-			Log.d(TAG,"cancel");
 			if(m_LoginResultListener != null){
 				m_LoginResultListener.cancel();
 			}
 		}else{
-			Log.d(TAG,"error2");
 			if(m_LoginResultListener != null){
 				m_LoginResultListener.error();
 			}
@@ -109,9 +108,6 @@ public class FacebookAction{
 
 	public void uploadImage(File imageFile) {
 		if(m_Session.isOpened()){
-			Log.d(TAG,"open");
-			Bundle parameters = new Bundle();
-			parameters.putString("caption",m_Activity.getString(R.string.app_name));
 			Request request = null;
 			try {
 				request = Request.newUploadPhotoRequest(m_Session, imageFile, m_RequestCallback);
@@ -122,7 +118,6 @@ public class FacebookAction{
 			RequestAsyncTask requestAsynk = new RequestAsyncTask(request);
 			requestAsynk.execute();
 		}else{
-			Log.d(TAG,"uploadError");
 			if(m_UploadListener != null){
 				m_UploadListener.error();
 			}
@@ -134,12 +129,7 @@ public class FacebookAction{
 	private Session.StatusCallback m_SessionStatusCallback = new Session.StatusCallback() {
 		@Override
 		public void call(Session session, SessionState state, Exception exception) {
-			Log.d(TAG, "session:"+session+"ex"+exception);
-			Log.d(TAG, "ac:"+session.getAccessToken()+" ap:"+session.getAuthorizationBundle()+"st:"+state);
-			Log.d(TAG, "open:"+session.isOpened()+" close:"+ session.isClosed() +"st:"+session.getState()+"as:"+session.getActiveSession());
-			if(state == SessionState.OPENED){
-				Log.d(TAG, "ac:"+session.getAccessToken()+" ac:"+ session.getActiveSession() + "as:"+session.getActiveSession()+"st"+state);
-			}
+
 		}
 	};
 
@@ -147,13 +137,10 @@ public class FacebookAction{
 
 		@Override
 		public void onCompleted(Response response) {
-			Log.d(TAG, "response:"+response);
 			if(m_UploadListener != null){
 				if(response.getError() == null){
-					Log.d(TAG, "success:");
 					m_UploadListener.success();
 				}else{
-					Log.d(TAG, "error:"+response.getError());
 					m_UploadListener.error();
 				}
 			}
@@ -166,23 +153,17 @@ public class FacebookAction{
 
 		@Override
 		public void save(Bundle bundle) {
-			Set<String> keySet = bundle.keySet();
-			Iterator<String> it = keySet.iterator();
-			while (it.hasNext()) {
-				String key = it.next();
-				Log.d(TAG, "savekey:"+key +" savevalue:"+bundle.get(key));
-			}
+			Session.saveSession(m_Session, bundle);
 		}
 
 		@Override
 		public Bundle load() {
-			Log.d(TAG, "load");
 			return null;
 		}
 
 		@Override
 		public void clear() {
-			Log.d(TAG, "clear");
+			m_Session.closeAndClearTokenInformation();
 		}
 	};
 

@@ -8,6 +8,7 @@ import com.taku.kobayashi.pngcamera.TwitterAction.UploadListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
@@ -50,6 +51,7 @@ public class CameraGalleryActivity extends Activity{
 	private WebView m_TwitterWebView;
 	private TwitterAction m_TwitterAction;
 	private FacebookAction m_FacebookAction;
+	private ProgressDialog m_SendingImageDialog;
 //	private FacebookActionOldVersion m_FacebookActionOldVersion;
 
 	@Override
@@ -128,8 +130,12 @@ public class CameraGalleryActivity extends Activity{
 		m_TwitterAction = new TwitterAction(this);
 		m_TwitterAction.setOnUploadListener(m_TwitterImageUploadListener);
 
-		m_FacebookAction = new FacebookAction(this);
+		m_FacebookAction = new FacebookAction(this, savedInstanceState);
 		m_FacebookAction.setOnUploadListener(m_FacebookImageUploadListener);
+		m_SendingImageDialog = new ProgressDialog(this);
+		m_SendingImageDialog.setCancelable(true);
+		m_SendingImageDialog.setMessage(this.getString(R.string.UploadingImageMessage));
+		m_SendingImageDialog.setIndeterminate(true);
 		//m_FacebookActionOldVersion = new FacebookActionOldVersion(this);
 	}
 
@@ -257,6 +263,7 @@ public class CameraGalleryActivity extends Activity{
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void sendTwitterAction(String tweet){
+		m_SendingImageDialog.show();
 		//Fileは投稿する画像のファイル、第二引数(String)はツイート文
 		m_TwitterAction.sendImageWithTweetToTwitter(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber), tweet);
 	}
@@ -283,24 +290,30 @@ public class CameraGalleryActivity extends Activity{
 
 		@Override
 		public void success(File UploadFile, String Tweet) {
+			m_SendingImageDialog.dismiss();
 			Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.ContributeSucessMessage));
 		}
 
 		@Override
 		public void error(int StatusCode) {
+			m_SendingImageDialog.dismiss();
 			Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.ContributeFailedMessage));
 		}
 	};
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private FacebookAction.UploadListener m_FacebookImageUploadListener = new FacebookAction.UploadListener() {
 
 		@Override
 		public void success() {
+			m_SendingImageDialog.dismiss();
 			Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.ContributeSucessMessage));
 		}
 
 		@Override
 		public void error() {
+			m_SendingImageDialog.dismiss();
 			Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.ContributeFailedMessage));
 		}
 	};
@@ -308,25 +321,28 @@ public class CameraGalleryActivity extends Activity{
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void setupFacebook(){
-		m_FacebookAction.startLogin();
-		m_FacebookAction.setOnLoginResultListener(new LoginResultListener() {
+		if(m_FacebookAction.isLogin()){
+			sendFacebookAction();
+		}else{
+			m_FacebookAction.startLogin();
+			m_FacebookAction.setOnLoginResultListener(new LoginResultListener() {
 
-			@Override
-			public void success(String accessToken) {
-				Tools.recordParam(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.FacebookAccessTokenKey), accessToken);
-				sendFacebookAction();
-			}
+				@Override
+				public void success(String accessToken) {
+					sendFacebookAction();
+				}
 
-			@Override
-			public void error() {
-				Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.AuthorizationFailedMessage));
-			}
+				@Override
+				public void error() {
+					Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.AuthorizationFailedMessage));
+				}
 
-			@Override
-			public void cancel() {
-				Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.AuthorizationCancelMessage));
-			}
-		});
+				@Override
+				public void cancel() {
+					Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.AuthorizationCancelMessage));
+				}
+			});
+		}
 		/*
 		if(m_FacebookActionOldVersion.isLogin()){
 			m_FacebookActionOldVersion.uploadImage(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber));
@@ -337,6 +353,7 @@ public class CameraGalleryActivity extends Activity{
 	}
 
 	private void sendFacebookAction(){
+		m_SendingImageDialog.show();
 		m_FacebookAction.uploadImage(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber));
 	}
 
