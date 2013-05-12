@@ -2,6 +2,7 @@ package com.taku.kobayashi.pngcamera;
 
 import java.io.File;
 
+import com.taku.kobayashi.pngcamera.FacebookAction.LoginResultListener;
 import com.taku.kobayashi.pngcamera.TwitterAction.OAuthResultListener;
 import com.taku.kobayashi.pngcamera.TwitterAction.UploadListener;
 
@@ -128,6 +129,7 @@ public class CameraGalleryActivity extends Activity{
 		m_TwitterAction.setOnUploadListener(m_TwitterImageUploadListener);
 
 		m_FacebookAction = new FacebookAction(this);
+		m_FacebookAction.setOnUploadListener(m_FacebookImageUploadListener);
 		//m_FacebookActionOldVersion = new FacebookActionOldVersion(this);
 	}
 
@@ -277,7 +279,7 @@ public class CameraGalleryActivity extends Activity{
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-	private UploadListener m_TwitterImageUploadListener = new UploadListener() {
+	private TwitterAction.UploadListener m_TwitterImageUploadListener = new TwitterAction.UploadListener() {
 
 		@Override
 		public void success(File UploadFile, String Tweet) {
@@ -290,10 +292,41 @@ public class CameraGalleryActivity extends Activity{
 		}
 	};
 
+	private FacebookAction.UploadListener m_FacebookImageUploadListener = new FacebookAction.UploadListener() {
+
+		@Override
+		public void success() {
+			Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.ContributeSucessMessage));
+		}
+
+		@Override
+		public void error() {
+			Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.ContributeFailedMessage));
+		}
+	};
+
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void setupFacebook(){
 		m_FacebookAction.startLogin();
+		m_FacebookAction.setOnLoginResultListener(new LoginResultListener() {
+
+			@Override
+			public void success(String accessToken) {
+				Tools.recordParam(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.FacebookAccessTokenKey), accessToken);
+				sendFacebookAction();
+			}
+
+			@Override
+			public void error() {
+				Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.AuthorizationFailedMessage));
+			}
+
+			@Override
+			public void cancel() {
+				Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.AuthorizationCancelMessage));
+			}
+		});
 		/*
 		if(m_FacebookActionOldVersion.isLogin()){
 			m_FacebookActionOldVersion.uploadImage(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber));
@@ -301,6 +334,10 @@ public class CameraGalleryActivity extends Activity{
 			m_FacebookActionOldVersion.startLogin();
 		}
 		*/
+	}
+
+	private void sendFacebookAction(){
+		m_FacebookAction.uploadImage(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber));
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

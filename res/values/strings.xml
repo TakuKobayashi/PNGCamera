@@ -17,6 +17,7 @@
 	<string name="ExceptSwitchIdKeyListKey">ExceptSwitchIdKeyList</string>
 	<!-- int型でとれるカメラのサポートしているサイズをつなぐ文字列 -->
 	<string name="SizeConnectionWord">×</string>
+	<string name="FacebookAccessTokenKey">FacebookAccessToken</string>
 
 
 	<string name="TwitterAccessTokenKey">TwitterAccessToken</string>
