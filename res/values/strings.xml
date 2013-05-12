@@ -19,7 +19,6 @@
 	<string name="SizeConnectionWord">×</string>
 	<string name="FacebookAccessTokenKey">FacebookAccessToken</string>
 
-
 	<string name="TwitterAccessTokenKey">TwitterAccessToken</string>
 	<string name="TwitterAccessTokenSecretKey">TwitterAccessTokenSecret</string>
 
@@ -43,7 +42,7 @@
 	<string name="ContributeSucessMessage">投稿しました</string>
 	<string name="ContributeFailedMessage">投稿に失敗しました</string>
 	<string name="TweetOverMessage">文字数が多すぎてツイートできませんでした</string>
-
+	<string name="CannotAccedssNetwprkMessage">ネットワークにつながっていません</string>
 
 
 	<string name="SaveFormatKey">SaveFormat</string>

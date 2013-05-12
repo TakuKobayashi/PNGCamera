@@ -259,36 +259,40 @@ public class CameraGalleryActivity extends Activity{
 			m_TwitterAction.setAccessToken(AccessToken, AccessTokenSecret);
 			showTweetDialog();
 		}else{
-			m_TwitterAction.setOnOAuthResultListener(new OAuthResultListener() {
-				//認証ページのURLを取得した時に呼ばれる
-				@Override
-				public void requestOAuthUrl(String url) {
-					if(url != null){
-						m_TwitterWebView.loadUrl(url);
-						m_TwitterWebView.setVisibility(View.VISIBLE);
-						//WebView上で入力時にキーボードを出現させるためにフォーカスをあてる。
-						m_TwitterWebView.requestFocus();
+			if(Tools.CheckNetWork(this)){
+				m_TwitterAction.setOnOAuthResultListener(new OAuthResultListener() {
+					//認証ページのURLを取得した時に呼ばれる
+					@Override
+					public void requestOAuthUrl(String url) {
+						if(url != null){
+							m_TwitterWebView.loadUrl(url);
+							m_TwitterWebView.setVisibility(View.VISIBLE);
+							//WebView上で入力時にキーボードを出現させるためにフォーカスをあてる。
+							m_TwitterWebView.requestFocus();
+						}
 					}
-				}
 
-				//認証完了後AccessToken取得完了した時に呼ばれる
-				@Override
-				public void oAuthResult(String token, String tokenSecret) {
-					m_TwitterButton.setClickable(true);
-					m_TwitterWebView.setVisibility(View.INVISIBLE);
-					m_TwitterAction.setAccessToken(token, tokenSecret);
-					showTweetDialog();
-				}
+					//認証完了後AccessToken取得完了した時に呼ばれる
+					@Override
+					public void oAuthResult(String token, String tokenSecret) {
+						m_TwitterButton.setClickable(true);
+						m_TwitterWebView.setVisibility(View.INVISIBLE);
+						m_TwitterAction.setAccessToken(token, tokenSecret);
+						showTweetDialog();
+					}
 
-				//認証エラーが発生した時に呼ばれる
-				@Override
-				public void oAuthError(int StatusCode) {
-					m_TwitterButton.setClickable(true);
-					m_TwitterWebView.setVisibility(View.INVISIBLE);
-				}
-			});
-			m_TwitterButton.setClickable(false);
-			m_TwitterAction.startOAuth();
+					//認証エラーが発生した時に呼ばれる
+					@Override
+					public void oAuthError(int StatusCode) {
+						m_TwitterButton.setClickable(true);
+						m_TwitterWebView.setVisibility(View.INVISIBLE);
+					}
+				});
+				m_TwitterButton.setClickable(false);
+				m_TwitterAction.startOAuth();
+			}else{
+				Tools.showToast(this, this.getString(R.string.CannotAccedssNetwprkMessage));
+			}
 		}
 	}
 
@@ -307,9 +311,13 @@ public class CameraGalleryActivity extends Activity{
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void sendTwitterAction(String tweet){
-		m_SendingImageDialog.show();
-		//Fileは投稿する画像のファイル、第二引数(String)はツイート文
-		m_TwitterAction.sendImageWithTweetToTwitter(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber), tweet);
+		if(Tools.CheckNetWork(this)){
+			m_SendingImageDialog.show();
+			//Fileは投稿する画像のファイル、第二引数(String)はツイート文
+			m_TwitterAction.sendImageWithTweetToTwitter(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber), tweet);
+		}else{
+			Tools.showToast(this, this.getString(R.string.CannotAccedssNetwprkMessage));
+		}
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -368,24 +376,28 @@ public class CameraGalleryActivity extends Activity{
 		if(m_FacebookAction.isLogin()){
 			sendFacebookAction();
 		}else{
-			m_FacebookAction.startLogin();
-			m_FacebookAction.setOnLoginResultListener(new LoginResultListener() {
+			if(Tools.CheckNetWork(this)){
+				m_FacebookAction.startLogin();
+				m_FacebookAction.setOnLoginResultListener(new LoginResultListener() {
 
-				@Override
-				public void success(String accessToken) {
-					sendFacebookAction();
-				}
+					@Override
+					public void success(String accessToken) {
+						sendFacebookAction();
+					}
 
-				@Override
-				public void error() {
-					Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.AuthorizationFailedMessage));
-				}
+					@Override
+					public void error() {
+						Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.AuthorizationFailedMessage));
+					}
 
-				@Override
-				public void cancel() {
-					Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.AuthorizationCancelMessage));
-				}
-			});
+					@Override
+					public void cancel() {
+						Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.AuthorizationCancelMessage));
+					}
+				});
+			}else{
+				Tools.showToast(this, this.getString(R.string.CannotAccedssNetwprkMessage));
+			}
 		}
 		/*
 		if(m_FacebookActionOldVersion.isLogin()){
@@ -397,8 +409,12 @@ public class CameraGalleryActivity extends Activity{
 	}
 
 	private void sendFacebookAction(){
-		m_SendingImageDialog.show();
-		m_FacebookAction.uploadImage(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber));
+		if(Tools.CheckNetWork(this)){
+			m_SendingImageDialog.show();
+			m_FacebookAction.uploadImage(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber));
+		}else{
+			Tools.showToast(this, this.getString(R.string.CannotAccedssNetwprkMessage));
+		}
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
