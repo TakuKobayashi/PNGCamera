@@ -185,7 +185,7 @@ public class CameraGalleryActivity extends Activity{
 		tweetDialog.show();
 		tweetDialog.setContentView(R.layout.tweetdialog);
 		m_TextCount = (TextView) tweetDialog.findViewById(R.id.TweetCountText);
-		int textCount = Config.TWITTER_MAX_TEXT_COUNT - 2 - m_TweetString.length();
+		int textCount = Config.TWITTER_MAX_TEXT_COUNT - m_TweetString.length();
 		m_TextCount.setText(String.valueOf(textCount));
 		if(textCount >= 0){
 			m_TextCount.setTextColor(Color.BLACK);
@@ -198,7 +198,7 @@ public class CameraGalleryActivity extends Activity{
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				int remainTextCount = Config.TWITTER_MAX_TEXT_COUNT - 2 - s.length();
+				int remainTextCount = Config.TWITTER_MAX_TEXT_COUNT - s.length();
 				if(remainTextCount >= 0){
 					m_TextCount.setTextColor(Color.BLACK);
 				}else{
@@ -224,14 +224,15 @@ public class CameraGalleryActivity extends Activity{
 			@Override
 			public void onClick(View v) {
 				String tweet = tweetText.getText().toString();
-				if((Config.TWITTER_MAX_TEXT_COUNT - 2 - tweet.length()) >= 0){
+				if((Config.TWITTER_MAX_TEXT_COUNT - tweet.length()) >= 0){
 					sendTwitterAction(tweet);
+					//ツイートボタンを押したら出ているキーボードは消えてもらう
+					InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+					tweetDialog.cancel();
 				}else{
 					Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.TweetOverMessage));
 				}
-				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-				tweetDialog.cancel();
 			}
 		});
 		sendTweetButton.setOnTouchListener(ExtraLayout.ImageTouchListener);
