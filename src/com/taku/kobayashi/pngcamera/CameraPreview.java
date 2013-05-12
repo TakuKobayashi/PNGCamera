@@ -77,6 +77,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 				Bitmap image = Tools.getSelectSizeBitmap(m_Context, Uri.fromFile(file), m_ThumbnailSize.width, m_ThumbnailSize.height);
 				//画像ファイルとしては正しいが、画像ではなかったり壊れているファイルなら消す
 				if(image != null){
+					Tools.releaseImageView(m_Thumbnail);
 					m_Thumbnail.setImageBitmap(image);
 					break;
 				}else{

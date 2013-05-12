@@ -4,6 +4,7 @@
 package com.taku.kobayashi.pngcamera;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +32,7 @@ public class CameraGalleryAdapter extends BaseAdapter{
 		String path = Tools.getSDCardFolderPath() + "/" + com.taku.kobayashi.pngcamera.Config.DIRECTORY_NAME_TO_SAVE;
 		File dir = new File(path);
 		File[] files = dir.listFiles();
-		m_ImgaeFileList = Arrays.asList(files);
+		m_ImgaeFileList = new ArrayList<File>(Arrays.asList(files));
 		//日付が新しい順
 		Collections.reverse(m_ImgaeFileList);
 		m_Images = new Bitmap[m_ImgaeFileList.size()];
@@ -92,8 +93,9 @@ public class CameraGalleryAdapter extends BaseAdapter{
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	public void FileDelete(int nFileNum){
-		m_ImgaeFileList.get(nFileNum).delete();
+		File deleteFile = m_ImgaeFileList.get(nFileNum);
 		m_ImgaeFileList.remove(nFileNum);
+		deleteFile.delete();
 		this.notifyDataSetChanged();
 	}
 

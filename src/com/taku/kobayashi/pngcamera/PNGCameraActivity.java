@@ -42,6 +42,7 @@ public class PNGCameraActivity extends Activity {
 	private boolean m_bMoveSurFace = false;
 	private boolean m_bAutoFocus = false;
 	private int m_nCameraDisplayOrientation = 90;
+	private ImageView m_ThumbnailImgaeView;
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -56,6 +57,7 @@ public class PNGCameraActivity extends Activity {
 		ImageButton shatterButton = (ImageButton) findViewById(R.id.ShutterButton);
 		shatterButton.setImageResource(R.drawable.device_access_camera);
 		shatterButton.setOnClickListener(m_ShatterListener);
+		shatterButton.setOnTouchListener(ExtraLayout.ImageTouchListener);
 
 		ImageButton InOutButton = (ImageButton) findViewById(R.id.InOutButton);
 		InOutButton.setImageResource(R.drawable.device_access_switch_camera);
@@ -68,6 +70,17 @@ public class PNGCameraActivity extends Activity {
 		}else{
 			InOutButton.setVisibility(View.INVISIBLE);
 		}
+
+		m_ThumbnailImgaeView = (ImageView) findViewById(R.id.ThumbnailImageview);
+		m_ThumbnailImgaeView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(PNGCameraActivity.this, CameraGalleryActivity.class);
+				startActivity(intent);
+			}
+		});
+		m_ThumbnailImgaeView.setOnTouchListener(ExtraLayout.ImageTouchListener);
+
 
 		RelativeLayout CameraOptionLayout = (RelativeLayout) findViewById(R.id.CameraParamsTextLayout);
 		CameraOptionLayout.setOnClickListener(m_CameraOptionListener);
@@ -228,16 +241,8 @@ public class PNGCameraActivity extends Activity {
 	protected void onResume(){
 		super.onResume();
 		m_CameraPreview = (CameraPreview) findViewById(R.id.CameraPreview);
-		ImageView im = (ImageView) findViewById(R.id.ThumbnailImageview);
-		im.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(PNGCameraActivity.this, CameraGalleryActivity.class);
-				startActivity(intent);
-			}
-		});
 		m_CameraPreview.setCamera(m_nCameraID, m_CameraParameterAdapter);
-		m_CameraPreview.setThumbnailImageView(im);
+		m_CameraPreview.setThumbnailImageView(m_ThumbnailImgaeView);
 		m_SensorManager.registerListener(m_SensorEventListener, m_SensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_UI);
 		m_OrientationListener.enable();
 		CGSize displaySize = ExtraLayout.getDisplaySize(this);
@@ -281,7 +286,6 @@ public class PNGCameraActivity extends Activity {
 			m_SensorManager.unregisterListener(m_SensorEventListener);
 		}
 		m_OrientationListener.disable();
-		Tools.releaseImageView((ImageView) findViewById(R.id.ThumbnailImageview));		Tools.releaseImageView((ImageView) findViewById(R.id.ThumbnailImageview));
 		//カメラを切る
 		m_CameraPreview.releaseCamera();
 		m_CameraParameterAdapter.releaseParameters();
@@ -294,6 +298,7 @@ public class PNGCameraActivity extends Activity {
 		super.onDestroy();
 		Tools.releaseImageView((ImageButton) findViewById(R.id.ShutterButton));
 		Tools.releaseImageView((ImageButton) findViewById(R.id.InOutButton));
+		Tools.releaseImageView(m_ThumbnailImgaeView);
 	}
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------------------------

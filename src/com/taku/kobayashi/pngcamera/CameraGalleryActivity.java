@@ -89,6 +89,7 @@ public class CameraGalleryActivity extends Activity{
 				setupFacebook();
 			}
 		});
+		FacebookButton.setOnTouchListener(ExtraLayout.ImageTouchListener);
 		m_TwitterButton =  (ImageButton) findViewById(R.id.TwitterButton);
 		m_TwitterButton.setImageResource(R.drawable.twitter_icon);
 		m_TwitterButton.setOnClickListener(new OnClickListener() {
@@ -97,6 +98,7 @@ public class CameraGalleryActivity extends Activity{
 				setupTweet();
 			}
 		});
+		m_TwitterButton.setOnTouchListener(ExtraLayout.ImageTouchListener);
 		ImageButton MailButton = (ImageButton) findViewById(R.id.MailButton);
 		MailButton.setImageResource(R.drawable.mail_icon);
 		MailButton.setOnClickListener(new OnClickListener() {
@@ -105,6 +107,7 @@ public class CameraGalleryActivity extends Activity{
 				showMailerList();
 			}
 		});
+		MailButton.setOnTouchListener(ExtraLayout.ImageTouchListener);
 		ImageButton TrashButton = (ImageButton) findViewById(R.id.TrashButton);
 		TrashButton.setImageResource(R.drawable.trash_icon);
 		TrashButton.setOnClickListener(new OnClickListener() {
@@ -113,6 +116,7 @@ public class CameraGalleryActivity extends Activity{
 				showDeleteDialog();
 			}
 		});
+		TrashButton.setOnTouchListener(ExtraLayout.ImageTouchListener);
 
 		m_TwitterWebView = (WebView) findViewById(R.id.TwitterWebView);
 		m_TwitterWebView.getSettings().setJavaScriptEnabled(true);
@@ -154,7 +158,7 @@ public class CameraGalleryActivity extends Activity{
 				if(m_CameraGalleryAdapter.isEmpty() == true){
 					CameraGalleryActivity.this.finish();
 				}
-				Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.GalleryDeleteDialogMessage));
+				Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.GalleryDeleteImageMessage));
 			}
 		});
 		deleteImgDialog.setNegativeButton(this.getString(R.string.SelectNoText), new DialogInterface.OnClickListener() {
