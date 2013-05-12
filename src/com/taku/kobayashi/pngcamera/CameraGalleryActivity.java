@@ -8,6 +8,7 @@ import com.taku.kobayashi.pngcamera.TwitterAction.UploadListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +38,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.DialerFilter;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageButton;
@@ -90,8 +92,7 @@ public class CameraGalleryActivity extends Activity{
 		m_TwitterButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//setupTweet();
-				showTweetDialog();
+				setupTweet();
 			}
 		});
 		ImageButton MailButton = (ImageButton) findViewById(R.id.MailButton);
@@ -176,9 +177,9 @@ public class CameraGalleryActivity extends Activity{
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void showTweetDialog(){
-		AlertDialog.Builder tweetDialogBuilder = new AlertDialog.Builder(this);
-		tweetDialogBuilder.setCancelable(true);
-		final AlertDialog tweetDialog = tweetDialogBuilder.create();
+		final Dialog tweetDialog = new Dialog(this);
+		tweetDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+		tweetDialog.setCancelable(true);
 		tweetDialog.show();
 		tweetDialog.setContentView(R.layout.tweetdialog);
 		final TextView tweetCountText = (TextView) tweetDialog.findViewById(R.id.TweetCountText);
