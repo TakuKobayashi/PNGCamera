@@ -4,7 +4,6 @@ import java.io.File;
 
 import com.taku.kobayashi.pngcamera.FacebookAction.LoginResultListener;
 import com.taku.kobayashi.pngcamera.TwitterAction.OAuthResultListener;
-import com.taku.kobayashi.pngcamera.TwitterAction.UploadListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -13,7 +12,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -22,12 +20,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
@@ -38,7 +34,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.DialerFilter;
 import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageButton;
@@ -54,7 +49,6 @@ public class CameraGalleryActivity extends Activity{
 	private TwitterAction m_TwitterAction;
 	private FacebookAction m_FacebookAction;
 	private ProgressDialog m_SendingImageDialog;
-//	private FacebookActionOldVersion m_FacebookActionOldVersion;
 	private TextView m_TextCount;
 	private String m_TweetString = "";
 
@@ -143,7 +137,6 @@ public class CameraGalleryActivity extends Activity{
 		m_SendingImageDialog.setCancelable(true);
 		m_SendingImageDialog.setMessage(this.getString(R.string.UploadingImageMessage));
 		m_SendingImageDialog.setIndeterminate(true);
-		//m_FacebookActionOldVersion = new FacebookActionOldVersion(this);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -399,14 +392,9 @@ public class CameraGalleryActivity extends Activity{
 				Tools.showToast(this, this.getString(R.string.CannotAccedssNetwprkMessage));
 			}
 		}
-		/*
-		if(m_FacebookActionOldVersion.isLogin()){
-			m_FacebookActionOldVersion.uploadImage(m_CameraGalleryAdapter.getFile(m_nSelectImageNumber));
-		}else{
-			m_FacebookActionOldVersion.startLogin();
-		}
-		*/
 	}
+
+	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	private void sendFacebookAction(){
 		if(Tools.CheckNetWork(this)){
@@ -423,7 +411,6 @@ public class CameraGalleryActivity extends Activity{
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		m_FacebookAction.setLoginResult(requestCode, resultCode, data);
-		//m_FacebookActionOldVersion.setLoginResult(requestCode, resultCode, data);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------

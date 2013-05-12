@@ -18,7 +18,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.OrientationEventListener;
 import android.view.View;

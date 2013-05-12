@@ -19,7 +19,6 @@ import twitter4j.media.MediaProvider;
 import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.app.Activity;
 import android.content.SharedPreferences;
 

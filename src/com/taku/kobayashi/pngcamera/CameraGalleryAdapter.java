@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.View;
@@ -20,7 +19,7 @@ import android.widget.ImageView;
 
 public class CameraGalleryAdapter extends BaseAdapter{
 
-	private static final String TAG = "PNGCamera_Parameter";
+	private static final String TAG = "PNGCamera_CameraGalleryAdapter";
 	private Activity m_Activity;
 	private Bitmap[] m_Images;
 	private List<File> m_ImgaeFileList;

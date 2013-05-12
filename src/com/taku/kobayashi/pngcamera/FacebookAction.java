@@ -6,27 +6,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.EventListener;
-import java.util.Iterator;
-import java.util.Set;
 
-import com.facebook.AccessToken;
 import com.facebook.Request;
 import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.TokenCachingStrategy;
-import com.facebook.internal.Utility;
-import com.facebook.model.GraphObject;
-import com.taku.kobayashi.pngcamera.TwitterAction.OAuthResultListener;
-import com.taku.kobayashi.pngcamera.TwitterAction.UploadListener;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 
 
 //Facebookへの認証処理

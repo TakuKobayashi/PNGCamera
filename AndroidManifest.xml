@@ -1,10 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.taku.kobayashi.pngcamera"
+	android:installLocation="preferExternal"
 	android:versionCode="2"
 	android:versionName="2.0" >
 
 	<uses-sdk
-		android:minSdkVersion="9" />
+		android:minSdkVersion="8" />
 
 	<uses-permission android:name="android.permission.CAMERA" />
 	<uses-feature android:name="android.hardware.camera" />
