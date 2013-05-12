@@ -44,7 +44,7 @@ public class FacebookActionOldVersion{
 
 	private static final String TAG = "PNGCamera_FacebookAction";
 	private static final String APP_ID = FacebookConfig.APP_ID;
-	private static final String[] PERMISSIONS = {"offline_access","user_photos","photo_upload"};
+	private static final String[] PERMISSIONS = FacebookConfig.PERMISSIONS;
 	private static final int AUTHORIZE_ACTIVITY_RESULT_CODE = 0;
 	private static final int LOGIN_REQUESTCODE = 1;
 	private static final String SAVE_KEY = "facebook-session";

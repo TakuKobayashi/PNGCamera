@@ -32,6 +32,7 @@
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
 			android:layout_toLeftOf="@+id/FaceBookButton"
+			android:layout_marginRight="15dp"
 			android:background="#00000000"
 			android:scaleType="fitXY"
 		/>
@@ -42,6 +43,7 @@
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
 			android:layout_toLeftOf="@+id/TwitterButton"
+			android:layout_marginRight="15dp"
 			android:background="#00000000"
 			android:scaleType="fitXY"
 		/>
@@ -60,7 +62,7 @@
 
 	<Gallery
 		android:id="@+id/CameraGallery"
-		android:layout_width="wrap_content"
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:layout_above="@+id/CameraGalleryFooterLayout"
 	/>

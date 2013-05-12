@@ -42,7 +42,7 @@
 	<string name="UploadingImageMessage">投稿中</string>
 	<string name="ContributeSucessMessage">投稿しました</string>
 	<string name="ContributeFailedMessage">投稿に失敗しました</string>
-
+	<string name="TweetOverMessage">文字数が多すぎてツイートできませんでした</string>
 
 
 

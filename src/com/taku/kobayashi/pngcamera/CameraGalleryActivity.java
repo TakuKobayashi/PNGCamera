@@ -55,6 +55,8 @@ public class CameraGalleryActivity extends Activity{
 	private FacebookAction m_FacebookAction;
 	private ProgressDialog m_SendingImageDialog;
 //	private FacebookActionOldVersion m_FacebookActionOldVersion;
+	private TextView m_TextCount;
+	private String m_TweetString = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -182,17 +184,53 @@ public class CameraGalleryActivity extends Activity{
 		tweetDialog.setCancelable(true);
 		tweetDialog.show();
 		tweetDialog.setContentView(R.layout.tweetdialog);
-		final TextView tweetCountText = (TextView) tweetDialog.findViewById(R.id.TweetCountText);
-		tweetCountText.setText(String.valueOf(Config.TWITTER_MAX_TEXT_COUNT - 2));
-		tweetCountText.setTextColor(Color.BLACK);
+		m_TextCount = (TextView) tweetDialog.findViewById(R.id.TweetCountText);
+		int textCount = Config.TWITTER_MAX_TEXT_COUNT - 2 - m_TweetString.length();
+		m_TextCount.setText(String.valueOf(textCount));
+		if(textCount >= 0){
+			m_TextCount.setTextColor(Color.BLACK);
+		}else{
+			m_TextCount.setTextColor(Color.RED);
+		}
 		final EditText tweetText = (EditText) tweetDialog.findViewById(R.id.TweetText);
-		tweetText.setInputType(InputType.TYPE_CLASS_TEXT);
+		tweetText.setText(m_TweetString);
+		tweetText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				int remainTextCount = Config.TWITTER_MAX_TEXT_COUNT - 2 - s.length();
+				if(remainTextCount >= 0){
+					m_TextCount.setTextColor(Color.BLACK);
+				}else{
+					m_TextCount.setTextColor(Color.RED);
+				}
+				m_TextCount.setText(String.valueOf(remainTextCount));
+				m_TweetString = s.toString();
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,int after) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+
+			}
+		});
 		ImageButton sendTweetButton = (ImageButton) tweetDialog.findViewById(R.id.SendTweetButton);
 		sendTweetButton.setImageResource(R.drawable.tweetbutton);
 		sendTweetButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				sendTwitterAction(tweetText.getText().toString());
+				String tweet = tweetText.getText().toString();
+				if((Config.TWITTER_MAX_TEXT_COUNT - 2 - tweet.length()) >= 0){
+					sendTwitterAction(tweet);
+				}else{
+					Tools.showToast(CameraGalleryActivity.this, CameraGalleryActivity.this.getString(R.string.TweetOverMessage));
+				}
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 				tweetDialog.cancel();
 			}
 		});

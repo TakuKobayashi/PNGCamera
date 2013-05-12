@@ -34,8 +34,7 @@ public class FacebookAction{
 
 	private static final String TAG = "PNGCamera_FacebookAction";
 	private static final String APP_ID = FacebookConfig.APP_ID;
-	private static final String[] PERMISSIONS = {"offline_access","user_photos","photo_upload"};
-	private static final int LOGIN_REQUESTCODE = 1;
+	private static final String[] PERMISSIONS = FacebookConfig.PERMISSIONS;
 	private Activity m_Activity;
 	private Session m_Session;
 	private UploadListener m_UploadListener = null;
